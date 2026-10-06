@@ -1443,3 +1443,310 @@ body {
   border: 1.5px solid var(--border-solid);
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
+
+/* ==========================================================================
+   UNIFIED COCKPIT DASHBOARD LAYOUT (HIGH-DENSITY COMPACT REDESIGN)
+   ========================================================================== */
+
+/* Main content shell: wider, compact padding */
+.main-content {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* Reduce chassis margins & padding to fit within single screen */
+.chassis-card {
+  margin-bottom: 14px !important;
+  padding: 16px 18px !important;
+}
+
+/* Config / Dispatch Chassis */
+.config-chassis {
+  padding-bottom: 12px !important;
+}
+
+.presets-compact-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.presets-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.cockpit-action-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.cockpit-action-strip .url-input-container {
+  flex: 1 1 360px;
+  margin-bottom: 0;
+  height: 40px;
+}
+
+.cockpit-action-strip .url-input-container .solid-input {
+  height: 40px;
+  font-size: 12px;
+}
+
+.compact-stepper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  min-width: 110px;
+  max-width: 130px;
+  height: 40px;
+  background-color: var(--bg-card-secondary);
+  border: 1.5px solid var(--border-solid);
+  border-radius: 6px;
+  padding: 3px 8px;
+  box-sizing: border-box;
+}
+
+.stepper-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.stepper-val-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--ink-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-solid);
+  padding: 0 4px;
+  border-radius: 3px;
+}
+
+.solid-range-compact {
+  width: 100%;
+  accent-color: var(--color-peach);
+  cursor: pointer;
+  height: 4px;
+  margin: 0;
+}
+
+.solid-action-btn-compact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  background-color: var(--color-mint);
+  color: #18181B;
+  border: 2px solid var(--border-solid);
+  box-shadow: 2px 2px 0px var(--border-solid);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 120ms ease;
+  flex-shrink: 0;
+}
+
+.solid-action-btn-compact:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--border-solid);
+}
+
+.solid-action-btn-compact:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--border-solid);
+}
+
+/* Side-by-Side Cockpit Grid */
+.cockpit-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 14px;
+  margin-bottom: 14px;
+  align-items: stretch;
+}
+
+@media (max-width: 1040px) {
+  .cockpit-grid {
+    grid-template-columns: 1fr;
+  }
+  .cockpit-action-strip {
+    flex-wrap: wrap;
+  }
+}
+
+/* Compact Left Stage Chassis */
+.stage-chassis .master-telemetry-bar {
+  margin-bottom: 8px;
+}
+
+.stage-chassis .metric-big {
+  font-size: 26px !important;
+}
+
+.stage-chassis .master-track-container {
+  margin-bottom: 10px;
+}
+
+.stage-chassis .solid-track-base {
+  height: 10px !important;
+}
+
+.stage-chassis .concurrency-arena {
+  display: grid;
+  grid-template-columns: 140px 1fr 180px !important;
+  gap: 10px !important;
+  min-height: 230px !important;
+  max-height: 250px !important;
+  padding: 8px 10px !important;
+  margin-top: 0 !important;
+  overflow: hidden;
+}
+
+/* Scaled XP Folder inside Left Stage */
+.stage-chassis .dest-folder-wrapper {
+  transform: scale(0.78);
+  transform-origin: top center;
+  margin: -10px 0 0 0;
+}
+
+.stage-chassis .dest-status-box {
+  margin-top: -15px;
+  font-size: 9px;
+  gap: 3px;
+  padding: 4px 6px;
+}
+
+/* Compact SVG conduits */
+.stage-chassis .conduits-center {
+  min-height: 210px !important;
+}
+
+/* Compact Worker Entities Rack */
+.stage-chassis .worker-entities-rack {
+  max-height: 195px !important;
+  gap: 6px !important;
+}
+
+.stage-chassis .worker-node {
+  padding: 5px 8px !important;
+  border-radius: 4px !important;
+}
+
+.stage-chassis .worker-chunk-tag {
+  font-size: 9px !important;
+  margin-bottom: 3px !important;
+}
+
+.stage-chassis .worker-mini-track {
+  height: 4px !important;
+  margin-bottom: 3px !important;
+}
+
+/* Compact Right Matrix Chassis */
+.matrix-card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.matrix-header-row {
+  margin-bottom: 8px !important;
+}
+
+.matrix-desc {
+  font-size: 10px !important;
+  line-height: 1.3 !important;
+  margin-top: 2px !important;
+}
+
+.matrix-terminal-frame {
+  min-height: 180px !important;
+  max-height: 215px !important;
+  padding: 10px !important;
+  border-radius: 6px !important;
+  overflow-y: auto;
+}
+
+.matrix-grid-viewport {
+  gap: 6px !important;
+  justify-content: flex-start !important;
+  align-content: flex-start !important;
+}
+
+.matrix-grid-viewport .chunk-cell {
+  width: 32px !important;
+  height: 28px !important;
+  font-size: 9px !important;
+}
+
+.matrix-legend-row {
+  padding-top: 6px !important;
+  gap: 12px !important;
+}
+
+.matrix-legend-row .legend-text {
+  font-size: 10px !important;
+}
+
+/* Compact Trace Chassis (Bottom Drawer) */
+.trace-chassis {
+  margin-bottom: 12px !important;
+}
+
+.trace-chassis .trace-header {
+  padding-bottom: 6px !important;
+  margin-bottom: 6px !important;
+}
+
+.trace-chassis .trace-title {
+  font-size: 13px !important;
+}
+
+.trace-chassis .trace-sub {
+  font-size: 10px !important;
+}
+
+.trace-chassis .trace-terminal-window {
+  height: 110px !important;
+  min-height: 110px !important;
+  padding: 8px 12px !important;
+  font-size: 11px !important;
+  border-radius: 6px !important;
+}
+
+/* Compact App Shell & Footer */
+.app-shell {
+  padding: 10px 16px !important;
+}
+
+.top-nav {
+  margin-bottom: 14px !important;
+  padding-bottom: 8px !important;
+}
+
+.app-footer {
+  padding: 6px 0 !important;
+  font-size: 10px !important;
+  margin-top: 0 !important;
+}
