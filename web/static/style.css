@@ -1,0 +1,1278 @@
+/* ==========================================================================
+   ChunkDown — Neo-Brutalist / Retro-Editorial Design System (CSS)
+   Aesthetic: Solid Color Palette (NO Gradients), Tactile Chassis with Rivets,
+              Protruding Folder Tabs, Recursive Variable Typography,
+              Windows XP File-Transfer Metaphor (Folder + Animated Byte Packets)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Design Tokens & Theme Variables
+   -------------------------------------------------------------------------- */
+:root, [data-theme="light"] {
+  /* Surface & Base Colors (Pure Solid, Zero Gradients) */
+  --bg-page: #F7F5EE;
+  --bg-card: #FFFFFF;
+  --bg-card-secondary: #F3EFE3;
+  --bg-input: #FFFFFF;
+  --bg-trace: #1A1A1E;
+
+  /* Ink & Borders */
+  --ink-primary: #18181B;
+  --ink-secondary: #52525B;
+  --ink-muted: #71717A;
+  --border-solid: #18181B;
+  --border-width: 2px;
+  --shadow-offset: 4px 4px 0px #18181B;
+  --shadow-offset-sm: 2px 2px 0px #18181B;
+  --shadow-offset-pressed: 1px 1px 0px #18181B;
+
+  /* Solid Pastel Accent Blocks (Inspired by user's reference image) */
+  --color-peach: #F8B195;
+  --color-peach-light: #FFDAC1;
+  --color-butter: #FCD34D;
+  --color-butter-dark: #F59E0B;
+  --color-mint: #95D5B2;
+  --color-mint-dark: #52B788;
+  --color-lavender: #C7CEEA;
+  --color-sky: #A2D2FF;
+  --color-coral: #E07A5F;
+  --color-rivet: #E5E1D3;
+
+  /* Destination Folder Colors (Classic Tactile XP Yellow) */
+  --folder-tab: #F59E0B;
+  --folder-back: #FBBF24;
+  --folder-front: #FCD34D;
+  --folder-border: #18181B;
+
+  /* Typography */
+  --font-main: 'Recursive', ui-monospace, monospace, sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  /* Conduits */
+  --conduit-stroke: #18181B;
+  --packet-bg: #FFFFFF;
+  --packet-border: #18181B;
+}
+
+[data-theme="dark"] {
+  /* Dark Mode Palette (Solid Charcoal & Calibrated Pastel Mutes) */
+  --bg-page: #141416;
+  --bg-card: #202024;
+  --bg-card-secondary: #28282E;
+  --bg-input: #18181B;
+  --bg-trace: #0E0E10;
+
+  --ink-primary: #F4F4F6;
+  --ink-secondary: #A1A1AA;
+  --ink-muted: #71717A;
+  --border-solid: #4A4A54;
+  --border-width: 2px;
+  --shadow-offset: 4px 4px 0px #0A0A0C;
+  --shadow-offset-sm: 2px 2px 0px #0A0A0C;
+  --shadow-offset-pressed: 1px 1px 0px #0A0A0C;
+
+  --color-peach: #E07A5F;
+  --color-peach-light: #8D4B39;
+  --color-butter: #E5A93C;
+  --color-butter-dark: #B4781E;
+  --color-mint: #52B788;
+  --color-mint-dark: #378A62;
+  --color-lavender: #7E85B5;
+  --color-sky: #4A7EB0;
+  --color-coral: #D9534F;
+  --color-rivet: #33333A;
+
+  --folder-tab: #B4781E;
+  --folder-back: #D99B26;
+  --folder-front: #E5A93C;
+  --folder-border: #4A4A54;
+
+  --conduit-stroke: #666675;
+  --packet-bg: #2C2C34;
+  --packet-border: #F4F4F6;
+}
+
+/* --------------------------------------------------------------------------
+   2. Reset & Document Setup
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-page);
+  color: var(--ink-primary);
+  font-family: var(--font-main);
+  font-variation-settings: 'MONO' 0, 'CASL' 0.5, 'wght' 450;
+  line-height: 1.5;
+  min-height: 100vh;
+  padding: 32px 16px 80px;
+  transition: background-color 200ms ease, color 200ms ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-wrapper {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   3. Top Navigation & Brand Header
+   -------------------------------------------------------------------------- */
+.top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: var(--border-width) solid var(--border-solid);
+}
+
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-folder-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--color-butter);
+  color: #18181B;
+  border: var(--border-width) solid var(--border-solid);
+  box-shadow: var(--shadow-offset-sm);
+  padding: 6px 12px;
+  border-radius: 6px 14px 6px 6px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.brand-title-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-family: var(--font-main);
+  font-variation-settings: 'MONO' 0, 'CASL' 1, 'wght' 850;
+  font-size: 26px;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  color: var(--ink-primary);
+}
+
+.brand-accent {
+  background-color: var(--color-peach);
+  color: #18181B;
+  padding: 0px 6px;
+  margin-left: 2px;
+  border: var(--border-width) solid var(--border-solid);
+  border-radius: 4px;
+}
+
+.brand-version {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-secondary);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.nav-middle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badge-pill {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border: var(--border-width) solid var(--border-solid);
+  border-radius: 999px;
+  box-shadow: var(--shadow-offset-sm);
+  color: #18181B;
+}
+
+.pill-solid-yellow { background-color: var(--color-butter); }
+.pill-solid-mint   { background-color: var(--color-mint); }
+.pill-solid-blue   { background-color: var(--color-lavender); }
+
+/* Theme Switcher Toggle */
+.theme-switcher {
+  display: flex;
+  background-color: var(--bg-card);
+  border: var(--border-width) solid var(--border-solid);
+  border-radius: 999px;
+  box-shadow: var(--shadow-offset-sm);
+  padding: 3px;
+  gap: 2px;
+}
+
+.theme-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  background: transparent;
+  color: var(--ink-secondary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.theme-btn:hover {
+  color: var(--ink-primary);
+}
+
+.theme-btn.active {
+  background-color: var(--ink-primary);
+  color: var(--bg-card);
+}
+
+/* --------------------------------------------------------------------------
+   4. Tactile Chassis Cards with Corner Rivets & Folder Tabs
+   -------------------------------------------------------------------------- */
+.chassis-card {
+  position: relative;
+  background-color: var(--bg-card);
+  border: var(--border-width) solid var(--border-solid);
+  box-shadow: var(--shadow-offset);
+  border-radius: 10px;
+  margin-bottom: 32px;
+  padding: 24px;
+}
+
+/* Protruding Folder Tab from Card Top */
+.card-folder-tab {
+  position: absolute;
+  top: -16px;
+  left: 20px;
+  background-color: var(--color-butter);
+  color: #18181B;
+  border: var(--border-width) solid var(--border-solid);
+  border-bottom: none;
+  padding: 3px 14px 4px;
+  border-radius: 8px 8px 0 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 2px -2px 0px rgba(0, 0, 0, 0.05);
+  z-index: 2;
+}
+
+.card-folder-tab.tab-peach {
+  background-color: var(--color-peach);
+}
+
+/* Corner Industrial Screws/Rivets (As in user's reference image 1) */
+.rivet {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-solid);
+  background-color: var(--color-rivet);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.rivet::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 1px;
+  background-color: var(--border-solid);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.rivet-tl { top: 8px; left: 8px; }
+.rivet-tr { top: 8px; right: 8px; }
+.rivet-bl { bottom: 8px; left: 8px; }
+.rivet-br { bottom: 8px; right: 8px; }
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Section Headings */
+.section-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--ink-secondary);
+  margin-bottom: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   5. Demonstration Preset Pills & URL Input
+   -------------------------------------------------------------------------- */
+.presets-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.preset-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 8px 14px;
+  border: var(--border-width) solid var(--border-solid);
+  border-radius: 8px;
+  box-shadow: var(--shadow-offset-sm);
+  cursor: pointer;
+  background-color: var(--bg-card);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+  font-family: var(--font-main);
+  text-align: left;
+}
+
+.preset-pill:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--border-solid);
+}
+
+.preset-pill:active, .preset-pill.active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-offset-pressed);
+}
+
+.preset-pill-tag {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: #18181B;
+}
+
+.preset-pill-desc {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.7);
+  margin-top: 2px;
+}
+
+/* Solid Preset Palettes */
+.preset-peach.active, .preset-peach:hover { background-color: var(--color-peach); }
+.preset-butter.active, .preset-butter:hover { background-color: var(--color-butter); }
+.preset-mint.active, .preset-mint:hover { background-color: var(--color-mint); }
+.preset-lavender.active, .preset-lavender:hover { background-color: var(--color-lavender); }
+
+/* URL Input */
+.url-input-container {
+  display: flex;
+  align-items: center;
+  border: var(--border-width) solid var(--border-solid);
+  border-radius: 8px;
+  background-color: var(--bg-input);
+  box-shadow: var(--shadow-offset-sm);
+  overflow: hidden;
+}
+
+.input-method-badge {
+  background-color: var(--color-mint);
+  color: #18181B;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 12px;
+  padding: 10px 14px;
+  border-right: var(--border-width) solid var(--border-solid);
+}
+
+.solid-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--ink-primary);
+  font-weight: 600;
+}
+
+/* Parametric Sliders & Trigger Row */
+.params-and-trigger-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+@media (max-width: 860px) {
+  .params-and-trigger-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stepper-box {
+  background-color: var(--bg-card-secondary);
+  border: var(--border-width) solid var(--border-solid);
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow-offset-sm);
+}
+
+.stepper-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.stepper-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.stepper-display {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  background-color: var(--ink-primary);
+  color: var(--bg-card);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.solid-range {
+  width: 100%;
+  accent-color: var(--color-peach);
+  cursor: pointer;
+  height: 6px;
+}
+
+.stepper-caption {
+  display: block;
+  font-size: 10.5px;
+  color: var(--ink-muted);
+  margin-top: 6px;
+  font-family: var(--font-mono);
+}
+
+/* Primary Action Button */
+.solid-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--color-mint);
+  color: #18181B;
+  border: var(--border-width) solid var(--border-solid);
+  border-radius: 8px;
+  padding: 14px 22px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  box-shadow: var(--shadow-offset);
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+  white-space: nowrap;
+}
+
+.solid-action-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px var(--border-solid);
+  background-color: var(--color-mint-dark);
+}
+
+.solid-action-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-offset-pressed);
+}
+
+.solid-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: var(--shadow-offset-sm);
+}
+
+/* --------------------------------------------------------------------------
+   6. Concurrency Stage (Master Telemetry Bar & Track)
+   -------------------------------------------------------------------------- */
+.master-telemetry-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  border-bottom: var(--border-width) dashed var(--border-solid);
+}
+
+.master-main-metric {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.metric-big {
+  font-family: var(--font-main);
+  font-variation-settings: 'MONO' 1, 'CASL' 0, 'wght' 900;
+  font-size: 52px;
+  line-height: 1;
+  color: var(--ink-primary);
+  letter-spacing: -2px;
+}
+
+.metric-big small {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.metric-status-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.badge-status-pill {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  background-color: var(--color-butter);
+  color: #18181B;
+  padding: 3px 8px;
+  border: 1.5px solid var(--border-solid);
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.badge-status-pill.streaming {
+  background-color: var(--color-mint);
+  animation: pulseStatus 1s infinite alternate;
+}
+
+@keyframes pulseStatus {
+  from { opacity: 0.85; }
+  to { opacity: 1; }
+}
+
+.metric-file-name {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+.master-stats-cluster {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.stat-cell {
+  background-color: var(--bg-card-secondary);
+  border: var(--border-width) solid var(--border-solid);
+  padding: 8px 14px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cell-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-muted);
+}
+
+.cell-value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-primary);
+  margin-top: 2px;
+}
+
+.stat-speed {
+  color: var(--color-coral);
+}
+
+/* Master Segmented Track */
+.master-track-container {
+  margin-top: 4px;
+}
+
+.solid-track-base {
+  height: 16px;
+  background-color: var(--bg-card-secondary);
+  border: var(--border-width) solid var(--border-solid);
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: inset 1px 1px 0px rgba(0, 0, 0, 0.15);
+}
+
+.solid-track-fill {
+  height: 100%;
+  background-color: var(--color-peach);
+  border-right: var(--border-width) solid var(--border-solid);
+  transition: width 150ms linear;
+}
+
+/* --------------------------------------------------------------------------
+   7. The Concurrency Arena: Destination Folder + Conduits + Worker Nodes
+   (Direct Implementation of User Sketch: Left Folder, Flying Bytes, Right Workers)
+   -------------------------------------------------------------------------- */
+.concurrency-arena {
+  display: grid;
+  grid-template-columns: 260px 1fr 340px;
+  gap: 16px;
+  min-height: 420px;
+  position: relative;
+  margin-top: 10px;
+  border: var(--border-width) solid var(--border-solid);
+  background-color: var(--bg-card-secondary);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+@media (max-width: 1080px) {
+  .concurrency-arena {
+    grid-template-columns: 220px 1fr 280px;
+  }
+}
+
+@media (max-width: 860px) {
+  .concurrency-arena {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- COLUMN A: Destination Folder Station --- */
+.destination-column {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  z-index: 2;
+}
+
+.destination-header, .workers-column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: var(--border-width) solid var(--border-solid);
+  padding-bottom: 6px;
+}
+
+.column-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-secondary);
+  letter-spacing: 0.5px;
+}
+
+.file-type-pill {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  background-color: var(--color-lavender);
+  color: #18181B;
+  padding: 2px 6px;
+  border: 1px solid var(--border-solid);
+  border-radius: 4px;
+}
+
+/* Retro Windows XP Destination Folder Graphic */
+.dest-folder-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 0 16px;
+  position: relative;
+}
+
+.dest-folder {
+  position: relative;
+  width: 160px;
+  height: 120px;
+  cursor: pointer;
+  transition: transform 120ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dest-folder:hover {
+  transform: scale(1.03);
+}
+
+/* Folder Back Plate */
+.folder-back {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 160px;
+  height: 105px;
+  background-color: var(--folder-back);
+  border: var(--border-width) solid var(--folder-border);
+  border-radius: 6px 16px 8px 8px;
+  box-shadow: 2px 2px 0px var(--border-solid);
+}
+
+.folder-tab-top {
+  position: absolute;
+  top: -16px;
+  left: -2px;
+  width: 65px;
+  height: 18px;
+  background-color: var(--folder-tab);
+  border: var(--border-width) solid var(--folder-border);
+  border-bottom: none;
+  border-radius: 6px 8px 0 0;
+}
+
+/* Paper Sheets Peeking Out of the Folder (Classic XP style) */
+.folder-paper-sheet {
+  position: absolute;
+  background-color: #FFFFFF;
+  border: 1.5px solid var(--border-solid);
+  border-radius: 3px;
+  box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.15);
+  transition: transform 200ms ease;
+}
+
+.sheet-1 {
+  width: 120px;
+  height: 80px;
+  top: 6px;
+  left: 14px;
+  transform: rotate(-3deg);
+}
+
+.sheet-2 {
+  width: 120px;
+  height: 80px;
+  top: 8px;
+  left: 22px;
+  transform: rotate(2deg);
+}
+
+.sheet-3 {
+  width: 120px;
+  height: 80px;
+  top: 12px;
+  left: 18px;
+  transform: rotate(0deg);
+}
+
+/* Front Flap (Opens slightly and displays filename card) */
+.folder-front {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 160px;
+  height: 85px;
+  background-color: var(--folder-front);
+  border: var(--border-width) solid var(--folder-border);
+  border-radius: 0 12px 8px 8px;
+  box-shadow: var(--shadow-offset-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  transform-origin: bottom center;
+  transition: transform 150ms ease;
+}
+
+.folder-label-card {
+  background-color: #FFFFFF;
+  border: 1.5px solid var(--border-solid);
+  padding: 4px 8px;
+  border-radius: 4px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
+}
+
+.folder-filename {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: #18181B;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.folder-absorbed-bytes {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  color: var(--color-coral);
+  margin-top: 2px;
+}
+
+/* Exact Ingestion Target Point for SVG paths */
+.folder-intake-target {
+  position: absolute;
+  top: 30px;
+  right: -5px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* Verification Wax Seal (Shown on 100% completion) */
+.verification-seal {
+  position: absolute;
+  top: 10px;
+  right: -10px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--color-butter);
+  border: 2px solid var(--border-solid);
+  box-shadow: var(--shadow-offset-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0) rotate(-15deg);
+  transition: transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.verification-seal.revealed {
+  transform: scale(1) rotate(-8deg);
+}
+
+.seal-icon {
+  font-size: 14px;
+  color: #18181B;
+}
+
+.seal-text {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 900;
+  color: #18181B;
+  letter-spacing: 0.5px;
+}
+
+.seal-sub {
+  font-size: 7px;
+  font-weight: 700;
+  color: #18181B;
+}
+
+/* Destination Status Box */
+.dest-status-box {
+  background-color: var(--bg-card);
+  border: var(--border-width) solid var(--border-solid);
+  border-radius: 6px;
+  padding: 10px 12px;
+  box-shadow: var(--shadow-offset-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.dest-status-row {
+  display: flex;
+  justify-content: space-between;
+  color: var(--ink-secondary);
+}
+
+.dest-status-row strong {
+  color: var(--ink-primary);
+}
+
+/* --- COLUMN B: Conduits Center & Flying Byte Packets Plane --- */
+.conduits-center {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+  overflow: visible;
+}
+
+.conduits-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 1;
+}
+
+.conduit-track {
+  fill: none;
+  stroke: var(--conduit-stroke);
+  stroke-width: 2px;
+  stroke-dasharray: 4 4;
+  opacity: 0.7;
+  transition: stroke 200ms ease, opacity 200ms ease;
+}
+
+.conduit-track.active {
+  stroke: var(--color-mint-dark);
+  stroke-dasharray: none;
+  stroke-width: 2.5px;
+  opacity: 1;
+}
+
+.conduit-track.complete {
+  stroke: var(--color-butter);
+  stroke-dasharray: none;
+  stroke-width: 2px;
+  opacity: 0.9;
+}
+
+/* Animated DOM Byte Packets Flying along the SVG Path */
+.byte-packets-plane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.byte-packet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 16px;
+  background-color: var(--packet-bg);
+  border: 1.5px solid var(--packet-border);
+  border-radius: 3px;
+  box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--ink-primary);
+  will-change: transform;
+}
+
+.byte-packet.type-data {
+  background-color: var(--color-peach-light);
+}
+
+.byte-packet.type-chunk {
+  background-color: var(--color-butter);
+}
+
+/* --- COLUMN C: Worker Entities Rack (Right Side) --- */
+.workers-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  z-index: 2;
+}
+
+.workers-active-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  background-color: var(--ink-primary);
+  color: var(--bg-card);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.worker-entities-rack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 440px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* Custom retro scrollbar */
+.worker-entities-rack::-webkit-scrollbar {
+  width: 6px;
+}
+.worker-entities-rack::-webkit-scrollbar-thumb {
+  background: var(--ink-secondary);
+  border-radius: 3px;
+}
+
+/* Single Worker Node Chassis */
+.worker-node {
+  position: relative;
+  background-color: var(--bg-card);
+  border: var(--border-width) solid var(--border-solid);
+  border-radius: 6px;
+  padding: 10px 12px;
+  box-shadow: var(--shadow-offset-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.worker-node.active-streaming {
+  border-color: var(--color-mint-dark);
+  box-shadow: 3px 3px 0px var(--color-mint-dark);
+}
+
+.worker-node.worker-complete {
+  border-color: var(--color-butter-dark);
+}
+
+/* Worker Node Emitter Nozzle (Left side, where byte packets shoot out towards folder) */
+.worker-emitter-port {
+  position: absolute;
+  top: 50%;
+  left: -9px;
+  width: 10px;
+  height: 10px;
+  background-color: var(--color-butter);
+  border: 1.5px solid var(--border-solid);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+}
+
+.worker-node.active-streaming .worker-emitter-port {
+  background-color: var(--color-mint);
+  box-shadow: 0 0 6px var(--color-mint);
+}
+
+.worker-node-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.worker-id-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.worker-led {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid var(--border-solid);
+  background-color: #A1A1AA;
+}
+
+.worker-led.led-active {
+  background-color: var(--color-mint);
+}
+
+.worker-led.led-done {
+  background-color: var(--color-butter);
+}
+
+.worker-name-label {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+.worker-status-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border: 1px solid var(--border-solid);
+  border-radius: 3px;
+  background-color: var(--bg-card-secondary);
+  color: var(--ink-secondary);
+}
+
+.worker-status-badge.streaming {
+  background-color: var(--color-mint);
+  color: #18181B;
+}
+
+.worker-status-badge.completed {
+  background-color: var(--color-butter);
+  color: #18181B;
+}
+
+/* Worker Chunk Range */
+.worker-chunk-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Mini Progress Bar */
+.worker-mini-track {
+  height: 7px;
+  background-color: var(--bg-card-secondary);
+  border: 1px solid var(--border-solid);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.worker-mini-fill {
+  height: 100%;
+  background-color: var(--color-mint);
+  width: 0%;
+  transition: width 100ms linear;
+}
+
+.worker-node-bottom {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   8. Diagnostic RFC 7233 Protocol Trace Drawer
+   -------------------------------------------------------------------------- */
+.trace-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.trace-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.terminal-prompt {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--color-coral);
+}
+
+.trace-title {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--ink-primary);
+}
+
+.trace-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-muted);
+}
+
+.solid-pill-btn-small {
+  background-color: var(--bg-card-secondary);
+  color: var(--ink-primary);
+  border: 1.5px solid var(--border-solid);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-offset-sm);
+  transition: transform 100ms ease;
+}
+
+.solid-pill-btn-small:hover {
+  background-color: var(--color-peach);
+  color: #18181B;
+}
+
+.solid-pill-btn-small:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--border-solid);
+}
+
+.trace-terminal-window {
+  background-color: var(--bg-trace);
+  border: var(--border-width) solid var(--border-solid);
+  border-radius: 6px;
+  padding: 14px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: #E4E4E7;
+  max-height: 160px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.trace-log-line {
+  line-height: 1.4;
+}
+
+.trace-log-line.log-system  { color: #A1A1AA; }
+.trace-log-line.log-probe   { color: #60A5FA; }
+.trace-log-line.log-range   { color: #FCD34D; }
+.trace-log-line.log-stream  { color: #34D399; }
+.trace-log-line.log-success { color: #A7F3D0; font-weight: 700; }
+.trace-log-line.log-error   { color: #F87171; font-weight: 700; }
+
+/* --------------------------------------------------------------------------
+   9. App Footer
+   -------------------------------------------------------------------------- */
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: var(--border-width) solid var(--border-solid);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-secondary);
+}
+
+.app-footer code {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-solid);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--ink-primary);
+  font-weight: 700;
+}
+
+.status-indicator-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-mint);
+  border: 1px solid var(--border-solid);
+}

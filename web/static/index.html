@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beam — Concurrent Byte-Range Streaming Engine</title>
+  <meta name="description" content="Visual demonstrator for high-throughput concurrent RFC 7233 chunk downloader in Go with live worker byte streaming animation.">
+  
+  <!-- Fonts: Recursive (Variable mechanical font) & Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Recursive:slnt,wght,CASL,CRSV,MONO@-15..0,300..1000,0..1,0..1,0..1&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Local Anime.js Animation Engine (17KB) -->
+  <script src="anime.min.js"></script>
+</head>
+<body>
+  <div class="app-wrapper">
+    
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+      <div class="brand-group">
+        <div class="brand-folder-tab">
+          <span class="folder-tab-icon">📁</span>
+          <span class="folder-tab-text">RFC 7233</span>
+        </div>
+        <div class="brand-title-box">
+          <h1 class="brand-title">BEAM<span class="brand-accent">STREAM</span></h1>
+          <span class="brand-version">v1.0.0 • Go Engine</span>
+        </div>
+      </div>
+
+      <div class="nav-middle">
+        <span class="badge-pill pill-solid-yellow">⚡ Lock-Free Atomics</span>
+        <span class="badge-pill pill-solid-mint">🧵 Bounded Pool</span>
+        <span class="badge-pill pill-solid-blue">📦 Zero-RAM Stitch</span>
+      </div>
+
+      <!-- Light / Dark Mode Toggle Switch (Default: Light Mode) -->
+      <div class="theme-switcher">
+        <button type="button" class="theme-btn active" id="theme-light-btn" title="Switch to Light Mode">
+          <span class="theme-icon">☀️</span>
+          <span class="theme-label">Light</span>
+        </button>
+        <button type="button" class="theme-btn" id="theme-dark-btn" title="Switch to Dark Mode">
+          <span class="theme-icon">🌙</span>
+          <span class="theme-label">Dark</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Card 1: Parametric Controls (Chassis with Corner Rivets & Folder Tab) -->
+      <section class="chassis-card config-chassis" id="config-card">
+        <!-- Corner Rivets -->
+        <span class="rivet rivet-tl" aria-hidden="true"></span>
+        <span class="rivet rivet-tr" aria-hidden="true"></span>
+        <span class="rivet rivet-bl" aria-hidden="true"></span>
+        <span class="rivet rivet-br" aria-hidden="true"></span>
+
+        <!-- Protruding Folder Tab -->
+        <div class="card-folder-tab">
+          <span class="tab-label">SOURCE DISPATCH CONTROL</span>
+        </div>
+
+        <div class="card-body">
+          <!-- Preset Demonstration Buttons -->
+          <div class="control-row">
+            <label class="section-label">SELECT DEMO PAYLOAD</label>
+            <div class="presets-bar">
+              <button type="button" class="preset-pill preset-peach active" id="preset-50mb" data-url="/api/demo/50mb" data-workers="4" data-chunks="4">
+                <span class="preset-pill-tag">50 MB</span>
+                <span class="preset-pill-desc">Local Synthetic (Zero RAM)</span>
+              </button>
+
+              <button type="button" class="preset-pill preset-butter" id="preset-100mb" data-url="/api/demo/100mb" data-workers="8" data-chunks="8">
+                <span class="preset-pill-tag">100 MB</span>
+                <span class="preset-pill-desc">Local Synthetic (Zero RAM)</span>
+              </button>
+
+              <button type="button" class="preset-pill preset-mint" id="preset-hetzner" data-url="https://speed.hetzner.de/100MB.bin" data-workers="8" data-chunks="8">
+                <span class="preset-pill-tag">Hetzner CDN</span>
+                <span class="preset-pill-desc">100 MB Public Mirror</span>
+              </button>
+
+              <button type="button" class="preset-pill preset-lavender" id="preset-godev" data-url="https://go.dev/dl/go1.22.0.src.tar.gz" data-workers="4" data-chunks="4">
+                <span class="preset-pill-tag">Go 1.22</span>
+                <span class="preset-pill-desc">26 MB Official Tarball</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- URL Input Row -->
+          <div class="control-row">
+            <label for="url-input" class="section-label">TARGET HTTP/HTTPS URL</label>
+            <div class="url-input-container">
+              <span class="input-method-badge">HTTP GET</span>
+              <input type="url" id="url-input" class="solid-input" value="/api/demo/50mb" placeholder="https://..." required spellcheck="false">
+            </div>
+          </div>
+
+          <!-- Sliders & Trigger Row -->
+          <div class="params-and-trigger-row">
+            <!-- Workers Slider -->
+            <div class="stepper-box">
+              <div class="stepper-header">
+                <label for="workers-slider" class="stepper-label">WORKER GOROUTINES</label>
+                <span class="stepper-display" id="workers-val">4</span>
+              </div>
+              <input type="range" id="workers-slider" min="1" max="16" value="4" class="solid-range">
+              <span class="stepper-caption">Concurrent TCP streams in worker pool</span>
+            </div>
+
+            <!-- Chunks Slider -->
+            <div class="stepper-box">
+              <div class="stepper-header">
+                <label for="chunks-slider" class="stepper-label">BYTE-RANGE CHUNKS</label>
+                <span class="stepper-display" id="chunks-val">4</span>
+              </div>
+              <input type="range" id="chunks-slider" min="1" max="16" value="4" class="solid-range">
+              <span class="stepper-caption">RFC 7233 partitions (Range: bytes=X-Y)</span>
+            </div>
+
+            <!-- Start Button -->
+            <div class="action-btn-container">
+              <button type="button" id="start-btn" class="solid-action-btn">
+                <span class="btn-icon">🚀</span>
+                <span class="btn-text">START CONCURRENT STREAM</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Card 2: Interactive Concurrency Stage (Windows XP File-Transfer Metaphor) -->
+      <section class="chassis-card stage-chassis" id="stage-card">
+        <!-- Corner Rivets -->
+        <span class="rivet rivet-tl" aria-hidden="true"></span>
+        <span class="rivet rivet-tr" aria-hidden="true"></span>
+        <span class="rivet rivet-bl" aria-hidden="true"></span>
+        <span class="rivet rivet-br" aria-hidden="true"></span>
+
+        <!-- Card Folder Tab -->
+        <div class="card-folder-tab tab-peach">
+          <span class="tab-label">CONCURRENCY TRANSFER STAGE</span>
+        </div>
+
+        <div class="card-body">
+          <!-- Top Master Telemetry Bar -->
+          <div class="master-telemetry-bar">
+            <div class="master-main-metric">
+              <span class="metric-big" id="master-percent">0.0<small>%</small></span>
+              <div class="metric-status-col">
+                <span class="badge-status-pill" id="stage-status-badge">READY</span>
+                <span class="metric-file-name" id="stage-filename">50mb</span>
+              </div>
+            </div>
+
+            <div class="master-stats-cluster">
+              <div class="stat-cell">
+                <span class="cell-label">TRANSFERRED</span>
+                <span class="cell-value" id="master-bytes">0 B / 0 B</span>
+              </div>
+              <div class="stat-cell">
+                <span class="cell-label">SPEED</span>
+                <span class="cell-value stat-speed" id="master-speed">0 B/s</span>
+              </div>
+              <div class="stat-cell">
+                <span class="cell-label">EST. TIME</span>
+                <span class="cell-value" id="master-eta">--</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Master Solid Segmented Progress Bar -->
+          <div class="master-track-container">
+            <div class="solid-track-base">
+              <div class="solid-track-fill" id="master-fill" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- THE VISUAL CONCURRENCY ARENA (Image 2 User Sketch: Left Destination Folder, Middle Animated Byte Packets, Right Worker Entities) -->
+          <div class="concurrency-arena" id="concurrency-arena">
+            
+            <!-- LEFT: Destination Folder Terminal -->
+            <div class="destination-column">
+              <div class="destination-header">
+                <span class="column-tag">ASSEMBLY DESTINATION</span>
+                <span class="file-type-pill">io.MultiReader</span>
+              </div>
+
+              <!-- Retro XP Style Folder Container -->
+              <div class="dest-folder-wrapper" id="dest-folder-wrapper">
+                <div class="dest-folder" id="dest-folder" title="Target Assembly Destination">
+                  <!-- Folder Back Plate -->
+                  <div class="folder-back">
+                    <div class="folder-tab-top"></div>
+                  </div>
+                  
+                  <!-- Paper Sheets Peeking Inside -->
+                  <div class="folder-paper-sheet sheet-1"></div>
+                  <div class="folder-paper-sheet sheet-2"></div>
+                  <div class="folder-paper-sheet sheet-3"></div>
+
+                  <!-- Folder Front Flap (Opens/Bounces when absorbing byte packets) -->
+                  <div class="folder-front" id="folder-front">
+                    <div class="folder-label-card">
+                      <span class="folder-filename" id="folder-filename-display">destination.bin</span>
+                      <span class="folder-absorbed-bytes" id="folder-bytes-display">0 B absorbed</span>
+                    </div>
+                  </div>
+
+                  <!-- Ingestion Target Point for SVG paths -->
+                  <div class="folder-intake-target" id="dest-folder-target" aria-hidden="true"></div>
+
+                  <!-- Verification Seal (Revealed on 100% completion) -->
+                  <div class="verification-seal" id="verification-seal">
+                    <span class="seal-icon">★</span>
+                    <span class="seal-text">VERIFIED</span>
+                    <small class="seal-sub">SHA-256 OK</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Destination Metrics -->
+              <div class="dest-status-box">
+                <div class="dest-status-row">
+                  <span>Stitching Mode:</span>
+                  <strong>Zero-RAM Copy</strong>
+                </div>
+                <div class="dest-status-row">
+                  <span>Packets Ingested:</span>
+                  <strong id="packets-ingested-count">0</strong>
+                </div>
+                <div class="dest-status-row">
+                  <span>Integrity:</span>
+                  <strong id="integrity-status">Standby</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- CENTER: Dynamic SVG Conduits & Flying Byte Packets Overlay -->
+            <div class="conduits-center" id="conduits-container">
+              <!-- SVG Layer for drawing smooth bezier curves connecting each worker to the folder -->
+              <svg class="conduits-svg" id="conduits-svg" aria-hidden="true">
+                <!-- Dynamically generated <path> conduits by app.js -->
+              </svg>
+
+              <!-- Container for animated DOM byte packets moving along the SVG paths -->
+              <div class="byte-packets-plane" id="byte-packets-plane" aria-hidden="true"></div>
+            </div>
+
+            <!-- RIGHT: Worker Entities Rack (Server / Disk Nodes) -->
+            <div class="workers-column">
+              <div class="workers-column-header">
+                <span class="column-tag">CONCURRENT WORKER ENTITIES</span>
+                <span class="workers-active-badge" id="workers-count-badge">4 Workers Active</span>
+              </div>
+
+              <!-- Worker Nodes List (Dynamically generated) -->
+              <div class="worker-entities-rack" id="worker-entities-rack">
+                <!-- Dynamically populated by app.js -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Card 3: Diagnostic RFC 7233 Protocol Trace Drawer -->
+      <section class="chassis-card trace-chassis" id="trace-card">
+        <!-- Corner Rivets -->
+        <span class="rivet rivet-tl" aria-hidden="true"></span>
+        <span class="rivet rivet-tr" aria-hidden="true"></span>
+        <span class="rivet rivet-bl" aria-hidden="true"></span>
+        <span class="rivet rivet-br" aria-hidden="true"></span>
+
+        <div class="trace-header">
+          <div class="trace-title-group">
+            <span class="terminal-prompt">&gt;_</span>
+            <h3 class="trace-title">RFC 7233 PROTOCOL TRACE</h3>
+            <span class="trace-sub">Live Socket &amp; Byte-Range Ingestion Stream</span>
+          </div>
+          <button type="button" class="solid-pill-btn-small" id="clear-trace-btn">CLEAR TRACE</button>
+        </div>
+
+        <div class="trace-terminal-window" id="trace-window">
+          <div class="trace-log-line log-system">[00:00:00] [system] Beam v1.0.0 engine online. Light mode initialized.</div>
+          <div class="trace-log-line log-info">[00:00:00] [probe] Bounded worker queue ready (capacity: 16). Standing by for payload dispatch.</div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-left">
+        <span>Beam • Concurrent Byte-Range Streaming Engine in pure Go</span>
+        <code>net/http</code> • <code>sync/atomic</code> • <code>io.MultiReader</code>
+      </div>
+      <div class="footer-right">
+        <span>Zero External Go Dependencies</span>
+        <span class="status-indicator-dot"></span>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
