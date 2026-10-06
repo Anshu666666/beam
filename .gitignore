@@ -9,3 +9,4 @@ vendor/
 go.work
 *.part
 temp_*
+downloads/

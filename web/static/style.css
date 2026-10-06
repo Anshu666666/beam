@@ -1772,10 +1772,39 @@ body {
 /* Expanded Hero Arena inside the wider Stage Card */
 .stage-chassis .concurrency-arena {
   display: grid !important;
-  grid-template-columns: 160px 1fr 210px !important;
+  grid-template-columns: 195px 1fr 220px !important;
   gap: 12px !important;
   min-height: 250px !important;
-  max-height: 270px !important;
+  max-height: 275px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding-right: 4px !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-solid) var(--bg-card-secondary);
+}
+
+.stage-chassis .concurrency-arena::-webkit-scrollbar {
+  width: 5px;
+}
+
+.stage-chassis .concurrency-arena::-webkit-scrollbar-track {
+  background: var(--bg-card-secondary);
+}
+
+.stage-chassis .concurrency-arena::-webkit-scrollbar-thumb {
+  background-color: var(--border-solid);
+  border-radius: 3px;
+}
+
+.stage-chassis .destination-column {
+  overflow: visible !important;
+  max-height: none !important;
+  scrollbar-width: none !important;
+}
+
+.stage-chassis .destination-column::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
 }
 
 .stage-chassis .dest-folder-wrapper {
@@ -1788,7 +1817,8 @@ body {
 }
 
 .stage-chassis .worker-entities-rack {
-  max-height: 215px !important;
+  max-height: none !important;
+  overflow: visible !important;
 }
 
 /* Compact Square Matrix Card (Takes tiny screen footprint) */

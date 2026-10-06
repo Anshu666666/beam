@@ -1,5 +1,16 @@
 # Beam (`beam`) — High-Throughput Concurrent Byte-Range Streaming Engine
 
+<p align="left">
+  <a href="https://golang.org"><img src="https://img.shields.io/badge/Go-1.22+-00ADD8?style=flat-square&logo=go&logoColor=white" alt="Go Version"></a>
+  <a href="https://datatracker.ietf.org/doc/html/rfc7233"><img src="https://img.shields.io/badge/RFC_7233-Byte--Ranges-F59E0B?style=flat-square" alt="RFC 7233"></a>
+  <a href="https://github.com/Anshu666666/beam"><img src="https://img.shields.io/badge/Build-Passing-10B981?style=flat-square" alt="Build Status"></a>
+  <a href="https://github.com/Anshu666666/beam"><img src="https://img.shields.io/badge/Tests-100%25_Passing-34D399?style=flat-square" alt="Tests"></a>
+  <a href="go.mod"><img src="https://img.shields.io/badge/Dependencies-Zero_External-6366F1?style=flat-square" alt="Zero Dependencies"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-EC4899?style=flat-square" alt="License"></a>
+  <a href="https://github.com/Anshu666666/beam/releases"><img src="https://img.shields.io/badge/Version-v1.0.0-8B5CF6?style=flat-square" alt="Version"></a>
+  <a href="https://github.com/Anshu666666/beam"><img src="https://img.shields.io/badge/Platform-Windows_%7C_Linux_%7C_macOS-64748B?style=flat-square" alt="Platform"></a>
+</p>
+
 A production-grade, lightweight concurrent file downloader inspired by `aria2` and `curl`, written from scratch in Go using standard library primitives.
 
 ---

@@ -634,6 +634,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+    const arenaEl = document.getElementById('concurrency-arena');
+  if (arenaEl) {
+    arenaEl.addEventListener('scroll', () => {
+      if (workersSlider) {
+        renderConduits(parseInt(workersSlider.value, 10));
+      }
+    });
+  }
+
   window.addEventListener('resize', () => {
     if (workersSlider) {
       const count = parseInt(workersSlider.value, 10);
