@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -164,6 +165,19 @@ func (s *Server) handleDownloadStream(w http.ResponseWriter, r *http.Request) {
 			Error: "Query parameter 'url' is required",
 		})
 		return
+	}
+
+	// Auto-resolve relative paths (e.g. /api/demo/50mb) against the incoming Host header
+	if strings.HasPrefix(targetURL, "/") {
+		scheme := "http"
+		if r.TLS != nil {
+			scheme = "https"
+		}
+		host := r.Host
+		if host == "" {
+			host = "localhost:8080"
+		}
+		targetURL = fmt.Sprintf("%s://%s%s", scheme, host, targetURL)
 	}
 
 	workers, _ := strconv.Atoi(query.Get("workers"))

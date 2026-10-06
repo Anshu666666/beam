@@ -277,7 +277,11 @@ document.addEventListener('DOMContentLoaded', () => {
       presetBtns.forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
 
-      if (urlInput) urlInput.value = btn.dataset.url;
+      let resolvedUrl = btn.dataset.url;
+      if (resolvedUrl && resolvedUrl.startsWith('/')) {
+        resolvedUrl = window.location.origin + resolvedUrl;
+      }
+      if (urlInput) urlInput.value = resolvedUrl;
 
       if (btn.dataset.workers && workersSlider) {
         workersSlider.value = btn.dataset.workers;
@@ -404,7 +408,12 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('[beam] START button clicked!');
       if (isDownloading) return;
 
-      const url = urlInput ? urlInput.value.trim() : '';
+      let rawUrl = urlInput ? urlInput.value.trim() : '';
+      if (!rawUrl) {
+        alert('Please enter a target URL.');
+        return;
+      }
+      const url = rawUrl.startsWith('/') ? (window.location.origin + rawUrl) : rawUrl;
       if (!url) {
         alert('Please enter a target URL.');
         return;
@@ -556,8 +565,9 @@ document.addEventListener('DOMContentLoaded', () => {
         break;
 
       case 'error':
-        appendTrace(`[beam] Stream error: ${data.message}`, 'log-error');
-        finishDownload(false, data.message);
+        const errDesc = data.error || data.message || 'Stream connection error';
+        appendTrace(`[beam] Stream error: ${errDesc}`, 'log-error');
+        finishDownload(false, errDesc);
         break;
     }
   }
@@ -612,6 +622,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  if (urlInput && urlInput.value && urlInput.value.startsWith('/')) {
+    urlInput.value = window.location.origin + urlInput.value;
+  }
   const initialWorkers = workersSlider ? parseInt(workersSlider.value, 10) : 4;
   const initialChunks = chunksSlider ? parseInt(chunksSlider.value, 10) : 16;
 
