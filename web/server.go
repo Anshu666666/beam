@@ -44,6 +44,7 @@ type SSEMessage struct {
 	Duration       string              `json:"duration,omitempty"`
 	AverageSpeed   string              `json:"averageSpeed,omitempty"`
 	Error          string              `json:"error,omitempty"`
+	CompletedChunks []int               `json:"completedChunks,omitempty"`
 	Master         *MasterProgressDTO  `json:"master,omitempty"`
 	Workers        []WorkerProgressDTO `json:"workers,omitempty"`
 }
@@ -162,7 +163,8 @@ func (s *Server) handleDownloadStream(w http.ResponseWriter, r *http.Request) {
 			defer mu.Unlock()
 
 			msg := SSEMessage{
-				Type: "progress",
+				Type:            "progress",
+				CompletedChunks: tracker.CompletedChunks(),
 				Master: &MasterProgressDTO{
 					Percent:             tracker.Percent(),
 					Downloaded:          tracker.Downloaded(),

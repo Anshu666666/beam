@@ -3,6 +3,7 @@ package downloader
 import (
 	"fmt"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"time"
 )
@@ -179,6 +180,8 @@ type ProgressTracker struct {
 	downloaded atomic.Int64     // Lock-free atomic accumulator for downloaded bytes
 	startTime  time.Time        // Timestamp recorded when the tracker was created
 	workers    []*WorkerTracker // Dedicated trackers for each worker goroutine
+	chunksMu   sync.RWMutex     // Protects chunksDone
+	chunksDone map[int]bool     // Set of completed chunk indices
 }
 
 // NewProgressTracker constructs an initialized ProgressTracker with optional worker count.
@@ -186,10 +189,8 @@ type ProgressTracker struct {
 func NewProgressTracker(totalSize int64, numWorkers ...int) *ProgressTracker {
 	p := &ProgressTracker{
 		totalSize: totalSize,
-		// time.Now():
-		// - What it does: Returns the current local time with monotonic clock reading.
-		// - Returns: time.Time -> Current timestamp.
 		startTime: time.Now(),
+		chunksDone: make(map[int]bool),
 	}
 
 	count := 0
@@ -385,4 +386,32 @@ func (p *ProgressTracker) RenderDashboard(masterWidth int, workerWidth int) []st
 	}
 
 	return lines
+}
+
+
+// MarkChunkDone records a chunk index as fully downloaded and verified.
+func (p *ProgressTracker) MarkChunkDone(index int) {
+	if p == nil {
+		return
+	}
+	p.chunksMu.Lock()
+	if p.chunksDone == nil {
+		p.chunksDone = make(map[int]bool)
+	}
+	p.chunksDone[index] = true
+	p.chunksMu.Unlock()
+}
+
+// CompletedChunks returns a snapshot of all completed chunk indices.
+func (p *ProgressTracker) CompletedChunks() []int {
+	if p == nil {
+		return nil
+	}
+	p.chunksMu.RLock()
+	defer p.chunksMu.RUnlock()
+	res := make([]int, 0, len(p.chunksDone))
+	for idx := range p.chunksDone {
+		res = append(res, idx)
+	}
+	return res
 }

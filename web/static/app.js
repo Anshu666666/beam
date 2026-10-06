@@ -132,11 +132,14 @@ document.addEventListener('DOMContentLoaded', () => {
   setTheme(savedTheme);
 
   // 4. 2D Visual Completion Grid Engine (BitTorrent / Defrag Style)
+  let workerLastChunkMap = new Map();
+
   function initChunkMatrix(chunkCount) {
     if (!matrixGrid) return;
     currentTotalChunks = chunkCount;
     matrixGrid.innerHTML = '';
     completedChunksSet.clear();
+    workerLastChunkMap.clear();
 
     // Dynamically calculate uniform square grid dimensions
     const cols = Math.ceil(Math.sqrt(chunkCount));
@@ -160,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function updateChunkMatrix(workers, isFinished = false) {
+  function updateChunkMatrix(workers, completedChunks = [], isFinished = false) {
     if (!matrixGrid) return;
 
     if (isFinished) {
@@ -191,8 +194,38 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // 1. Mark backend-confirmed completed chunks
+    if (completedChunks && Array.isArray(completedChunks)) {
+      completedChunks.forEach((chunkId) => {
+        if (chunkId < currentTotalChunks) {
+          completedChunksSet.add(chunkId);
+          const cell = document.getElementById(`chunk-cell-${chunkId}`);
+          if (cell) {
+            cell.className = 'chunk-cell status-completed';
+            cell.title = `Chunk #${chunkId}: 100% Stitched`;
+          }
+        }
+      });
+    }
+
+    // 2. Track worker transitions and active chunks
     if (workers && Array.isArray(workers)) {
       workers.forEach((w) => {
+        const lastChunk = workerLastChunkMap.get(w.id);
+        if (lastChunk !== undefined && w.currentChunk !== undefined && w.currentChunk !== lastChunk) {
+          if (lastChunk < currentTotalChunks) {
+            completedChunksSet.add(lastChunk);
+            const prevCell = document.getElementById(`chunk-cell-${lastChunk}`);
+            if (prevCell) {
+              prevCell.className = 'chunk-cell status-completed';
+              prevCell.title = `Chunk #${lastChunk}: 100% Stitched`;
+            }
+          }
+        }
+        if (w.currentChunk !== undefined) {
+          workerLastChunkMap.set(w.id, w.currentChunk);
+        }
+
         if (w.currentChunk !== undefined && w.currentChunk < currentTotalChunks) {
           const chunkId = w.currentChunk;
           const cell = document.getElementById(`chunk-cell-${chunkId}`);
@@ -201,12 +234,10 @@ document.addEventListener('DOMContentLoaded', () => {
           if (w.percent >= 100 || w.status === 'done') {
             completedChunksSet.add(chunkId);
             cell.className = 'chunk-cell status-completed';
-            cell.title = `Chunk #${chunkId}: Completed (${w.totalFormatted || ''})`;
-          } else if (w.chunkDownloaded > 0) {
-            if (!completedChunksSet.has(chunkId)) {
-              cell.className = 'chunk-cell status-downloading';
-              cell.title = `Chunk #${chunkId}: ${w.percent.toFixed(0)}% (Worker #${w.id})`;
-            }
+            cell.title = `Chunk #${chunkId}: 100% Stitched`;
+          } else if (!completedChunksSet.has(chunkId)) {
+            cell.className = 'chunk-cell status-downloading';
+            cell.title = `Chunk #${chunkId}: ${w.percent.toFixed(0)}% (Worker #${w.id})`;
           }
         }
       });
@@ -522,7 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
 
-        updateChunkMatrix(data.workers, false);
+        updateChunkMatrix(data.workers, data.completedChunks, false);
 
         if (data.workers && Array.isArray(data.workers)) {
           data.workers.forEach((w) => {
@@ -579,7 +610,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       case 'complete':
         appendTrace(`[beam] Ingestion complete! Duration: ${data.duration}. Average speed: ${data.averageSpeed}`, 'log-success');
-        updateChunkMatrix(data.workers, true);
+        updateChunkMatrix(data.workers, data.completedChunks, true);
         finishDownload(true);
         break;
 

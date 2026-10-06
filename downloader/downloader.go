@@ -154,8 +154,11 @@ func downloadSingleStream(opts Options, info *TargetInfo, outputPath string) err
 		return fmt.Errorf("streaming download failed: %w", err)
 	}
 
-	if tracker != nil && tracker.Worker(0) != nil {
-		tracker.Worker(0).FinishChunk()
+	if tracker != nil {
+		tracker.MarkChunkDone(0)
+		if tracker.Worker(0) != nil {
+			tracker.Worker(0).FinishChunk()
+		}
 	}
 
 	return nil

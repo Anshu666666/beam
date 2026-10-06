@@ -86,6 +86,9 @@ func RunWorkerPoolWithLimiter(targetURL string, chunks []Chunk, numWorkers int, 
 					continue
 				}
 
+				if tracker != nil {
+					tracker.MarkChunkDone(chunk.Index)
+				}
 				if workerTracker != nil {
 					workerTracker.FinishChunk()
 				}
