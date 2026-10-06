@@ -102,6 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 3. Theme Switcher (Default: Light Mode)
   function setTheme(theme) {
+    console.log('[beam] Theme switched to:', theme);
     document.documentElement.setAttribute('data-theme', theme);
     try { localStorage.setItem('beam-theme', theme); } catch (e) {}
 
@@ -250,6 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
     workersSlider.addEventListener('input', (e) => {
       const val = parseInt(e.target.value, 10);
       if (workersVal) workersVal.textContent = val;
+      console.log('[beam] Workers configured:', val);
       if (workersCountBadge) workersCountBadge.textContent = `${val} Workers Active`;
       if (!isDownloading) {
         initWorkerRack(val);
@@ -262,6 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
     chunksSlider.addEventListener('input', (e) => {
       const val = parseInt(e.target.value, 10);
       if (chunksVal) chunksVal.textContent = val;
+      console.log('[beam] Chunks matrix configured:', val);
       if (!isDownloading) {
         initChunkMatrix(val);
       }
@@ -288,6 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const wCount = parseInt(workersSlider.value, 10);
       const cCount = parseInt(chunksSlider.value, 10);
+      console.log('[beam] Preset button clicked:', label, '->', btn.dataset.url);
 
       initWorkerRack(wCount);
       initChunkMatrix(cCount);
@@ -301,6 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 8. Diagnostic Protocol Trace Window
   if (clearTraceBtn) {
     clearTraceBtn.addEventListener('click', () => {
+      console.log('[beam] Diagnostic trace cleared.');
       if (traceWindow) {
         traceWindow.innerHTML = '<div class="trace-log-line log-system">[00:00:00] [system] Protocol trace buffer cleared.</div>';
       }
@@ -396,6 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 10. Start Concurrent Download (SSE Stream Connection)
   if (startBtn) {
     startBtn.addEventListener('click', () => {
+      console.log('[beam] START button clicked!');
       if (isDownloading) return;
 
       const url = urlInput ? urlInput.value.trim() : '';
@@ -440,6 +446,9 @@ document.addEventListener('DOMContentLoaded', () => {
       activeEventSource.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
+          if (data.type === 'start' || data.type === 'complete' || data.type === 'error') {
+            console.log('[beam] SSE Event [' + data.type + ']:', data);
+          }
           handleStreamEvent(data, workers);
         } catch (err) {
           console.error('Failed to parse SSE event JSON:', err);
