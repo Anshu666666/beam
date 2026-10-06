@@ -58,8 +58,24 @@ func ProbeTarget(rawURL string) (*TargetInfo, error) {
 	// - Returns: (*http.Response, error) -> Pointer to http.Response (containing
 	//   StatusCode, Header, Body, etc.) or a network/transport error.
 	resp, err := HTTPClient.Do(req)
+	// Fallback to GET with Range: bytes=0-0 if HEAD fails or is rejected
+	if err != nil || (resp != nil && resp.StatusCode >= 400) {
+		getReq, getErr := http.NewRequest(http.MethodGet, rawURL, nil)
+		if getErr == nil {
+			getReq.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Beam/1.0")
+			getReq.Header.Set("Range", "bytes=0-0")
+			getResp, doErr := HTTPClient.Do(getReq)
+			if doErr == nil && (getResp.StatusCode == http.StatusOK || getResp.StatusCode == http.StatusPartialContent) {
+				if resp != nil && resp.Body != nil {
+					resp.Body.Close()
+				}
+				resp = getResp
+				err = nil
+			}
+		}
+	}
 	if err != nil {
-		return nil, fmt.Errorf("HEAD request failed: %w", err)
+		return nil, fmt.Errorf("probe request failed: %w", err)
 	}
 
 	// resp.Body.Close():
@@ -92,6 +108,16 @@ func ProbeTarget(rawURL string) (*TargetInfo, error) {
 		// - Returns: (int64, error) -> Parsed 64-bit integer and an error if non-numeric/overflow.
 		if parsedSize, err := strconv.ParseInt(cl, 10, 64); err == nil && parsedSize >= 0 {
 			size = parsedSize
+		}
+	}
+
+	// Check Content-Range header from 206 Partial Content fallback
+	if cr := resp.Header.Get("Content-Range"); cr != "" {
+		parts := strings.Split(cr, "/")
+		if len(parts) == 2 {
+			if parsedSize, err := strconv.ParseInt(parts[1], 10, 64); err == nil && parsedSize > 0 {
+				size = parsedSize
+			}
 		}
 	}
 

@@ -115,6 +115,21 @@
               <input type="range" id="chunks-slider" min="1" max="64" value="16" class="solid-range-compact">
             </div>
 
+            <!-- Bandwidth Throttle Selector -->
+            <div class="compact-stepper speed-stepper">
+              <div class="stepper-meta">
+                <span class="stepper-title">THROTTLE</span>
+                <span class="stepper-val-badge" id="speed-limit-badge">3 MB/s</span>
+              </div>
+              <select id="speed-limit-select" class="solid-select-compact">
+                <option value="1">🐢 1 MB/s (Slow)</option>
+                <option value="3" selected>⏱️ 3 MB/s (Demo)</option>
+                <option value="5">🎬 5 MB/s (Smooth)</option>
+                <option value="10">🚀 10 MB/s (Fast)</option>
+                <option value="0">⚡ Max (Unlimited)</option>
+              </select>
+            </div>
+
             <!-- Start Trigger Button -->
             <button type="button" id="start-btn" class="solid-action-btn-compact">
               <span class="btn-icon">⚡</span>
@@ -240,50 +255,32 @@
           </div>
         </section>
 
-        <!-- Card 3: 2D Visual Completion Grid (Right Side-by-Side) -->
-        <section class="chassis-card matrix-chassis" id="matrix-card">
+        <!-- Card 3: 2D Visual Tracker (Square Compact Block) -->
+        <section class="chassis-card matrix-chassis compact-square-matrix" id="matrix-card">
           <span class="rivet rivet-tl" aria-hidden="true"></span>
           <span class="rivet rivet-tr" aria-hidden="true"></span>
           <span class="rivet rivet-bl" aria-hidden="true"></span>
           <span class="rivet rivet-br" aria-hidden="true"></span>
 
           <div class="card-folder-tab tab-blue">
-            <span class="tab-label">2D CHUNK COMPLETION MATRIX</span>
+            <span class="tab-label">2D GRID TRACKER</span>
           </div>
 
-          <div class="card-body matrix-card-body">
-            <div class="matrix-header-row">
-              <div>
-                <span class="section-label">RFC 7233 DISCRETE PARTITION MAP</span>
-                <p class="matrix-desc">BitTorrent &amp; Defrag-style completion matrix. Cells transition from hollow pending to pulsing active to solid white completed.</p>
-              </div>
-              <div class="matrix-stats-pills">
-                <span class="matrix-pill" id="matrix-completed-count">0 / 16 Chunks Stitched</span>
-                <span class="matrix-pill pill-accent" id="matrix-coverage-pct">0.0% Coverage</span>
-              </div>
+          <div class="card-body square-matrix-body">
+            <div class="matrix-mini-header">
+              <span class="matrix-mini-title">CHUNKS MAP</span>
+              <span class="matrix-pill-compact" id="matrix-coverage-pct">0.0%</span>
             </div>
 
-            <!-- Retro Blue Terminal Grid Frame -->
-            <div class="matrix-terminal-frame">
+            <!-- Square Retro Electric-Blue Terminal Frame -->
+            <div class="matrix-terminal-square-frame">
               <div class="matrix-grid-viewport" id="matrix-grid-viewport">
                 <!-- Populated dynamically by app.js -->
               </div>
             </div>
 
-            <!-- Matrix Legend -->
-            <div class="matrix-legend-row">
-              <div class="legend-item">
-                <span class="legend-swatch swatch-pending"></span>
-                <span class="legend-text">Pending Partition</span>
-              </div>
-              <div class="legend-item">
-                <span class="legend-swatch swatch-active"></span>
-                <span class="legend-text">Active Worker Stream</span>
-              </div>
-              <div class="legend-item">
-                <span class="legend-swatch swatch-done"></span>
-                <span class="legend-text">Stitched &amp; Verified (Solid White)</span>
-              </div>
+            <div class="matrix-mini-footer">
+              <span class="matrix-count-text" id="matrix-completed-count">0 / 16 Done</span>
             </div>
           </div>
         </section>

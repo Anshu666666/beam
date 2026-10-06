@@ -14,6 +14,7 @@ type Options struct {
 	OutputFile string                         // Local destination path (optional: auto-derived if omitted)
 	Workers    int                            // Maximum concurrent worker goroutines (default 4)
 	Chunks     int                            // Total chunk slices to partition file into (default 4)
+	RateLimit  int64                          // Maximum download speed in bytes/sec (0 = unlimited)
 	OnProgress func(tracker *ProgressTracker) // Optional progress callback invoked during download
 }
 
@@ -80,7 +81,8 @@ func downloadConcurrent(opts Options, info *TargetInfo, outputPath string) error
 	defer stopReporter()
 
 	// Download all chunks concurrently across bounded worker pool
-	err := RunWorkerPool(opts.URL, chunks, opts.Workers, tracker)
+	limiter := NewRateLimiter(opts.RateLimit)
+	err := RunWorkerPoolWithLimiter(opts.URL, chunks, opts.Workers, tracker, limiter)
 	if err != nil {
 		// Clean up any partially downloaded chunk files on failure
 		for _, c := range chunks {
@@ -127,7 +129,11 @@ func downloadSingleStream(opts Options, info *TargetInfo, outputPath string) err
 	stopReporter := startProgressReporter(tracker, opts.OnProgress)
 	defer stopReporter()
 
+	limiter := NewRateLimiter(opts.RateLimit)
 	var src io.Reader = resp.Body
+	if limiter != nil {
+		src = NewThrottledReader(src, limiter)
+	}
 	if tracker != nil {
 		var counter io.Writer = tracker
 		if tracker.Worker(0) != nil {

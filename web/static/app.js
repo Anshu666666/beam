@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const workersVal = document.getElementById('workers-val');
   const chunksSlider = document.getElementById('chunks-slider');
   const chunksVal = document.getElementById('chunks-val');
+  const speedLimitSelect = document.getElementById('speed-limit-select');
+  const speedLimitBadge = document.getElementById('speed-limit-badge');
   const startBtn = document.getElementById('start-btn');
   const presetBtns = document.querySelectorAll('.preset-pill');
 
@@ -136,11 +138,16 @@ document.addEventListener('DOMContentLoaded', () => {
     matrixGrid.innerHTML = '';
     completedChunksSet.clear();
 
+    // Dynamically calculate uniform square grid dimensions
+    const cols = Math.ceil(Math.sqrt(chunkCount));
+    matrixGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    matrixGrid.style.gridTemplateRows = `repeat(${cols}, 1fr)`;
+
     if (matrixCompletedCount) {
-      matrixCompletedCount.textContent = `0 / ${chunkCount} Chunks Stitched`;
+      matrixCompletedCount.textContent = `0 / ${chunkCount} Done`;
     }
     if (matrixCoveragePct) {
-      matrixCoveragePct.textContent = '0.0% Coverage';
+      matrixCoveragePct.textContent = '0.0%';
     }
 
     for (let i = 0; i < chunkCount; i++) {
@@ -166,10 +173,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
       if (matrixCompletedCount) {
-        matrixCompletedCount.textContent = `${currentTotalChunks} / ${currentTotalChunks} Chunks Stitched`;
+        matrixCompletedCount.textContent = `${currentTotalChunks} / ${currentTotalChunks} Done`;
       }
       if (matrixCoveragePct) {
-        matrixCoveragePct.textContent = '100.0% Coverage';
+        matrixCoveragePct.textContent = '100.0%';
       }
 
       if (typeof anime !== 'undefined') {
@@ -208,10 +215,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const count = completedChunksSet.size;
     const coverage = ((count / currentTotalChunks) * 100).toFixed(1);
     if (matrixCompletedCount) {
-      matrixCompletedCount.textContent = `${count} / ${currentTotalChunks} Chunks Stitched`;
+      matrixCompletedCount.textContent = `${count} / ${currentTotalChunks} Done`;
     }
     if (matrixCoveragePct) {
-      matrixCoveragePct.textContent = `${coverage}% Coverage`;
+      matrixCoveragePct.textContent = `${coverage}%`;
     }
   }
 
@@ -271,6 +278,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  if (speedLimitSelect) {
+    speedLimitSelect.addEventListener('change', (e) => {
+      const val = parseInt(e.target.value, 10);
+      if (speedLimitBadge) {
+        speedLimitBadge.textContent = val === 0 ? 'MAX' : `${val} MB/s`;
+      }
+      appendTrace(`[limiter] Bandwidth limit set: ${val === 0 ? 'Unlimited' : val + ' MB/s'}`, 'log-system');
+    });
+  }
+
+
   // 7. Demonstration Preset Selectors
   presetBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -295,13 +313,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const wCount = parseInt(workersSlider.value, 10);
       const cCount = parseInt(chunksSlider.value, 10);
+      const label = btn.querySelector('.preset-pill-tag') ? btn.querySelector('.preset-pill-tag').textContent : 'Preset';
       console.log('[beam] Preset button clicked:', label, '->', btn.dataset.url);
 
       initWorkerRack(wCount);
       initChunkMatrix(cCount);
       setTimeout(() => renderConduits(wCount), 50);
-
-      const label = btn.querySelector('.preset-pill-tag') ? btn.querySelector('.preset-pill-tag').textContent : 'Preset';
       appendTrace(`[preset] Selected ${label} -> ${btn.dataset.url} (Chunks: ${cCount})`, 'log-probe');
     });
   });
@@ -443,9 +460,11 @@ document.addEventListener('DOMContentLoaded', () => {
       renderConduits(workers);
       startPacketStreamingEngine(workers);
 
-      appendTrace(`[beam] Initiating stream: ${url} (Workers: ${workers}, Chunks: ${chunks})`, 'log-system');
+      const rateLimit = speedLimitSelect ? parseInt(speedLimitSelect.value, 10) : 0;
+      const rateStr = rateLimit > 0 ? ` (Throttle: ${rateLimit} MB/s)` : ' (Unlimited Speed)';
+      appendTrace(`[beam] Initiating stream: ${url} (Workers: ${workers}, Chunks: ${chunks})${rateStr}`, 'log-system');
 
-      const sseUrl = `/api/download/stream?url=${encodeURIComponent(url)}&workers=${workers}&chunks=${chunks}`;
+      const sseUrl = `/api/download/stream?url=${encodeURIComponent(url)}&workers=${workers}&chunks=${chunks}&rate=${rateLimit}`;
       if (activeEventSource) {
         activeEventSource.close();
       }

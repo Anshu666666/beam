@@ -14,6 +14,11 @@ import (
 // read from the HTTP response socket is duplicated to 'counter' (e.g. for progress tracking)
 // in a single pass without buffering or double disk writes.
 func DownloadChunk(targetURL string, chunk Chunk, counter io.Writer) error {
+	return DownloadChunkWithLimiter(targetURL, chunk, counter, nil)
+}
+
+// DownloadChunkWithLimiter downloads an individual chunk with bandwidth pacing.
+func DownloadChunkWithLimiter(targetURL string, chunk Chunk, counter io.Writer, limiter *RateLimiter) error {
 	// Guard clause: ensure destination file path is specified
 	if chunk.TempFilePath == "" {
 		return fmt.Errorf("chunk %d has empty TempFilePath", chunk.Index)
@@ -80,6 +85,9 @@ func DownloadChunk(targetURL string, chunk Chunk, counter io.Writer) error {
 
 	// Stream Reader setup:
 	var src io.Reader = resp.Body
+	if limiter != nil {
+		src = NewThrottledReader(src, limiter)
+	}
 
 	if counter != nil {
 		// io.TeeReader(r, w):

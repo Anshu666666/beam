@@ -112,6 +112,12 @@ func (s *Server) handleDownloadStream(w http.ResponseWriter, r *http.Request) {
 		chunks = 4
 	}
 
+	rateMB, _ := strconv.Atoi(query.Get("rate"))
+	var rateBytes int64
+	if rateMB > 0 {
+		rateBytes = int64(rateMB) * 1024 * 1024
+	}
+
 	// Create temporary destination file
 	tmpFile, err := os.CreateTemp("", "web_download_*")
 	if err != nil {
@@ -150,6 +156,7 @@ func (s *Server) handleDownloadStream(w http.ResponseWriter, r *http.Request) {
 		OutputFile: tmpPath,
 		Workers:    workers,
 		Chunks:     chunks,
+		RateLimit:  rateBytes,
 		OnProgress: func(tracker *downloader.ProgressTracker) {
 			mu.Lock()
 			defer mu.Unlock()

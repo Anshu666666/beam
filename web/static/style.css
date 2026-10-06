@@ -1750,3 +1750,175 @@ body {
   font-size: 10px !important;
   margin-top: 0 !important;
 }
+
+/* ==========================================================================
+   SQUARE 2D MATRIX TRACKER & ASYMMETRIC STAGE HERO LAYOUT
+   ========================================================================== */
+
+/* Concurrency Transfer Stage takes ~80% of width, Square Matrix takes 240px */
+.cockpit-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 240px !important;
+  gap: 14px !important;
+  align-items: stretch !important;
+}
+
+@media (max-width: 980px) {
+  .cockpit-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Expanded Hero Arena inside the wider Stage Card */
+.stage-chassis .concurrency-arena {
+  display: grid !important;
+  grid-template-columns: 160px 1fr 210px !important;
+  gap: 12px !important;
+  min-height: 250px !important;
+  max-height: 270px !important;
+}
+
+.stage-chassis .dest-folder-wrapper {
+  transform: scale(0.85) !important;
+  margin: -5px 0 0 0 !important;
+}
+
+.stage-chassis .conduits-center {
+  min-height: 230px !important;
+}
+
+.stage-chassis .worker-entities-rack {
+  max-height: 215px !important;
+}
+
+/* Compact Square Matrix Card (Takes tiny screen footprint) */
+.compact-square-matrix {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  width: 240px !important;
+  box-sizing: border-box !important;
+}
+
+.square-matrix-body {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  height: 100% !important;
+  gap: 8px !important;
+  padding: 4px 0 !important;
+}
+
+.matrix-mini-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 4px;
+}
+
+.matrix-mini-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-secondary);
+  letter-spacing: 0.5px;
+}
+
+.matrix-pill-compact {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  background-color: var(--color-mint);
+  color: #18181B;
+  padding: 1px 6px;
+  border-radius: 3px;
+  border: 1px solid var(--border-solid);
+}
+
+/* Perfect Square Retro Electric-Blue Terminal Frame */
+.matrix-terminal-square-frame {
+  width: 190px !important;
+  height: 190px !important;
+  aspect-ratio: 1 / 1 !important;
+  background-color: #0018F0 !important;
+  border: 2px solid var(--border-solid) !important;
+  border-radius: 6px !important;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4), 2px 2px 0px var(--border-solid) !important;
+  padding: 8px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.matrix-terminal-square-frame .matrix-grid-viewport {
+  display: grid !important;
+  width: 100% !important;
+  height: 100% !important;
+  gap: 3px !important;
+  box-sizing: border-box !important;
+  align-content: center !important;
+  justify-content: center !important;
+}
+
+.matrix-terminal-square-frame .chunk-cell {
+  aspect-ratio: 1 / 1 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: var(--font-mono) !important;
+  font-size: 8px !important;
+  font-weight: 700 !important;
+  border-radius: 2px !important;
+  box-sizing: border-box !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  background-color: transparent !important;
+  transition: all 120ms ease !important;
+}
+
+.matrix-terminal-square-frame .chunk-cell.status-downloading {
+  background-color: #FBBF24 !important;
+  color: #18181B !important;
+  border-color: #F59E0B !important;
+  animation: chunkPulse 800ms infinite ease-in-out !important;
+}
+
+.matrix-terminal-square-frame .chunk-cell.status-completed {
+  background-color: #FFFFFF !important;
+  color: #0018F0 !important;
+  border-color: #FFFFFF !important;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8) !important;
+}
+
+.matrix-mini-footer {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+/* Speed Limiter Throttle Styles */
+.speed-stepper {
+  min-width: 120px !important;
+  max-width: 140px !important;
+}
+
+.solid-select-compact {
+  width: 100%;
+  height: 20px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  background-color: var(--bg-card);
+  color: var(--ink-primary);
+  border: 1px solid var(--border-solid);
+  border-radius: 3px;
+  padding: 0 2px;
+  cursor: pointer;
+  outline: none;
+}

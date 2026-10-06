@@ -115,13 +115,13 @@ sequenceDiagram
     actor User as Browser Client (EventSource)
     participant Srv as Go Web Server (:8080)
     participant DL as Concurrent Downloader
-    participant Mock as Synthetic Seeker (:8080/api/demo)
+    participant Remote as Remote HTTP Server / CDN / GitHub
 
     User->>Srv: GET /api/download/stream?url=...&workers=4&chunks=4
     Srv-->>User: 200 OK (Content-Type: text/event-stream)
     Srv->>DL: Start Download with OnWorkerProgress callback
-    DL->>Mock: HTTP HEAD (Probe RFC 7233)
-    Mock-->>DL: 200 OK (Accept-Ranges: bytes, Content-Length)
+    DL->>Remote: HTTP HEAD / Range Probe (RFC 7233)
+    Remote-->>DL: 200/206 Partial Content (Accept-Ranges: bytes)
     loop Every 50ms (or on chunk byte transfers)
         DL-->>Srv: OnWorkerProgress(chunkID, transferred, total)
         Srv-->>User: data: {"type":"progress", "workers":[...], "speed_mbps":...}
@@ -136,12 +136,14 @@ sequenceDiagram
 
 ```bash
 # Run the web dashboard server
-go run ./projects/01_chunk_downloader/cmd/web/main.go -port 8080
+go run ./cmd/web -port 8080
 ```
 Open **`http://localhost:8080`** in any web browser.
 
 ### Features
-1. **Interactive Demo Presets**: Includes built-in 50 MB and 100 MB synthetic test files served via zero-RAM virtual byte-range streams (`/api/demo/50mb`, `/api/demo/100mb`).
+1. **Real-World Payloads & Presets**: Direct streaming from GitHub Releases (50 MB, 100 MB), Linux Kernel CDN (142 MB), and Go Dev (27.5 MB).
+2. **Configurable Bandwidth Throttler**: Built-in Token Bucket rate limiter (1 MB/s, 3 MB/s, 5 MB/s, 10 MB/s, or Unlimited) to simulate real-world network constraints.
+3. **Compact Square 2D Tracker**: Retro BitTorrent/defrag style matrix displaying discrete chunk state transitions in a minimal footprint.
 2. **Per-Worker Telemetry Cards**: Watch individual worker goroutines claim chunks, stream data, and complete chunks in real time.
 3. **Master Progress Track**: Real-time throughput gauge (MB/s), ETA countdown, transferred megabytes, and completion percentage.
 4. **Live RFC 7233 Protocol Drawer**: Collapsible diagnostic log showing byte-range requests (`Range: bytes=X-Y`), HTTP 206 Partial Content responses, and SHA-256 verification.
@@ -156,7 +158,7 @@ All components are covered by unit and integration tests using `net/http/httptes
 Run tests with Go's race detector enabled:
 
 ```bash
-go test -v -race ./projects/01_chunk_downloader/...
+go test -v -race ./...
 ```
 
 Every test verifies end-to-end cryptographic SHA-256 data integrity and zero concurrent data races.

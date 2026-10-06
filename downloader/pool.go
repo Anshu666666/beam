@@ -16,6 +16,11 @@ import (
 // 4. A background goroutine waits on sync.WaitGroup to close 'results' once all workers finish.
 // 5. If any worker reports an error, RunWorkerPool captures and returns the first error encountered.
 func RunWorkerPool(targetURL string, chunks []Chunk, numWorkers int, tracker *ProgressTracker) error {
+	return RunWorkerPoolWithLimiter(targetURL, chunks, numWorkers, tracker, nil)
+}
+
+// RunWorkerPoolWithLimiter dispatches chunk download jobs with a shared bandwidth throttle.
+func RunWorkerPoolWithLimiter(targetURL string, chunks []Chunk, numWorkers int, tracker *ProgressTracker, limiter *RateLimiter) error {
 	// Guard clause: if no chunks exist, there is nothing to download
 	if len(chunks) == 0 {
 		return nil
@@ -74,7 +79,7 @@ func RunWorkerPool(targetURL string, chunks []Chunk, numWorkers int, tracker *Pr
 					workerTracker.StartChunk(chunk.Index, chunk.Size())
 				}
 
-				err := DownloadChunk(targetURL, chunk, workerWriter)
+				err := DownloadChunkWithLimiter(targetURL, chunk, workerWriter, limiter)
 				if err != nil {
 					results <- fmt.Errorf("worker %d failed chunk %d [%d-%d]: %w",
 						workerID, chunk.Index, chunk.Start, chunk.End, err)
