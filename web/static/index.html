@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Beam — Concurrent Byte-Range Streaming Engine</title>
-  <meta name="description" content="Visual demonstrator for high-throughput concurrent RFC 7233 chunk downloader in Go with live worker byte streaming animation.">
+  <title>Beam � Concurrent Byte-Range Streaming Engine</title>
+  <meta name="description" content="Visual demonstrator for high-throughput concurrent RFC 7233 chunk downloader in Go with live worker byte streaming animation and 2D visual completion grid.">
   
   <!-- Fonts: Recursive (Variable mechanical font) & Space Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,29 +23,29 @@
     <header class="top-nav">
       <div class="brand-group">
         <div class="brand-folder-tab">
-          <span class="folder-tab-icon">📁</span>
+          <span class="folder-tab-icon">??</span>
           <span class="folder-tab-text">RFC 7233</span>
         </div>
         <div class="brand-title-box">
           <h1 class="brand-title">BEAM<span class="brand-accent">STREAM</span></h1>
-          <span class="brand-version">v1.0.0 • Go Engine</span>
+          <span class="brand-version">v1.0.0 � Go Engine</span>
         </div>
       </div>
 
       <div class="nav-middle">
-        <span class="badge-pill pill-solid-yellow">⚡ Lock-Free Atomics</span>
-        <span class="badge-pill pill-solid-mint">🧵 Bounded Pool</span>
-        <span class="badge-pill pill-solid-blue">📦 Zero-RAM Stitch</span>
+        <span class="badge-pill pill-solid-yellow">? Lock-Free Atomics</span>
+        <span class="badge-pill pill-solid-mint">?? Bounded Pool</span>
+        <span class="badge-pill pill-solid-blue">?? Zero-RAM Stitch</span>
       </div>
 
       <!-- Light / Dark Mode Toggle Switch (Default: Light Mode) -->
       <div class="theme-switcher">
         <button type="button" class="theme-btn active" id="theme-light-btn" title="Switch to Light Mode">
-          <span class="theme-icon">☀️</span>
+          <span class="theme-icon">??</span>
           <span class="theme-label">Light</span>
         </button>
         <button type="button" class="theme-btn" id="theme-dark-btn" title="Switch to Dark Mode">
-          <span class="theme-icon">🌙</span>
+          <span class="theme-icon">??</span>
           <span class="theme-label">Dark</span>
         </button>
       </div>
@@ -72,22 +72,22 @@
           <div class="control-row">
             <label class="section-label">SELECT DEMO PAYLOAD</label>
             <div class="presets-bar">
-              <button type="button" class="preset-pill preset-peach active" id="preset-50mb" data-url="/api/demo/50mb" data-workers="4" data-chunks="4">
+              <button type="button" class="preset-pill preset-peach active" id="preset-50mb" data-url="/api/demo/50mb" data-workers="4" data-chunks="16">
                 <span class="preset-pill-tag">50 MB</span>
-                <span class="preset-pill-desc">Local Synthetic (Zero RAM)</span>
+                <span class="preset-pill-desc">Local Synthetic (16 Chunks)</span>
               </button>
 
-              <button type="button" class="preset-pill preset-butter" id="preset-100mb" data-url="/api/demo/100mb" data-workers="8" data-chunks="8">
+              <button type="button" class="preset-pill preset-butter" id="preset-100mb" data-url="/api/demo/100mb" data-workers="8" data-chunks="32">
                 <span class="preset-pill-tag">100 MB</span>
-                <span class="preset-pill-desc">Local Synthetic (Zero RAM)</span>
+                <span class="preset-pill-desc">Local Synthetic (32 Chunks)</span>
               </button>
 
-              <button type="button" class="preset-pill preset-mint" id="preset-hetzner" data-url="https://speed.hetzner.de/100MB.bin" data-workers="8" data-chunks="8">
+              <button type="button" class="preset-pill preset-mint" id="preset-hetzner" data-url="https://speed.hetzner.de/100MB.bin" data-workers="8" data-chunks="16">
                 <span class="preset-pill-tag">Hetzner CDN</span>
                 <span class="preset-pill-desc">100 MB Public Mirror</span>
               </button>
 
-              <button type="button" class="preset-pill preset-lavender" id="preset-godev" data-url="https://go.dev/dl/go1.22.0.src.tar.gz" data-workers="4" data-chunks="4">
+              <button type="button" class="preset-pill preset-lavender" id="preset-godev" data-url="https://go.dev/dl/go1.22.0.src.tar.gz" data-workers="4" data-chunks="8">
                 <span class="preset-pill-tag">Go 1.22</span>
                 <span class="preset-pill-desc">26 MB Official Tarball</span>
               </button>
@@ -115,20 +115,20 @@
               <span class="stepper-caption">Concurrent TCP streams in worker pool</span>
             </div>
 
-            <!-- Chunks Slider -->
+            <!-- Chunks Slider (Supports up to 64 chunks for visual 2D grid) -->
             <div class="stepper-box">
               <div class="stepper-header">
                 <label for="chunks-slider" class="stepper-label">BYTE-RANGE CHUNKS</label>
-                <span class="stepper-display" id="chunks-val">4</span>
+                <span class="stepper-display" id="chunks-val">16</span>
               </div>
-              <input type="range" id="chunks-slider" min="1" max="16" value="4" class="solid-range">
-              <span class="stepper-caption">RFC 7233 partitions (Range: bytes=X-Y)</span>
+              <input type="range" id="chunks-slider" min="1" max="64" value="16" class="solid-range">
+              <span class="stepper-caption">Partitions represented in 2D completion grid</span>
             </div>
 
             <!-- Start Button -->
             <div class="action-btn-container">
               <button type="button" id="start-btn" class="solid-action-btn">
-                <span class="btn-icon">🚀</span>
+                <span class="btn-icon">??</span>
                 <span class="btn-text">START CONCURRENT STREAM</span>
               </button>
             </div>
@@ -183,7 +183,7 @@
             </div>
           </div>
 
-          <!-- THE VISUAL CONCURRENCY ARENA (Image 2 User Sketch: Left Destination Folder, Middle Animated Byte Packets, Right Worker Entities) -->
+          <!-- THE VISUAL CONCURRENCY ARENA -->
           <div class="concurrency-arena" id="concurrency-arena">
             
             <!-- LEFT: Destination Folder Terminal -->
@@ -206,7 +206,7 @@
                   <div class="folder-paper-sheet sheet-2"></div>
                   <div class="folder-paper-sheet sheet-3"></div>
 
-                  <!-- Folder Front Flap (Opens/Bounces when absorbing byte packets) -->
+                  <!-- Folder Front Flap -->
                   <div class="folder-front" id="folder-front">
                     <div class="folder-label-card">
                       <span class="folder-filename" id="folder-filename-display">destination.bin</span>
@@ -217,9 +217,9 @@
                   <!-- Ingestion Target Point for SVG paths -->
                   <div class="folder-intake-target" id="dest-folder-target" aria-hidden="true"></div>
 
-                  <!-- Verification Seal (Revealed on 100% completion) -->
+                  <!-- Verification Seal -->
                   <div class="verification-seal" id="verification-seal">
-                    <span class="seal-icon">★</span>
+                    <span class="seal-icon">?</span>
                     <span class="seal-text">VERIFIED</span>
                     <small class="seal-sub">SHA-256 OK</small>
                   </div>
@@ -245,33 +245,75 @@
 
             <!-- CENTER: Dynamic SVG Conduits & Flying Byte Packets Overlay -->
             <div class="conduits-center" id="conduits-container">
-              <!-- SVG Layer for drawing smooth bezier curves connecting each worker to the folder -->
-              <svg class="conduits-svg" id="conduits-svg" aria-hidden="true">
-                <!-- Dynamically generated <path> conduits by app.js -->
-              </svg>
-
-              <!-- Container for animated DOM byte packets moving along the SVG paths -->
+              <svg class="conduits-svg" id="conduits-svg" aria-hidden="true"></svg>
               <div class="byte-packets-plane" id="byte-packets-plane" aria-hidden="true"></div>
             </div>
 
-            <!-- RIGHT: Worker Entities Rack (Server / Disk Nodes) -->
+            <!-- RIGHT: Worker Entities Rack -->
             <div class="workers-column">
               <div class="workers-column-header">
                 <span class="column-tag">CONCURRENT WORKER ENTITIES</span>
                 <span class="workers-active-badge" id="workers-count-badge">4 Workers Active</span>
               </div>
 
-              <!-- Worker Nodes List (Dynamically generated) -->
-              <div class="worker-entities-rack" id="worker-entities-rack">
-                <!-- Dynamically populated by app.js -->
-              </div>
+              <div class="worker-entities-rack" id="worker-entities-rack"></div>
             </div>
 
           </div>
         </div>
       </section>
 
-      <!-- Card 3: Diagnostic RFC 7233 Protocol Trace Drawer -->
+      <!-- Card 3: 2D Visual Completion Grid (BitTorrent & Defrag Style Chunk Block Matrix) -->
+      <section class="chassis-card matrix-chassis" id="matrix-card">
+        <!-- Corner Rivets -->
+        <span class="rivet rivet-tl" aria-hidden="true"></span>
+        <span class="rivet rivet-tr" aria-hidden="true"></span>
+        <span class="rivet rivet-bl" aria-hidden="true"></span>
+        <span class="rivet rivet-br" aria-hidden="true"></span>
+
+        <!-- Card Folder Tab -->
+        <div class="card-folder-tab tab-blue">
+          <span class="tab-label">2D CHUNK COMPLETION MATRIX</span>
+        </div>
+
+        <div class="card-body">
+          <div class="matrix-header-row">
+            <div>
+              <span class="section-label">RFC 7233 DISCRETE PARTITION MAP</span>
+              <p class="matrix-desc">BitTorrent &amp; Defrag-style visual completion grid. Each cell represents an independent byte-range chunk transitioning from hollow pending to solid white completed.</p>
+            </div>
+            <div class="matrix-stats-pills">
+              <span class="matrix-pill" id="matrix-completed-count">0 / 16 Chunks Stitched</span>
+              <span class="matrix-pill pill-accent" id="matrix-coverage-pct">0.0% Coverage</span>
+            </div>
+          </div>
+
+          <!-- The Retro Blue Terminal Grid Frame (Matching User's Reference Sketch) -->
+          <div class="matrix-terminal-frame">
+            <div class="matrix-grid-viewport" id="matrix-grid-viewport">
+              <!-- Dynamically populated 2D cells by app.js -->
+            </div>
+          </div>
+
+          <!-- Matrix Legend -->
+          <div class="matrix-legend-row">
+            <div class="legend-item">
+              <span class="legend-swatch swatch-pending"></span>
+              <span class="legend-text">Pending Partition</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-swatch swatch-active"></span>
+              <span class="legend-text">Active Worker Stream</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-swatch swatch-done"></span>
+              <span class="legend-text">Stitched &amp; Verified (Solid White)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Card 4: Diagnostic RFC 7233 Protocol Trace Drawer -->
       <section class="chassis-card trace-chassis" id="trace-card">
         <!-- Corner Rivets -->
         <span class="rivet rivet-tl" aria-hidden="true"></span>
@@ -290,7 +332,7 @@
 
         <div class="trace-terminal-window" id="trace-window">
           <div class="trace-log-line log-system">[00:00:00] [system] Beam v1.0.0 engine online. Light mode initialized.</div>
-          <div class="trace-log-line log-info">[00:00:00] [probe] Bounded worker queue ready (capacity: 16). Standing by for payload dispatch.</div>
+          <div class="trace-log-line log-info">[00:00:00] [probe] 2D Chunk completion matrix initialized. Standing by for stream dispatch.</div>
         </div>
       </section>
 
@@ -299,8 +341,8 @@
     <!-- Footer -->
     <footer class="app-footer">
       <div class="footer-left">
-        <span>Beam • Concurrent Byte-Range Streaming Engine in pure Go</span>
-        <code>net/http</code> • <code>sync/atomic</code> • <code>io.MultiReader</code>
+        <span>Beam � Concurrent Byte-Range Streaming Engine in pure Go</span>
+        <code>net/http</code> � <code>sync/atomic</code> � <code>io.MultiReader</code>
       </div>
       <div class="footer-right">
         <span>Zero External Go Dependencies</span>
