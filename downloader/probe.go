@@ -50,14 +50,14 @@ func ProbeTarget(rawURL string) (*TargetInfo, error) {
 	// - What it does: Sets an HTTP header key-value pair, overwriting any previous
 	//   values for that key. Key casing is automatically canonicalized (e.g. "User-Agent").
 	// - Returns: void (no return value).
-	req.Header.Set("User-Agent", "Go-ChunkDownloader/1.0")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Beam/1.0")
 
 	// http.DefaultClient.Do(req):
 	// - What it does: Sends the HTTP request using Go's default HTTP client.
 	//   It automatically handles redirects (up to 10 hops) and TLS handshakes.
 	// - Returns: (*http.Response, error) -> Pointer to http.Response (containing
 	//   StatusCode, Header, Body, etc.) or a network/transport error.
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := HTTPClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("HEAD request failed: %w", err)
 	}

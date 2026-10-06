@@ -37,12 +37,12 @@ func DownloadChunk(targetURL string, chunk Chunk, counter io.Writer) error {
 	// - What it does: Sets the HTTP 'Range' request header.
 	// - Returns: void.
 	req.Header.Set("Range", rangeHeaderValue)
-	req.Header.Set("User-Agent", "Go-ChunkDownloader/1.0")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Beam/1.0")
 
 	// http.DefaultClient.Do(req):
 	// - What it does: Dispatches HTTP request over network socket using connection pooling.
 	// - Returns: (*http.Response, error) -> HTTP response or network/transport error.
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := HTTPClient.Do(req)
 	if err != nil {
 		return fmt.Errorf("network request failed for chunk %d [%s]: %w", chunk.Index, rangeHeaderValue, err)
 	}

@@ -69,24 +69,24 @@
           <div class="presets-compact-bar">
             <span class="presets-label">PAYLOAD PRESETS:</span>
             <div class="presets-bar">
-              <button type="button" class="preset-pill preset-peach active" id="preset-50mb" data-url="/api/demo/50mb" data-workers="4" data-chunks="16">
-                <span class="preset-pill-tag">50 MB</span>
-                <span class="preset-pill-desc">Synthetic Local (16 Chunks)</span>
-              </button>
-
-              <button type="button" class="preset-pill preset-butter" id="preset-100mb" data-url="/api/demo/100mb" data-workers="8" data-chunks="32">
-                <span class="preset-pill-tag">100 MB</span>
-                <span class="preset-pill-desc">Synthetic Local (32 Chunks)</span>
-              </button>
-
-              <button type="button" class="preset-pill preset-mint" id="preset-hetzner" data-url="https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-sample-50mb.bin" data-workers="4" data-chunks="16">
+              <button type="button" class="preset-pill preset-mint active" id="preset-gh-50mb" data-url="https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-sample-50mb.bin" data-workers="4" data-chunks="16">
                 <span class="preset-pill-tag">GitHub 50 MB</span>
-                <span class="preset-pill-desc">v1.0.0 Release Asset</span>
+                <span class="preset-pill-desc">v1.0.0 Official Release Asset</span>
+              </button>
+
+              <button type="button" class="preset-pill preset-butter" id="preset-gh-100mb" data-url="https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-sample-100mb.bin" data-workers="8" data-chunks="32">
+                <span class="preset-pill-tag">GitHub 100 MB</span>
+                <span class="preset-pill-desc">v1.0.0 High-Throughput Asset</span>
+              </button>
+
+              <button type="button" class="preset-pill preset-peach" id="preset-kernel" data-url="https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.8.tar.xz" data-workers="8" data-chunks="32">
+                <span class="preset-pill-tag">Linux Kernel</span>
+                <span class="preset-pill-desc">142 MB Fastly CDN Mirror</span>
               </button>
 
               <button type="button" class="preset-pill preset-lavender" id="preset-godev" data-url="https://go.dev/dl/go1.22.0.src.tar.gz" data-workers="4" data-chunks="8">
                 <span class="preset-pill-tag">Go 1.22</span>
-                <span class="preset-pill-desc">26 MB Official Tarball</span>
+                <span class="preset-pill-desc">27.5 MB Google CDN Mirror</span>
               </button>
             </div>
           </div>
@@ -95,7 +95,7 @@
           <div class="cockpit-action-strip">
             <div class="url-input-container">
               <span class="input-method-badge">HTTP GET</span>
-              <input type="url" id="url-input" class="solid-input" value="/api/demo/50mb" placeholder="https://..." required spellcheck="false">
+              <input type="url" id="url-input" class="solid-input" value="https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-sample-50mb.bin" placeholder="https://..." required spellcheck="false">
             </div>
 
             <!-- Compact Sliders -->

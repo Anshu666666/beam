@@ -1,79 +1,51 @@
 package web
 
 import (
-	"io"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"testing"
 )
 
-// TestSyntheticSeeker verifies seeking and reading byte ranges without memory overhead.
-func TestSyntheticSeeker(t *testing.T) {
-	seeker := NewSyntheticSeeker(1024)
-
-	// Read first 10 bytes
-	buf := make([]byte, 10)
-	n, err := seeker.Read(buf)
-	if err != nil || n != 10 {
-		t.Fatalf("expected 10 bytes read, got %d, err: %v", n, err)
+func TestServer_StaticAssetServing(t *testing.T) {
+	tempDir := t.TempDir()
+	indexFile := filepath.Join(tempDir, "index.html")
+	if err := os.WriteFile(indexFile, []byte("<h1>Beam Online</h1>"), 0644); err != nil {
+		t.Fatalf("failed to write test file: %v", err)
 	}
 
-	// Seek to byte 500
-	pos, err := seeker.Seek(500, io.SeekStart)
-	if err != nil || pos != 500 {
-		t.Fatalf("expected seek to 500, got %d, err: %v", pos, err)
-	}
+	server := NewServer(tempDir)
+	ts := httptest.NewServer(server.Handler())
+	defer ts.Close()
 
-	// Read next 5 bytes
-	buf2 := make([]byte, 5)
-	n, err = seeker.Read(buf2)
-	if err != nil || n != 5 {
-		t.Fatalf("expected 5 bytes read, got %d, err: %v", n, err)
+	resp, err := http.Get(ts.URL + "/")
+	if err != nil {
+		t.Fatalf("GET / failed: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("expected 200 OK, got %d", resp.StatusCode)
 	}
 }
 
-// TestServer_DemoEndpointRangeSupport verifies that the built-in demo endpoint
-// returns 206 Partial Content and correct Content-Range header for RFC 7233 requests.
-func TestServer_DemoEndpointRangeSupport(t *testing.T) {
+func TestServer_StreamEndpointMissingURL(t *testing.T) {
 	server := NewServer(t.TempDir())
 	ts := httptest.NewServer(server.Handler())
 	defer ts.Close()
 
-	// 1. Test HEAD request for Content-Length and Accept-Ranges
-	headResp, err := http.Head(ts.URL + "/api/demo/50mb")
+	// Calling stream endpoint without url query parameter should return an SSE error payload
+	resp, err := http.Get(ts.URL + "/api/download/stream")
 	if err != nil {
-		t.Fatalf("HEAD request failed: %v", err)
+		t.Fatalf("GET /api/download/stream failed: %v", err)
 	}
-	defer headResp.Body.Close()
+	defer resp.Body.Close()
 
-	if headResp.StatusCode != http.StatusOK {
-		t.Errorf("expected 200 OK for HEAD, got %d", headResp.StatusCode)
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("expected 200 OK for SSE stream, got %d", resp.StatusCode)
 	}
-	if headResp.Header.Get("Accept-Ranges") != "bytes" {
-		t.Errorf("expected Accept-Ranges: bytes, got %q", headResp.Header.Get("Accept-Ranges"))
-	}
-	if headResp.ContentLength != 50*1024*1024 {
-		t.Errorf("expected Content-Length: 52428800, got %d", headResp.ContentLength)
-	}
-
-	// 2. Test Range GET request
-	req, err := http.NewRequest(http.MethodGet, ts.URL+"/api/demo/50mb", nil)
-	if err != nil {
-		t.Fatalf("failed to create request: %v", err)
-	}
-	req.Header.Set("Range", "bytes=0-999")
-
-	getResp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		t.Fatalf("Range request failed: %v", err)
-	}
-	defer getResp.Body.Close()
-
-	if getResp.StatusCode != http.StatusPartialContent {
-		t.Errorf("expected 206 Partial Content, got %d", getResp.StatusCode)
-	}
-	body, _ := io.ReadAll(getResp.Body)
-	if len(body) != 1000 {
-		t.Errorf("expected 1000 bytes returned, got %d", len(body))
+	if resp.Header.Get("Content-Type") != "text/event-stream" {
+		t.Errorf("expected Content-Type text/event-stream, got %s", resp.Header.Get("Content-Type"))
 	}
 }

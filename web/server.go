@@ -3,64 +3,14 @@ package web
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"os"
 	"strconv"
-	"strings"
 	"sync"
 	"time"
 
 	"github.com/Anshu666666/beam/downloader"
 )
-
-// SyntheticSeeker implements io.ReadSeeker without holding the file in RAM.
-// It generates deterministic byte sequences on the fly, allowing zero-memory
-// HTTP byte-range serving for 50MB and 100MB demonstration files.
-type SyntheticSeeker struct {
-	size int64
-	pos  int64
-}
-
-// NewSyntheticSeeker creates a synthetic seeker of the given byte size.
-func NewSyntheticSeeker(size int64) *SyntheticSeeker {
-	return &SyntheticSeeker{size: size}
-}
-
-func (s *SyntheticSeeker) Read(p []byte) (n int, err error) {
-	if s.pos >= s.size {
-		return 0, io.EOF
-	}
-	remaining := s.size - s.pos
-	toRead := int64(len(p))
-	if toRead > remaining {
-		toRead = remaining
-	}
-	for i := int64(0); i < toRead; i++ {
-		p[i] = byte((s.pos + i) % 251)
-	}
-	s.pos += toRead
-	return int(toRead), nil
-}
-
-func (s *SyntheticSeeker) Seek(offset int64, whence int) (int64, error) {
-	var newPos int64
-	switch whence {
-	case io.SeekStart:
-		newPos = offset
-	case io.SeekCurrent:
-		newPos = s.pos + offset
-	case io.SeekEnd:
-		newPos = s.size + offset
-	default:
-		return 0, fmt.Errorf("invalid whence: %d", whence)
-	}
-	if newPos < 0 {
-		return 0, fmt.Errorf("negative position: %d", newPos)
-	}
-	s.pos = newPos
-	return newPos, nil
-}
 
 // MasterProgressDTO represents JSON serializable master progress.
 type MasterProgressDTO struct {
@@ -124,22 +74,7 @@ func (s *Server) routes() {
 	fs := http.FileServer(http.Dir(s.staticDir))
 	s.mux.Handle("/", fs)
 
-	// 2. Synthetic RFC 7233 Demo Endpoints (50MB & 100MB)
-	s.mux.HandleFunc("/api/demo/50mb", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Accept-Ranges", "bytes")
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		seeker := NewSyntheticSeeker(50 * 1024 * 1024)
-		http.ServeContent(w, r, "demo_50mb.dat", time.Time{}, seeker)
-	})
-
-	s.mux.HandleFunc("/api/demo/100mb", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Accept-Ranges", "bytes")
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		seeker := NewSyntheticSeeker(100 * 1024 * 1024)
-		http.ServeContent(w, r, "demo_100mb.dat", time.Time{}, seeker)
-	})
-
-	// 3. Server-Sent Events (SSE) Download Endpoint
+	// 2. Server-Sent Events (SSE) Download Endpoint (Streaming real remote targets)
 	s.mux.HandleFunc("/api/download/stream", s.handleDownloadStream)
 }
 
@@ -165,19 +100,6 @@ func (s *Server) handleDownloadStream(w http.ResponseWriter, r *http.Request) {
 			Error: "Query parameter 'url' is required",
 		})
 		return
-	}
-
-	// Auto-resolve relative paths (e.g. /api/demo/50mb) against the incoming Host header
-	if strings.HasPrefix(targetURL, "/") {
-		scheme := "http"
-		if r.TLS != nil {
-			scheme = "https"
-		}
-		host := r.Host
-		if host == "" {
-			host = "localhost:8080"
-		}
-		targetURL = fmt.Sprintf("%s://%s%s", scheme, host, targetURL)
 	}
 
 	workers, _ := strconv.Atoi(query.Get("workers"))
