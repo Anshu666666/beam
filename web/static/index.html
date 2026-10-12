@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,CRSV,MONO@400..800,0..1,0..1,0..1&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/style.css?v=4">
 </head>
 <body class="beam-app">
 
@@ -32,9 +32,13 @@
       </div>
 
       <div class="nav-middle">
-        <span class="badge-pill pill-solid-yellow">Lock-Free Atomics</span>
-        <span class="badge-pill pill-solid-mint">Bounded Pool</span>
-        <span class="badge-pill pill-solid-blue">Zero-RAM Stitch</span>
+        <button type="button" class="benchmark-nav-btn" id="benchmark-toggle-btn" title="Toggle Sequential vs Parallel Speedup Benchmark">
+          <span class="bench-btn-icon">⚔️</span>
+          <span>SPEEDUP BENCHMARK</span>
+        </button>
+        <span class="badge-pill pill-subtle">Lock-Free Atomics</span>
+        <span class="badge-pill pill-subtle">Bounded Pool</span>
+        <span class="badge-pill pill-subtle">Zero-RAM Stitch</span>
       </div>
 
       <!-- Light / Dark Mode Toggle Switch (Default: Light Mode) -->
@@ -88,6 +92,11 @@
                 <span class="preset-pill-tag">Go 1.22</span>
                 <span class="preset-pill-desc">27.5 MB Google CDN Mirror</span>
               </button>
+
+              <button type="button" class="preset-pill preset-benchmark-accent" id="quick-bench-trigger" title="Jump to Sequential vs Parallel Speedup Arena">
+                <span class="preset-pill-tag">⚔️ Speedup Arena</span>
+                <span class="preset-pill-desc">1 vs 8 Workers Head-to-Head</span>
+              </button>
             </div>
           </div>
 
@@ -119,26 +128,30 @@
             <div class="compact-stepper speed-stepper">
               <div class="stepper-meta">
                 <span class="stepper-title">THROTTLE</span>
-                <span class="stepper-val-badge" id="speed-limit-badge">3 MB/s</span>
+                <span class="stepper-val-badge" id="speed-limit-badge">5 MB/s</span>
               </div>
               <select id="speed-limit-select" class="solid-select-compact">
                 <option value="1">🐢 1 MB/s (Slow)</option>
-                <option value="3" selected>⏱️ 3 MB/s (Demo)</option>
-                <option value="5">🎬 5 MB/s (Smooth)</option>
+                <option value="3">⏱️ 3 MB/s (Demo)</option>
+                <option value="5" selected>🎬 5 MB/s (Smooth)</option>
                 <option value="10">🚀 10 MB/s (Fast)</option>
                 <option value="0">⚡ Max (Unlimited)</option>
               </select>
             </div>
 
             <!-- Start Trigger Button -->
-            <button type="button" id="start-btn" class="solid-action-btn-compact">
+            <button type="button" id="start-btn" class="solid-action-btn-compact hero-start-cta" title="Click to launch high-throughput concurrent stream">
+              <span class="cta-pulse-beacon" aria-hidden="true"></span>
               <span class="btn-icon">⚡</span>
               <span class="btn-text">START CONCURRENT STREAM</span>
+              <span class="btn-arrow" aria-hidden="true">▶</span>
             </button>
           </div>
         </div>
       </section>
 
+      <!-- Side-by-Side Cockpit Grid (Visual Transfer Arena & 2D Matrix Together) -->
+      
       <!-- Side-by-Side Cockpit Grid (Visual Transfer Arena & 2D Matrix Together) -->
       <div class="cockpit-grid">
 
@@ -287,6 +300,118 @@
 
       </div> <!-- End cockpit-grid -->
 
+      <!-- Card: Sequential vs Parallel Speedup Arena (Interactive Benchmark) -->
+      <section class="chassis-card benchmark-chassis" id="benchmark-card">
+        <span class="rivet rivet-tl" aria-hidden="true"></span>
+        <span class="rivet rivet-tr" aria-hidden="true"></span>
+        <span class="rivet rivet-bl" aria-hidden="true"></span>
+        <span class="rivet rivet-br" aria-hidden="true"></span>
+
+        <div class="card-folder-tab tab-butter">
+          <span class="tab-label">⚔️ SEQUENTIAL VS PARALLEL SPEEDUP ARENA</span>
+        </div>
+
+        <div class="card-body benchmark-body">
+          <div class="benchmark-control-row">
+            <div class="benchmark-meta-info">
+              <h3 class="bench-heading">RFC 7233 Multi-Stream Concurrency Benchmark</h3>
+              <p class="bench-subtext">Direct side-by-side performance comparison: 1 TCP connection (Sequential) vs 8 Bounded Goroutines (Parallel Byte-Ranges).</p>
+            </div>
+            <div class="benchmark-btn-cluster">
+              <button type="button" class="solid-action-btn-compact hero-bench-cta" id="benchmark-run-btn">
+                <span class="btn-icon">⚡</span>
+                <span>RUN SPEEDUP BENCHMARK</span>
+              </button>
+              <button type="button" class="solid-pill-btn-small" id="benchmark-close-btn">CLOSE</button>
+            </div>
+          </div>
+
+          <!-- Dual Lane Side-by-Side Grid -->
+          <div class="benchmark-arena-grid">
+            
+            <!-- Left Lane: Sequential -->
+            <div class="bench-lane bench-lane-seq">
+              <div class="bench-lane-header">
+                <div class="bench-lane-title-group">
+                  <span class="lane-badge-icon">🐢</span>
+                  <div>
+                    <h4 class="lane-title">Sequential Stream</h4>
+                    <span class="lane-sub">1 Worker • Single HTTP Connection</span>
+                  </div>
+                </div>
+                <span class="bench-status-badge" id="seq-status">STANDBY</span>
+              </div>
+
+              <div class="bench-progress-track">
+                <div class="bench-track-fill fill-seq" id="seq-fill" style="width: 0%;"></div>
+              </div>
+
+              <div class="bench-stats-cluster">
+                <div class="bench-stat-cell">
+                  <span class="b-stat-k">PROGRESS</span>
+                  <span class="b-stat-v" id="seq-pct">0.0%</span>
+                </div>
+                <div class="bench-stat-cell">
+                  <span class="b-stat-k">SPEED</span>
+                  <span class="b-stat-v" id="seq-speed">0 B/s</span>
+                </div>
+                <div class="bench-stat-cell">
+                  <span class="b-stat-k">TIME</span>
+                  <span class="b-stat-v" id="seq-time">0.0s</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Center: Speedup Multiplier Gauge -->
+            <div class="bench-multiplier-column">
+              <div class="speedup-multiplier-card">
+                <span class="gauge-tag">SPEEDUP MULTIPLIER</span>
+                <span class="gauge-multiplier" id="speedup-multiplier">--</span>
+                <span class="gauge-badge" id="speedup-verdict">Awaiting Test</span>
+              </div>
+              <div class="gauge-time-saved">
+                <span class="g-save-k">TIME REDUCTION</span>
+                <span class="g-save-v" id="time-reduction-pct">--</span>
+              </div>
+            </div>
+
+            <!-- Right Lane: Parallel Stream -->
+            <div class="bench-lane bench-lane-par">
+              <div class="bench-lane-header">
+                <div class="bench-lane-title-group">
+                  <span class="lane-badge-icon">🚀</span>
+                  <div>
+                    <h4 class="lane-title">Beam Parallel Engine</h4>
+                    <span class="lane-sub">8 Workers • RFC 7233 Multiplex</span>
+                  </div>
+                </div>
+                <span class="bench-status-badge badge-par" id="par-status">STANDBY</span>
+              </div>
+
+              <div class="bench-progress-track">
+                <div class="bench-track-fill fill-par" id="par-fill" style="width: 0%;"></div>
+              </div>
+
+              <div class="bench-stats-cluster">
+                <div class="bench-stat-cell">
+                  <span class="b-stat-k">PROGRESS</span>
+                  <span class="b-stat-v" id="par-pct">0.0%</span>
+                </div>
+                <div class="bench-stat-cell">
+                  <span class="b-stat-k">SPEED</span>
+                  <span class="b-stat-v" id="par-speed">0 B/s</span>
+                </div>
+                <div class="bench-stat-cell">
+                  <span class="b-stat-k">TIME</span>
+                  <span class="b-stat-v" id="par-time">0.0s</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       <!-- Card 4: Diagnostic Protocol Trace Window (Compact Bottom Drawer) -->
       <section class="chassis-card trace-chassis" id="trace-card">
         <span class="rivet rivet-tl" aria-hidden="true"></span>
@@ -312,13 +437,70 @@
     </main>
 
     <!-- Footer -->
-    <footer class="app-footer">
-      <div class="footer-left">
-        <span>Beam — Concurrent Byte-Range Streaming Engine in pure Go</span>
-        <code>net/http</code> • <code>sync/atomic</code> • <code>io.MultiReader</code>
+        <!-- Tactile Chassis Themed Footer -->
+    <footer class="chassis-footer" id="app-footer">
+      <span class="rivet rivet-tl" aria-hidden="true"></span>
+      <span class="rivet rivet-tr" aria-hidden="true"></span>
+      <span class="rivet rivet-bl" aria-hidden="true"></span>
+      <span class="rivet rivet-br" aria-hidden="true"></span>
+
+      <div class="footer-folder-tab">
+        <span class="tab-label">REPOSITORY &amp; CREDITS</span>
       </div>
-      <div class="footer-right">
-        <span>Zero External Go Dependencies</span>
+
+      <div class="footer-main-row">
+        <!-- Left: Brand & Engine Specs -->
+        <div class="footer-brand-meta">
+          <div class="footer-logo-line">
+            <span class="footer-bolt">⚡</span>
+            <span class="footer-name">BEAM<span class="footer-sub">STREAM</span></span>
+            <span class="footer-pill-ver">v1.0.0</span>
+          </div>
+          <p class="footer-lead">High-Throughput Concurrent Byte-Range Streaming Engine built with standard Go primitives.</p>
+          <div class="footer-tech-tags">
+            <span class="tech-pill">net/http</span>
+            <span class="tech-pill">sync/atomic</span>
+            <span class="tech-pill">io.MultiReader</span>
+            <span class="tech-pill">RFC 7233</span>
+            <span class="tech-pill">SSE Telemetry</span>
+          </div>
+        </div>
+
+        <!-- Center: Prominent GitHub Repo CTA -->
+        <div class="footer-cta-hub">
+          <a href="https://github.com/Anshu666666/beam" target="_blank" rel="noopener noreferrer" class="footer-github-btn" title="Visit Beam repository on GitHub">
+            <svg class="gh-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            <div class="gh-btn-copy">
+              <span class="gh-btn-title">★ Star on GitHub</span>
+              <span class="gh-btn-sub">Anshu666666/beam ↗</span>
+            </div>
+          </a>
+
+          <div class="footer-nav-links">
+            <a href="https://github.com/Anshu666666/beam#readme" target="_blank" rel="noopener">Documentation</a>
+            <span class="sep">•</span>
+            <a href="https://datatracker.ietf.org/doc/html/rfc7233" target="_blank" rel="noopener">RFC 7233 Spec</a>
+            <span class="sep">•</span>
+            <a href="https://github.com/Anshu666666/beam/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+          </div>
+        </div>
+
+        <!-- Right: Deployment & System Verification -->
+        <div class="footer-deploy-box">
+          <div class="deploy-status-pill">
+            <span class="pulse-green-dot"></span>
+            <span>Oracle Cloud Ready</span>
+          </div>
+          <span class="deploy-sub">Standalone Linux (AMD64 / ARM64)</span>
+          <span class="deploy-sub">Zero Docker • Instant 2ms Start</span>
+        </div>
+      </div>
+
+      <div class="footer-bottom-strip">
+        <span>Engineered by <strong>Anshu</strong> • Production-Grade Concurrency in Pure Go</span>
+        <span>MIT Open Source License</span>
       </div>
     </footer>
 

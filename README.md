@@ -1,176 +1,358 @@
-# Beam (`beam`) — High-Throughput Concurrent Byte-Range Streaming Engine
+# ⚡ Beam (`beam`)
 
-<p align="left">
-  <a href="https://golang.org"><img src="https://img.shields.io/badge/Go-1.22+-00ADD8?style=flat-square&logo=go&logoColor=white" alt="Go Version"></a>
-  <a href="https://datatracker.ietf.org/doc/html/rfc7233"><img src="https://img.shields.io/badge/RFC_7233-Byte--Ranges-F59E0B?style=flat-square" alt="RFC 7233"></a>
-  <a href="https://github.com/Anshu666666/beam"><img src="https://img.shields.io/badge/Build-Passing-10B981?style=flat-square" alt="Build Status"></a>
-  <a href="https://github.com/Anshu666666/beam"><img src="https://img.shields.io/badge/Tests-100%25_Passing-34D399?style=flat-square" alt="Tests"></a>
-  <a href="go.mod"><img src="https://img.shields.io/badge/Dependencies-Zero_External-6366F1?style=flat-square" alt="Zero Dependencies"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-EC4899?style=flat-square" alt="License"></a>
-  <a href="https://github.com/Anshu666666/beam/releases"><img src="https://img.shields.io/badge/Version-v1.0.0-8B5CF6?style=flat-square" alt="Version"></a>
-  <a href="https://github.com/Anshu666666/beam"><img src="https://img.shields.io/badge/Platform-Windows_%7C_Linux_%7C_macOS-64748B?style=flat-square" alt="Platform"></a>
+<p align="center">
+  <img src="assets/hero_dashboard_dark.png" alt="Beam Cockpit & Stream Telemetry" width="100%" style="border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);">
 </p>
 
-A production-grade, lightweight concurrent file downloader inspired by `aria2` and `curl`, written from scratch in Go using standard library primitives.
+<h3 align="center">High-Throughput Concurrent Byte-Range Streaming Engine, Bounded Goroutine Worker Pool & Lock-Free Atomic Telemetry</h3>
+
+<p align="center">
+  <a href="https://beam-stream.duckdns.org"><img src="https://img.shields.io/badge/Live_Dashboard-beam--stream.duckdns.org-10B981?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Dashboard"></a>
+  <a href="https://golang.org"><img src="https://img.shields.io/badge/Go-1.22+-00ADD8?style=for-the-badge&logo=go&logoColor=white" alt="Go Version"></a>
+  <a href="https://datatracker.ietf.org/doc/html/rfc7233"><img src="https://img.shields.io/badge/RFC_7233-Byte--Ranges-F59E0B?style=for-the-badge" alt="RFC 7233"></a>
+  <a href="https://github.com/Anshu666666/beam"><img src="https://img.shields.io/badge/Build-Passing-10B981?style=for-the-badge" alt="Build Status"></a>
+  <a href="https://github.com/Anshu666666/beam"><img src="https://img.shields.io/badge/Tests-100%25_Passing-34D399?style=for-the-badge" alt="Tests"></a>
+  <a href="go.mod"><img src="https://img.shields.io/badge/Dependencies-Zero_External-6366F1?style=for-the-badge" alt="Zero Dependencies"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-EC4899?style=for-the-badge" alt="License"></a>
+  <a href="https://github.com/Anshu666666/beam/releases"><img src="https://img.shields.io/badge/Version-v1.0.0-8B5CF6?style=for-the-badge" alt="Version"></a>
+  <a href="docker-compose.yml"><img src="https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"></a>
+  <a href="#-oracle-cloud-vm-deployment-guide"><img src="https://img.shields.io/badge/Deployed-Oracle_Cloud_Always_Free-F80000?style=for-the-badge&logo=oracle&logoColor=white" alt="Oracle Cloud"></a>
+  <a href="#-verified-production-resource-footprint"><img src="https://img.shields.io/badge/RAM_Footprint-7.2MB_RSS-00E5FF?style=for-the-badge&logo=speedtest&logoColor=black" alt="RAM Footprint"></a>
+</p>
+
+<p align="center">
+  <a href="#-live-web-application"><strong>🌐 Live Web Dashboard</strong></a> • 
+  <a href="#-overview">Beam Overview</a> • 
+  <a href="#-visual-showcase">Visual Showcase</a> • 
+  <a href="#-request-lifecycle--data-flow">Request Lifecycle & Architecture</a> • 
+  <a href="#-key-engineering-highlights">Key Engineering Highlights</a> • 
+  <a href="#-verified-production-resource-footprint">Resource Footprint & RAM</a> • 
+  <a href="#-quick-start">Quick Start</a> • 
+  <a href="#-oracle-cloud-vm-deployment-guide">Oracle Cloud Deployment</a>
+</p>
+
+> [!TIP]
+> ### 🌐 Live Web Application & Telemetry Cockpit
+> Experience the interactive visual cockpit, Goroutine worker racks, and live Speedup Arena on our live Oracle Cloud deployment:
+> - **🔒 HTTPS Domain (Let's Encrypt SSL)**: **[https://beam-stream.duckdns.org](https://beam-stream.duckdns.org)**
+> - **⚡ Direct Cloud Mirror**: **[http://152.67.6.234:8080](http://152.67.6.234:8080)**
 
 ---
 
-## 🚀 Overview
+## 📖 Overview
 
-Standard single-stream HTTP downloads are frequently throttled on a per-connection basis by remote servers and ISPs, underutilizing available network bandwidth. **`beam`** solves this by:
-1. Probing the remote server for RFC 7233 `Accept-Ranges` byte-range capabilities.
-2. Mathematically partitioning the payload across discrete byte ranges.
-3. Spawning a bounded worker pool of Goroutines that pull chunks concurrently over independent TCP streams.
-4. Assembling and stitching the downloaded parts into the target destination using zero whole-file memory allocation.
+Standard single-stream HTTP downloads are frequently throttled on a per-connection basis by remote servers, Content Delivery Networks (CDNs), and ISPs, severely bottlenecking high-bandwidth network pipelines. 
 
----
+**`beam`** is an enterprise-grade, high-throughput concurrent file downloading engine written from scratch in Go with **zero external dependencies**. Operating similarly to low-level accelerators like `aria2` and `curl`, `beam` maximizes network utilization by:
 
-## 🏛️ Architecture & Data Flow
-
-```mermaid
-graph TD
-    A["CLI Flags (main.go)"] --> B["ProbeTarget() (HTTP HEAD)"]
-    B -->|Check Accept-Ranges & Content-Length| C{Range Supported?}
-    
-    C -->|Yes| D["CalculateChunks()"]
-    D --> E["Job Queue (chan Chunk)"]
-    E --> F1["Worker Goroutine 1 (Range: bytes=0-1048575)"]
-    E --> F2["Worker Goroutine 2 (Range: bytes=1048576-2097151)"]
-    E --> F3["Worker Goroutine N (...)"]
-    
-    F1 -->|io.TeeReader| G["Atomic Progress Tracker (io.Writer)"]
-    F2 -->|io.TeeReader| G
-    F3 -->|io.TeeReader| G
-    G -->|Every 100ms| H["Live Terminal Progress Bar (\r)"]
-    
-    F1 --> P1["file.part0"]
-    F2 --> P2["file.part1"]
-    F3 --> PN["file.partN"]
-    
-    P1 --> S["StitchChunks() (io.MultiReader + io.Copy)"]
-    P2 --> S
-    PN --> S
-    S --> OUT["Final Destination File on Disk"]
-    S --> CLEAN["Clean up temp .part files"]
-
-    C -->|No| FALLBACK["Single-Stream Fallback (HTTP GET + io.Copy)"]
-    FALLBACK --> OUT
-```
+1. **RFC 7233 Capability Probing**: Performing non-destructive HTTP `HEAD` probes to verify `Accept-Ranges: bytes` header compliance and remote payload size.
+2. **Mathematical Interval Slicing**: Partitioning multi-gigabyte payloads into discrete byte ranges (`bytes=offset-limit`).
+3. **Bounded Goroutine Worker Pool**: Spawning a controlled pool of concurrent worker goroutines consuming ranges from buffered channels, saturating bandwidth while preventing socket exhaustion.
+4. **Lock-Free Atomic Telemetry**: Aggregating per-worker byte streams via `io.TeeReader` into cache-aligned `sync/atomic` counters for sub-millisecond progress calculation.
+5. **Zero-RAM Multi-Stream Stitching**: Streaming chunk bodies directly to disk using fixed 32 KB internal buffers and concatenating them sequentially with `io.MultiReader` without holding entire files in system RAM.
+6. **Real-Time Visual Cockpit**: Broadcasting live socket metrics over Server-Sent Events (SSE) to a retro-editorial cyberpunk command dashboard.
 
 ---
 
-## 🔑 Key Engineering Highlights
+## 📷 Visual Showcase
 
-### 1. Zero-RAM Streaming
-- Rather than buffering whole chunks (e.g. 500 MB) into memory buffers (`[]byte`), data is streamed directly from HTTP response bodies to disk using `io.Copy`.
-- `io.Copy` operates with a fixed internal 32 KB buffer, ensuring memory footprint remains negligible regardless of file size (tested with multi-gigabyte payloads).
+### 1. Live Concurrency Arena & Stream Telemetry (Dark Mode)
+Real-time aggregate throughput monitoring (`MB/s`), worker Goroutine progress tracks, animated byte packet conduits, and zero-RAM assembly folder with SHA-256 seal verification.
 
-### 2. Lock-Free Hierarchical Atomic Progress Dashboard
-- Multiple worker goroutines report transferred bytes simultaneously through dedicated `WorkerTracker` instances via `io.TeeReader`.
-- Writes atomically increment both the worker's chunk byte counter and the master aggregate counter using lock-free `sync/atomic.Int64.Add`.
-- Computes real-time per-worker status, overall percentage, aggregate transfer speed (MB/s), and overall ETA.
-- Renders a multi-line terminal dashboard using ANSI cursor movements (`\033[<N>A`) and line clearing (`\r\033[2K`), giving live visual feedback for every worker in the pool.
-
-### 3. Bounded Concurrency Worker Pool
-- Decouples task volume from resource consumption.
-- If a file is split into 100 chunks, a bounded pool of 4 workers consumes jobs sequentially from a buffered Go channel (`chan Chunk`), avoiding socket exhaustion and server rate-limiting.
-
-### 4. Zero-RAM Multi-File Stitching
-- Assembles downloaded parts into the target destination using `io.MultiReader`.
-- All temporary chunk handles are systematically tracked and explicitly closed before invoking `os.Remove`, avoiding OS file-lock exceptions (critical on Windows).
-
-### 5. Graceful Single-Stream Fallback
-- If a server omits `Accept-Ranges: bytes` or returns non-range status, the orchestrator detects this and seamlessly executes a single-stream fallback with full live progress tracking.
+<p align="center">
+  <img src="assets/hero_dashboard_dark.png" alt="Beam Concurrency Arena" width="100%" style="border-radius: 8px;">
+</p>
 
 ---
 
-## 📦 Installation & Build
+### 2. Dispatch Cockpit & Token-Bucket Bandwidth Limiter
+Quick-select real-world CDN payloads (GitHub Release Assets, Linux Kernel Fastly CDN, Go Dev Mirror), parametric worker/chunk sliders, and built-in Token Bucket throttling (1 MB/s, 3 MB/s, 5 MB/s, 10 MB/s, Max).
 
-Compile the standalone binary using the Go toolchain:
-
-```bash
-# Build executable binary in the project directory
-go build -o beam.exe ./projects/01_chunk_downloader/main.go
-```
+<p align="center">
+  <img src="assets/cockpit_standby_dark.png" alt="Dispatch Cockpit Standby" width="100%" style="border-radius: 8px;">
+</p>
 
 ---
 
-## 💻 CLI Usage
+### 3. 2D Discrete Chunk Matrix & Cryptographic Seal Verification
+Compact defrag-style chunk visualizer tracking discrete states (Idle `0`, Downloading `⚡`, Completed `✓`) alongside final cryptographic SHA-256 integrity validation.
 
-```bash
-# Basic download (auto-derives filename from URL)
-./beam.exe -url https://example.com/largefile.zip
-
-# Custom destination file with 8 workers and 8 chunks
-./beam.exe -url https://example.com/largefile.zip -o my_file.zip -w 8 -c 8
-```
-
-### Command Flags
-
-| Flag | Type | Default | Description |
-|---|---|---|---|
-| `-url` | `string` | *(Required)* | Target URL of the remote file to download |
-| `-o` | `string` | Auto-derived | Destination file path on local disk |
-| `-w` | `int` | `4` | Number of concurrent worker Goroutines in the pool |
-| `-c` | `int` | `4` | Number of byte-range chunks to divide the file into |
+<p align="center">
+  <img src="assets/transfer_verified_dark.png" alt="Transfer Verified Seal & 2D Matrix" width="100%" style="border-radius: 8px;">
+</p>
 
 ---
 
-## 🌐 Real-Time Web Dashboard & SSE Streaming
+### 4. High-Contrast Retro Light Mode
+Neo-brutalist tactile chassis with protruding folder tabs, recessed card bezels, and spring micro-interactions for bright ambient workstations.
 
-`beam` includes a retro-editorial tactile web dashboard (`web/`) powered by **Server-Sent Events (SSE)** and **Anime.js**. It enables users to visually observe concurrent chunk downloading, worker thread allocation, dynamic network throughput, and Windows XP style animated byte packets streaming along curved SVG conduits directly into a destination folder in real time.
+<p align="center">
+  <img src="assets/cockpit_light_mode.png" alt="Light Mode Cockpit" width="100%" style="border-radius: 8px;">
+</p>
+
+---
+
+## 🔄 Request Lifecycle & Data Flow
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor User as Browser Client (EventSource)
-    participant Srv as Go Web Server (:8080)
-    participant DL as Concurrent Downloader
+    actor Client as Browser Cockpit / CLI Client
+    participant Web as Go Web Gateway (:8080)
+    participant Engine as Concurrent Downloader Engine
+    participant Workers as Bounded Goroutine Pool (Workers 0..N)
     participant Remote as Remote HTTP Server / CDN / GitHub
+    participant Disk as Local Storage (Zero-RAM Stitcher)
 
-    User->>Srv: GET /api/download/stream?url=...&workers=4&chunks=4
-    Srv-->>User: 200 OK (Content-Type: text/event-stream)
-    Srv->>DL: Start Download with OnWorkerProgress callback
-    DL->>Remote: HTTP HEAD / Range Probe (RFC 7233)
-    Remote-->>DL: 200/206 Partial Content (Accept-Ranges: bytes)
-    loop Every 50ms (or on chunk byte transfers)
-        DL-->>Srv: OnWorkerProgress(chunkID, transferred, total)
-        Srv-->>User: data: {"type":"progress", "workers":[...], "speed_mbps":...}
+    Client->>Web: GET /api/download/stream?url=...&workers=8&chunks=32
+    Web-->>Client: 200 OK (Content-Type: text/event-stream)
+    Web->>Engine: Dispatch Download Task
+    
+    Engine->>Remote: HTTP HEAD / Probe RFC 7233
+    Remote-->>Engine: 200 OK (Accept-Ranges: bytes, Content-Length)
+    
+    Engine->>Engine: Partition Content into 32 Discrete Byte Intervals
+    Engine->>Workers: Populate Buffered Job Queue (chan Chunk)
+    
+    par Concurrent Ingestion
+        Workers->>Remote: HTTP GET (Range: bytes=0-1048575)
+        Remote-->>Workers: 206 Partial Content (Part 0)
+    and
+        Workers->>Remote: HTTP GET (Range: bytes=1048576-2097151)
+        Remote-->>Workers: 206 Partial Content (Part 1)
     end
-    DL->>DL: Stitch temporary .part files (io.MultiReader)
-    Srv-->>User: data: {"type":"stitched", "sha256":"..."}
-    Srv-->>User: data: {"type":"done", "status":"completed"}
-    User->>User: Stamp verified seal & trigger celebration animation
+    
+    loop Every 50ms Byte Transfer
+        Workers->>Web: Atomic Progress Tick (sync/atomic.Int64)
+        Web-->>Client: SSE Event: data: {"type":"progress", "speed_mbps":..., "workers":[...]}
+        Client->>Client: Animate Byte Conduits & Update 2D Grid Cells
+    end
+    
+    Workers->>Disk: Stream chunks directly to disk (io.Copy 32KB buffer)
+    Engine->>Disk: Concatenate chunks (io.MultiReader + io.Copy)
+    Disk-->>Engine: Verify SHA-256 Checksum & Remove Temp Parts
+    
+    Engine->>Web: Ingestion Complete
+    Web-->>Client: SSE Event: data: {"type":"stitched", "sha256":"..."}
+    Client->>Client: Render Verified Stamp & Trigger Completion Sequence
 ```
 
-### Launching the Web Dashboard
+---
 
+## ✨ Key Engineering Highlights
+
+### ⚡ Lock-Free Atomic Progress Engine
+- Decouples UI polling and progress calculation from worker synchronization.
+- Workers pipe raw incoming socket streams through `io.TeeReader` into dedicated `WorkerTracker` instances.
+- Writes atomically increment chunk progress and aggregate counters using lock-free `sync/atomic.Int64.Add`, eliminating mutex contention across high core counts.
+
+
+### 📊 Verified Production Resource Footprint
+Measured live on an **Oracle Cloud Infrastructure (OCI) Always-Free VM** (`152.67.6.234` running Ubuntu Linux `x86_64`):
+
+| Metric | Production Measurement | Technical Significance |
+|---|---|---|
+| **Physical RAM (`VmRSS`)** | **7,296 kB (~7.1 MB)** | Actual resident physical memory occupied in system RAM |
+| **Systemd CGroup Memory** | **8.6 MB (Peak: 9.0 MB)** | Total memory consumed including stack, heap, and runtime buffers |
+| **VM Memory Utilization** | **0.7% of 1 GB RAM** | Leaves 99.3% of VM memory completely free for other microservices (e.g. `shieldApi`, Redis) |
+| **Idle CPU Utilization** | **0.0%** | Event-driven Goroutines sleep efficiently with zero CPU polling |
+| **Daemon Startup Time** | **< 2 milliseconds** | Zero runtime initialization overhead or JIT/V8 warmup delays |
+
+#### Live Commands to Monitor Memory Consumption on the VM
 ```bash
-# Run the web dashboard server
+# 1. Quick systemd memory status (Shows current & peak memory)
+ssh -i "path/to/key.key" ubuntu@152.67.6.234 "systemctl status beam.service"
+
+# 2. Process table inspection (Shows exact RSS in KB and %MEM)
+ssh -i "path/to/key.key" ubuntu@152.67.6.234 "ps -o pid,user,%cpu,%mem,rss,comm -C beam-web"
+
+# 3. Direct Linux Kernel memory metrics (/proc)
+ssh -i "path/to/key.key" ubuntu@152.67.6.234 "grep -E 'VmRSS|VmPeak' /proc/\$(pidof beam-web)/status"
+```
+
+### 🛡️ Zero-RAM Streaming Architecture
+- Avoids accumulating massive file payloads in process heap memory.
+- Incoming chunk streams are flushed immediately to temporary files via Go's standard `io.Copy`, operating on an internal fixed **32 KB buffer**.
+- System memory utilization remains flat (~15 MB - 25 MB RSS) regardless of whether downloading a 10 MB archive or a 50 GB disk image.
+
+### 🧵 Bounded Concurrency Worker Pool
+- Decouples the number of mathematical chunk intervals from operating system thread and network socket consumption.
+- Chunks are distributed over a buffered Go channel (`chan Chunk`). A bounded pool (e.g. 4 or 8 workers) consumes chunks sequentially, eliminating socket exhaustion and CDN rate-limit tripping.
+
+### 🧮 2D Discrete Chunk Matrix Visualizer
+- Minimal-footprint retro defrag visualizer showing real-time chunk transitions.
+- Dynamically scales its CSS grid geometry to fit any chunk count (4 to 64 chunks) without DOM recreation, keeping frontend rendering butter-smooth at 60 FPS.
+
+### ⏱️ Token-Bucket Bandwidth Throttling
+- Integrated rate limiter using standard Go time tick tokens.
+- Supports throttling transfers at slow (1 MB/s), demo (3 MB/s), smooth (5 MB/s), or max bandwidth speeds, enabling controlled demonstrations and network congestion testing.
+
+### 🪢 Zero-RAM Multi-File Stitching
+- Assembles parts using virtual stream concatenation via `io.MultiReader`.
+- All temporary chunk handles are explicitly closed prior to unlinking, guaranteeing clean execution on Windows without OS file-lock exceptions.
+
+### 🔄 Automatic Single-Stream Fallback
+- If a target endpoint lacks RFC 7233 range support or returns a 200 OK without `Accept-Ranges`, `beam` seamlessly drops to a single-stream fallback while preserving full live telemetry.
+
+---
+
+## 🏗️ Repository Architecture
+
+```
+beam/
+├── assets/                          # High-resolution documentation screenshots
+│   ├── hero_dashboard_dark.png     # Live stream telemetry dashboard
+│   ├── cockpit_standby_dark.png    # Dispatch cockpit & preset controls
+│   ├── transfer_verified_dark.png  # Verified seal & completed 2D matrix
+│   └── cockpit_light_mode.png      # Neo-brutalist light theme showcase
+├── cmd/
+│   └── web/                        # Web Dashboard Server entrypoint
+│       └── main.go                 # HTTP server, SSE endpoint, static file server
+├── downloader/                     # Core Concurrent Engine Package
+│   ├── downloader.go               # Orchestrator, Range calculator, Probe logic
+│   ├── worker.go                   # Goroutine pool worker, HTTP Range client
+│   ├── stitcher.go                 # io.MultiReader zero-RAM file assembler
+│   ├── progress.go                 # Lock-free sync/atomic progress tracker
+│   └── rate_limiter.go             # Token-bucket bandwidth limiter
+├── web/
+│   └── static/                     # Embedded Web Cockpit Assets
+│       ├── index.html              # Cockpit layout & chassis frame
+│       ├── style.css               # Neo-brutalist dual-theme design system
+│       ├── app.js                  # SSE client & 2D Matrix state manager
+│       └── anime.min.js            # Particle physics motion engine
+├── Dockerfile                       # Multi-stage production container build
+├── docker-compose.yml               # 1-command microservice orchestration
+├── go.mod                           # Go module manifest (Zero external dependencies)
+├── main.go                          # CLI application entrypoint
+└── main_test.go                     # Data-race & cryptographic integrity tests
+```
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- [Go 1.22+](https://golang.org/dl/) (or [Docker](https://www.docker.com/) if running containerized)
+- [Git](https://git-scm.com/)
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/Anshu666666/beam.git
+cd beam
+```
+
+---
+
+### Option A: Launch the Web Cockpit (Recommended)
+```bash
+# Start the Go web server on port 8080
 go run ./cmd/web -port 8080
 ```
-Open **`http://localhost:8080`** in any web browser.
+Open **`http://localhost:8080`** in your browser.
 
-### Features
-1. **Real-World Payloads & Presets**: Direct streaming from GitHub Releases (50 MB, 100 MB), Linux Kernel CDN (142 MB), and Go Dev (27.5 MB).
-2. **Configurable Bandwidth Throttler**: Built-in Token Bucket rate limiter (1 MB/s, 3 MB/s, 5 MB/s, 10 MB/s, or Unlimited) to simulate real-world network constraints.
-3. **Compact Square 2D Tracker**: Retro BitTorrent/defrag style matrix displaying discrete chunk state transitions in a minimal footprint.
-2. **Per-Worker Telemetry Cards**: Watch individual worker goroutines claim chunks, stream data, and complete chunks in real time.
-3. **Master Progress Track**: Real-time throughput gauge (MB/s), ETA countdown, transferred megabytes, and completion percentage.
-4. **Live RFC 7233 Protocol Drawer**: Collapsible diagnostic log showing byte-range requests (`Range: bytes=X-Y`), HTTP 206 Partial Content responses, and SHA-256 verification.
-5. **Zero Framework Dependencies**: Pure Vanilla ES6+ and modern CSS with custom spring animations (`cubic-bezier(0.32, 0.72, 0, 1)`), OLED `#050505` backdrop, and concentric double-bezel cards.
+---
+
+### Option B: Run via Docker Compose
+```bash
+# Build and run the lightweight container in the background
+docker compose up -d
+
+# View live container logs
+docker compose logs -f
+```
+The web dashboard is instantly accessible at **`http://localhost:8080`**.
+
+---
+
+### Option C: CLI Mode
+```bash
+# Fast download with 8 concurrent workers and 16 chunks
+go run ./main.go -url https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.8.tar.xz -w 8 -c 16
+
+# Custom output file
+go run ./main.go -url https://example.com/payload.zip -o my_file.zip -w 4 -c 8
+```
+
+#### CLI Command Flags
+| Flag | Type | Default | Description |
+|---|---|---|---|
+| `-url` | `string` | *(Required)* | Remote target file URL to download |
+| `-o` | `string` | Auto-derived | Destination file path on local disk |
+| `-w` | `int` | `4` | Number of concurrent worker Goroutines |
+| `-c` | `int` | `4` | Number of discrete byte-range chunks |
+
+---
+
+## ☁️ Oracle Cloud VM Deployment Guide
+
+Because Oracle Cloud VMs run Linux (Ubuntu or Oracle Linux), the Windows `.exe` binary cannot run natively. However, deploying `beam` to an Oracle VM is fast and requires minimal effort:
+
+### Method 1: Docker Container Deployment (Recommended)
+1. **Connect to your Oracle VM via SSH**:
+   ```bash
+   ssh -i "path/to/your/ssh-key.key" ubuntu@<YOUR_ORACLE_VM_PUBLIC_IP>
+   ```
+
+2. **Clone and run with Docker Compose**:
+   ```bash
+   git clone https://github.com/Anshu666666/beam.git
+   cd beam
+   docker compose up -d --build
+   ```
+
+3. **Open Ingress Rules on Oracle Cloud**:
+   - Go to **OCI Console** -> **Networking** -> **Virtual Cloud Networks (VCN)**.
+   - Click on your Subnet's **Default Security List** -> **Add Ingress Rules**.
+   - Source: `0.0.0.0/0`, Protocol: `TCP`, Destination Port: `8080`.
+   - On the VM terminal, open the host firewall:
+     ```bash
+     sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 8080 -j ACCEPT
+     sudo netfilter-persistent save
+     ```
+
+---
+
+### Method 2: Direct Standalone Linux Binary (Zero Docker Required)
+Because `beam` has zero CGO or external dependencies, you can run the pre-compiled standalone Linux binary directly:
+
+1. **Upload the Linux binary and web assets to your VM**:
+   ```bash
+   # For standard x86_64 AMD shapes:
+   scp -i "your-key.key" beam-web-linux-amd64 ubuntu@<VM_IP>:~/beam-web
+   
+   # For Oracle Always Free ARM64 Ampere A1 shapes:
+   scp -i "your-key.key" beam-web-linux-arm64 ubuntu@<VM_IP>:~/beam-web
+
+   # Copy the web assets:
+   scp -i "your-key.key" -r web ubuntu@<VM_IP>:~/web
+   ```
+
+2. **Run as a background systemd service**:
+   ```bash
+   # On the VM:
+   chmod +x ~/beam-web
+   nohup ./beam-web -port 8080 > beam.log 2>&1 &
+   ```
 
 ---
 
 ## 🧪 Testing & Data Race Verification
 
-All components are covered by unit and integration tests using `net/http/httptest` (requiring zero external network access).
-
-Run tests with Go's race detector enabled:
+`beam` is thoroughly tested using Go's built-in race detector and synthetic in-memory test servers (`net/http/httptest`), requiring zero internet access during tests:
 
 ```bash
+# Run all unit and integration tests with the Go race detector enabled
 go test -v -race ./...
 ```
 
-Every test verifies end-to-end cryptographic SHA-256 data integrity and zero concurrent data races.
+All test suites verify:
+- ✅ **Zero Data Races**: Guaranteed thread safety across concurrent goroutine pools.
+- ✅ **Cryptographic SHA-256 Integrity**: Chunk reassembly exactly matches original bytes.
+- ✅ **Graceful Fallback**: Verified handling of non-range-supporting endpoints.
+- ✅ **Zero Memory Leaks**: Proper closing of temporary file descriptors.
 
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.

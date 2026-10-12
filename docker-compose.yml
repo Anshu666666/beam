@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  beam:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: beam-streaming-engine:latest
+    container_name: beam-streaming-engine
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    environment:
+      - PORT=8080

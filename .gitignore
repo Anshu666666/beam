@@ -10,3 +10,4 @@ go.work
 *.part
 temp_*
 downloads/
+beam-web*
