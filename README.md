@@ -65,7 +65,16 @@ Real-time aggregate throughput monitoring (`MB/s`), worker Goroutine progress tr
 
 ---
 
-### 2. Dispatch Cockpit & Token-Bucket Bandwidth Limiter
+### 2. Side-by-Side Sequential vs. Parallel Speedup Arena
+Real-time head-to-head benchmark racing a standard 1-worker sequential HTTP baseline against Beam's 8-worker RFC 7233 byte-range parallel engine on live CDN payloads. Features real-time speedup multiplier calculation and transfer latency reduction metrics.
+
+<p align="center">
+  <img src="assets/benchmark_arena_dark.png" alt="Sequential vs Parallel Speedup Arena" width="100%" style="border-radius: 8px;">
+</p>
+
+---
+
+### 3. Dispatch Cockpit & Token-Bucket Bandwidth Limiter
 Quick-select real-world CDN payloads (GitHub Release Assets, Linux Kernel Fastly CDN, Go Dev Mirror), parametric worker/chunk sliders, and built-in Token Bucket throttling (1 MB/s, 3 MB/s, 5 MB/s, 10 MB/s, Max).
 
 <p align="center">
@@ -74,7 +83,7 @@ Quick-select real-world CDN payloads (GitHub Release Assets, Linux Kernel Fastly
 
 ---
 
-### 3. 2D Discrete Chunk Matrix & Cryptographic Seal Verification
+### 4. 2D Discrete Chunk Matrix & Cryptographic Seal Verification
 Compact defrag-style chunk visualizer tracking discrete states (Idle `0`, Downloading `⚡`, Completed `✓`) alongside final cryptographic SHA-256 integrity validation.
 
 <p align="center">
@@ -83,7 +92,7 @@ Compact defrag-style chunk visualizer tracking discrete states (Idle `0`, Downlo
 
 ---
 
-### 4. High-Contrast Retro Light Mode
+### 5. High-Contrast Retro Light Mode
 Neo-brutalist tactile chassis with protruding folder tabs, recessed card bezels, and spring micro-interactions for bright ambient workstations.
 
 <p align="center">
