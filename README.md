@@ -16,7 +16,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-EC4899?style=for-the-badge" alt="License"></a>
   <a href="https://github.com/Anshu666666/beam/releases"><img src="https://img.shields.io/badge/Version-v1.0.0-8B5CF6?style=for-the-badge" alt="Version"></a>
   <a href="docker-compose.yml"><img src="https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"></a>
-  <a href="#-oracle-cloud-vm-deployment-guide"><img src="https://img.shields.io/badge/Deployed-Oracle_Cloud_Always_Free-F80000?style=for-the-badge&logo=oracle&logoColor=white" alt="Oracle Cloud"></a>
+  <a href="https://beam-stream.duckdns.org"><img src="https://img.shields.io/badge/Deployed-Oracle_Cloud_Always_Free-F80000?style=for-the-badge&logo=oracle&logoColor=white" alt="Oracle Cloud"></a>
   <a href="#-verified-production-resource-footprint"><img src="https://img.shields.io/badge/RAM_Footprint-7.2MB_RSS-00E5FF?style=for-the-badge&logo=speedtest&logoColor=black" alt="RAM Footprint"></a>
 </p>
 
@@ -27,15 +27,13 @@
   <a href="#-request-lifecycle--data-flow">Request Lifecycle & Architecture</a> • 
   <a href="#-key-engineering-highlights">Key Engineering Highlights</a> • 
   <a href="#-verified-production-resource-footprint">Resource Footprint & RAM</a> • 
-  <a href="#-quick-start">Quick Start</a> • 
-  <a href="#-oracle-cloud-vm-deployment-guide">Oracle Cloud Deployment</a>
+  <a href="#-quick-start">Quick Start</a>
 </p>
 
 > [!TIP]
 > ### 🌐 Live Web Application & Telemetry Cockpit
-> Experience the interactive visual cockpit, Goroutine worker racks, and live Speedup Arena on our live Oracle Cloud deployment:
-> - **🔒 HTTPS Domain (Let's Encrypt SSL)**: **[https://beam-stream.duckdns.org](https://beam-stream.duckdns.org)**
-> - **⚡ Direct Cloud Mirror**: **[http://152.67.6.234:8080](http://152.67.6.234:8080)**
+> Experience the interactive visual cockpit, Goroutine worker racks, and live Speedup Arena:  
+> 🔗 **Interactive Dashboard (HTTPS / SSL)**: **[https://beam-stream.duckdns.org](https://beam-stream.duckdns.org)**
 
 ---
 
@@ -157,7 +155,7 @@ sequenceDiagram
 
 
 ### 📊 Verified Production Resource Footprint
-Measured live on an **Oracle Cloud Infrastructure (OCI) Always-Free VM** (`152.67.6.234` running Ubuntu Linux `x86_64`):
+Measured live in production on a cloud server (1 vCPU, 1 GB RAM running Ubuntu Linux `x86_64`):
 
 | Metric | Production Measurement | Technical Significance |
 |---|---|---|
@@ -167,16 +165,16 @@ Measured live on an **Oracle Cloud Infrastructure (OCI) Always-Free VM** (`152.6
 | **Idle CPU Utilization** | **0.0%** | Event-driven Goroutines sleep efficiently with zero CPU polling |
 | **Daemon Startup Time** | **< 2 milliseconds** | Zero runtime initialization overhead or JIT/V8 warmup delays |
 
-#### Live Commands to Monitor Memory Consumption on the VM
+#### Real-Time Memory Inspection Commands
 ```bash
-# 1. Quick systemd memory status (Shows current & peak memory)
-ssh -i "path/to/key.key" ubuntu@152.67.6.234 "systemctl status beam.service"
+# 1. Systemd service status (Shows live & peak memory usage)
+systemctl status beam.service
 
-# 2. Process table inspection (Shows exact RSS in KB and %MEM)
-ssh -i "path/to/key.key" ubuntu@152.67.6.234 "ps -o pid,user,%cpu,%mem,rss,comm -C beam-web"
+# 2. Linux process table inspection (Shows exact physical RSS in KB and %MEM)
+ps -o pid,user,%cpu,%mem,rss,comm -C beam-web
 
 # 3. Direct Linux Kernel memory metrics (/proc)
-ssh -i "path/to/key.key" ubuntu@152.67.6.234 "grep -E 'VmRSS|VmPeak' /proc/\$(pidof beam-web)/status"
+grep -E 'VmRSS|VmPeak' /proc/$(pidof beam-web)/status
 ```
 
 ### 🛡️ Zero-RAM Streaming Architecture
@@ -289,59 +287,6 @@ go run ./main.go -url https://example.com/payload.zip -o my_file.zip -w 4 -c 8
 | `-o` | `string` | Auto-derived | Destination file path on local disk |
 | `-w` | `int` | `4` | Number of concurrent worker Goroutines |
 | `-c` | `int` | `4` | Number of discrete byte-range chunks |
-
----
-
-## ☁️ Oracle Cloud VM Deployment Guide
-
-Because Oracle Cloud VMs run Linux (Ubuntu or Oracle Linux), the Windows `.exe` binary cannot run natively. However, deploying `beam` to an Oracle VM is fast and requires minimal effort:
-
-### Method 1: Docker Container Deployment (Recommended)
-1. **Connect to your Oracle VM via SSH**:
-   ```bash
-   ssh -i "path/to/your/ssh-key.key" ubuntu@<YOUR_ORACLE_VM_PUBLIC_IP>
-   ```
-
-2. **Clone and run with Docker Compose**:
-   ```bash
-   git clone https://github.com/Anshu666666/beam.git
-   cd beam
-   docker compose up -d --build
-   ```
-
-3. **Open Ingress Rules on Oracle Cloud**:
-   - Go to **OCI Console** -> **Networking** -> **Virtual Cloud Networks (VCN)**.
-   - Click on your Subnet's **Default Security List** -> **Add Ingress Rules**.
-   - Source: `0.0.0.0/0`, Protocol: `TCP`, Destination Port: `8080`.
-   - On the VM terminal, open the host firewall:
-     ```bash
-     sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 8080 -j ACCEPT
-     sudo netfilter-persistent save
-     ```
-
----
-
-### Method 2: Direct Standalone Linux Binary (Zero Docker Required)
-Because `beam` has zero CGO or external dependencies, you can run the pre-compiled standalone Linux binary directly:
-
-1. **Upload the Linux binary and web assets to your VM**:
-   ```bash
-   # For standard x86_64 AMD shapes:
-   scp -i "your-key.key" beam-web-linux-amd64 ubuntu@<VM_IP>:~/beam-web
-   
-   # For Oracle Always Free ARM64 Ampere A1 shapes:
-   scp -i "your-key.key" beam-web-linux-arm64 ubuntu@<VM_IP>:~/beam-web
-
-   # Copy the web assets:
-   scp -i "your-key.key" -r web ubuntu@<VM_IP>:~/web
-   ```
-
-2. **Run as a background systemd service**:
-   ```bash
-   # On the VM:
-   chmod +x ~/beam-web
-   nohup ./beam-web -port 8080 > beam.log 2>&1 &
-   ```
 
 ---
 
