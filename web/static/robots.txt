@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://beam-stream.duckdns.org/sitemap.xml

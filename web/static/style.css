@@ -108,7 +108,8 @@ body {
   font-variation-settings: 'MONO' 0, 'CASL' 0.5, 'wght' 450;
   line-height: 1.5;
   min-height: 100vh;
-  padding: 32px 16px 80px;
+  padding: 0;
+  margin: 0;
   transition: background-color 200ms ease, color 200ms ease;
   -webkit-font-smoothing: antialiased;
 }
@@ -239,6 +240,115 @@ body {
 .theme-btn.active {
   background-color: var(--ink-primary);
   color: var(--bg-card);
+}
+
+/* --------------------------------------------------------------------------
+   3.5. Hero Overview Strip (Instant Context for Visitors)
+   -------------------------------------------------------------------------- */
+.hero-overview-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background-color: var(--bg-card);
+  border: var(--border-width) solid var(--border-solid);
+  border-radius: 10px;
+  box-shadow: var(--shadow-offset);
+  padding: 16px 24px;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.overview-left {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1 1 650px;
+}
+
+.overview-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background-color: var(--bg-card-secondary);
+  border: 1.5px solid var(--border-solid);
+  padding: 3px 10px;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.overview-beacon {
+  width: 7px;
+  height: 7px;
+  background-color: #10B981;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #10B981;
+}
+
+.overview-badge-text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--ink-secondary);
+}
+
+.overview-description {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ink-secondary);
+  margin: 0;
+}
+
+.overview-description strong {
+  color: var(--ink-primary);
+  font-weight: 700;
+}
+
+.overview-pills-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.overview-pill {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background-color: var(--bg-card-secondary);
+  border: 1.5px solid var(--border-solid);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  box-shadow: var(--shadow-offset-sm);
+}
+
+.overview-pill .pill-k {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--ink-muted);
+  letter-spacing: 0.5px;
+}
+
+.overview-pill .pill-v {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+@media (max-width: 960px) {
+  .hero-overview-strip {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px 16px;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .overview-pills-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -1448,21 +1558,22 @@ body {
    UNIFIED COCKPIT DASHBOARD LAYOUT (HIGH-DENSITY COMPACT REDESIGN)
    ========================================================================== */
 
-/* Main content shell: wider, compact padding */
+/* Main content shell: clean full width inside centered app shell */
 .main-content {
-  max-width: 1440px;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
 }
 
-/* Reduce chassis margins & padding to fit within single screen */
+/* Generous vertical spacing between sections to let tabs & chassis breathe */
 .chassis-card {
-  margin-bottom: 14px !important;
-  padding: 16px 18px !important;
+  margin-bottom: 56px !important;
+  padding: 26px 28px !important;
 }
 
 /* Config / Dispatch Chassis */
 .config-chassis {
-  padding-bottom: 12px !important;
+  padding-bottom: 22px !important;
 }
 
 .presets-compact-bar {
@@ -1735,20 +1846,22 @@ body {
   border-radius: 6px !important;
 }
 
-/* Compact App Shell & Footer */
+/* App Shell & Layout Margins with Breathing Room */
 .app-shell {
-  padding: 10px 16px !important;
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto !important;
+  padding: 28px clamp(24px, 4vw, 56px) 64px !important;
+  box-sizing: border-box;
 }
 
 .top-nav {
-  margin-bottom: 14px !important;
-  padding-bottom: 8px !important;
+  margin-bottom: 48px !important;
+  padding-bottom: 18px !important;
 }
 
-.app-footer {
-  padding: 6px 0 !important;
-  font-size: 10px !important;
-  margin-top: 0 !important;
+.chassis-footer {
+  margin-top: 60px !important;
 }
 
 /* ==========================================================================
@@ -1759,13 +1872,19 @@ body {
 .cockpit-grid {
   display: grid !important;
   grid-template-columns: 1fr 240px !important;
-  gap: 14px !important;
+  gap: 24px !important;
+  margin-bottom: 56px !important;
   align-items: stretch !important;
+}
+
+.cockpit-grid .chassis-card {
+  margin-bottom: 0 !important;
 }
 
 @media (max-width: 980px) {
   .cockpit-grid {
     grid-template-columns: 1fr !important;
+    gap: 28px !important;
   }
 }
 
@@ -2004,6 +2123,157 @@ body {
   border-color: #4A4A54;
 }
 
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.header-gh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--bg-card);
+  color: var(--ink-primary);
+  border: var(--border-width) solid var(--border-solid);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: var(--shadow-offset-sm);
+  transition: all 120ms ease;
+}
+
+.header-gh-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--border-solid);
+  background-color: var(--color-butter);
+  color: #18181B;
+}
+
+.header-gh-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: var(--shadow-offset-pressed);
+}
+
+.header-gh-arrow {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .header-gh-btn {
+  background-color: var(--bg-card);
+  color: var(--ink-primary);
+}
+
+[data-theme="dark"] .header-gh-btn:hover {
+  background-color: var(--color-butter);
+  color: #18181B;
+}
+
+.tour-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #FDE047 0%, #FACC15 100%);
+  color: #18181B;
+  border: 2px solid var(--border-solid);
+  border-radius: 8px;
+  padding: 6px 14px;
+  height: 38px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0px var(--border-solid);
+  transition: all 140ms ease;
+  position: relative;
+  overflow: visible;
+}
+
+.tour-nav-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px var(--border-solid);
+  background: linear-gradient(135deg, #FEF08A 0%, #FDE047 100%);
+}
+
+.tour-nav-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--border-solid);
+}
+
+[data-theme="dark"] .tour-nav-btn {
+  background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+  color: #000000;
+  border-color: #000000;
+  box-shadow: 3px 3px 0px #000000;
+}
+
+[data-theme="dark"] .tour-nav-btn:hover {
+  box-shadow: 5px 5px 0px #000000;
+  background: linear-gradient(135deg, #FDE047 0%, #FBBF24 100%);
+}
+
+/* Pulsing radar beacon for How It Works button */
+.tour-pulse-radar {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  background-color: #EF4444;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px #EF4444;
+}
+
+.tour-pulse-radar::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid #EF4444;
+  border-radius: 50%;
+  animation: tour-beacon-ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+  opacity: 0.75;
+}
+
+@keyframes tour-beacon-ping {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+.tour-btn-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.tour-btn-text {
+  font-weight: 800;
+  letter-spacing: 0.6px;
+}
+
+.tour-btn-arrow {
+  font-size: 10px;
+  opacity: 0.75;
+  transition: transform 120ms ease;
+}
+
+.tour-nav-btn:hover .tour-btn-arrow {
+  transform: translateX(2px);
+  opacity: 1;
+}
+
 .benchmark-nav-btn {
   display: inline-flex;
   align-items: center;
@@ -2119,13 +2389,13 @@ body {
 
 /* 4. SPEEDUP BENCHMARK ARENA STYLES */
 .benchmark-chassis {
-  margin-bottom: 14px;
+  margin-bottom: 56px !important;
   border-left: 4px solid var(--color-butter);
   transition: all 250ms ease;
 }
 
 .benchmark-body {
-  padding: 16px 20px 20px !important;
+  padding: 18px 24px 22px !important;
 }
 
 .benchmark-control-row {
@@ -2138,16 +2408,20 @@ body {
 }
 
 .bench-heading {
-  font-family: var(--font-main);
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--ink-primary);
-  margin-bottom: 2px;
+  font-family: var(--font-mono) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  color: var(--ink-primary) !important;
+  margin-bottom: 4px !important;
 }
 
 .bench-subtext {
-  font-size: 12px;
-  color: var(--ink-secondary);
+  font-family: var(--font-mono) !important;
+  font-size: 11px !important;
+  color: var(--ink-secondary) !important;
+  line-height: 1.4 !important;
 }
 
 .benchmark-btn-cluster {
@@ -2208,10 +2482,12 @@ body {
 }
 
 .lane-title {
-  font-family: var(--font-main);
-  font-size: 14px;
-  font-weight: 800;
-  color: var(--ink-primary);
+  font-family: var(--font-mono) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  color: var(--ink-primary) !important;
 }
 
 .lane-sub {
@@ -2601,4 +2877,404 @@ body {
   padding-top: 12px;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+/* ==========================================================================
+   6. INTERACTIVE PRODUCT TOUR (STEP-BY-STEP GUIDED WALKTHROUGH)
+   Neo-Brutalist Tactile Spotlight Overlay & Popover Modal
+   ========================================================================== */
+.beam-tour-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99970;
+  transition: opacity 250ms ease;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.beam-tour-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Disable background body scroll while tour is active to prevent limelight drift */
+html.tour-scroll-locked,
+body.tour-scroll-locked {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+
+/* Semi-transparent backdrop with dynamic cutout box-shadow spotlight */
+.beam-tour-spotlight {
+  position: fixed;
+  box-sizing: border-box;
+  border-radius: 12px;
+  border: 2.5px dashed var(--color-butter);
+  box-shadow: 0 0 0 9999px rgba(18, 18, 20, 0.68), 0 0 20px rgba(252, 211, 77, 0.35);
+  pointer-events: none;
+  transition: top 260ms cubic-bezier(0.2, 0.9, 0.3, 1),
+              left 260ms cubic-bezier(0.2, 0.9, 0.3, 1),
+              width 260ms cubic-bezier(0.2, 0.9, 0.3, 1),
+              height 260ms cubic-bezier(0.2, 0.9, 0.3, 1);
+  z-index: 99980;
+}
+
+/* Floating Neo-Brutalist Tour Card - Always on topmost layer of viewport */
+.beam-tour-popover {
+  position: fixed !important;
+  width: 360px;
+  max-width: calc(100vw - 36px);
+  background-color: var(--bg-card);
+  border: var(--border-width) solid var(--border-solid);
+  border-radius: 10px;
+  box-shadow: 8px 8px 0px var(--border-solid) !important;
+  padding: 22px 20px 18px;
+  z-index: 2147483647 !important;
+  font-family: var(--font-main);
+  box-sizing: border-box;
+  pointer-events: auto !important;
+  transition: top 320ms cubic-bezier(0.2, 0.9, 0.3, 1),
+              left 320ms cubic-bezier(0.2, 0.9, 0.3, 1),
+              opacity 200ms ease;
+}
+
+.beam-tour-popover .tour-folder-tab {
+  position: absolute;
+  top: -14px;
+  left: 18px;
+  background-color: var(--color-butter);
+  color: #18181B;
+  border: var(--border-width) solid var(--border-solid);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  padding: 1px 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.tour-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--ink-secondary);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 120ms ease;
+}
+
+.tour-close-btn:hover {
+  background-color: var(--bg-card-secondary);
+  border-color: var(--border-solid);
+  color: var(--ink-primary);
+}
+
+.tour-header-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.tour-icon-badge {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.tour-title {
+  font-family: var(--font-main);
+  font-variation-settings: 'MONO' 0, 'CASL' 0.5, 'wght' 800;
+  font-size: 15px;
+  color: var(--ink-primary);
+  line-height: 1.25;
+}
+
+.tour-description {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-secondary);
+  margin-bottom: 16px;
+}
+
+.tour-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1.5px solid var(--border-solid);
+}
+
+.tour-dots-indicator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tour-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid var(--border-solid);
+  background: var(--bg-card-secondary);
+  transition: all 150ms ease;
+}
+
+.tour-dot.active {
+  background: var(--color-peach);
+  transform: scale(1.3);
+}
+
+.tour-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tour-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border-solid);
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.tour-btn-ghost {
+  background: transparent;
+  color: var(--ink-muted);
+  border-color: transparent;
+}
+.tour-btn-ghost:hover {
+  color: var(--ink-primary);
+  background: var(--bg-card-secondary);
+  border-color: var(--border-solid);
+}
+
+.tour-btn-secondary {
+  background: var(--bg-card-secondary);
+  color: var(--ink-primary);
+  box-shadow: 1.5px 1.5px 0px var(--border-solid);
+}
+.tour-btn-secondary:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 2px 2px 0px var(--border-solid);
+}
+
+.tour-btn-primary {
+  background: var(--color-mint);
+  color: #18181B;
+  box-shadow: 2px 2px 0px var(--border-solid);
+}
+.tour-btn-primary:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--border-solid);
+}
+.tour-btn-primary:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--border-solid);
+}
+
+/* Interactive active target elevated above tour backdrop */
+.beam-tour-active-target {
+  position: relative !important;
+  z-index: 99990 !important;
+  pointer-events: auto !important;
+}
+
+/* Pause keyframe animations on active tour targets to ensure rock-solid, equal visual bounds */
+.beam-tour-active-target.hero-start-cta {
+  animation: none !important;
+  transform: translate(0, 0) !important;
+}
+
+/* Draggable Tour Popover Handle */
+.tour-drag-handle {
+  position: absolute;
+  top: -14px;
+  right: 46px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--bg-card-secondary);
+  color: var(--ink-secondary);
+  border: var(--border-width) solid var(--border-solid);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  padding: 1px 8px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: background-color 120ms ease;
+}
+
+.tour-drag-handle:hover {
+  background-color: var(--color-peach-light);
+  color: #18181B;
+}
+
+.tour-drag-handle:active,
+.beam-tour-popover.is-dragging,
+.beam-tour-popover.is-dragging * {
+  cursor: grabbing !important;
+}
+
+.beam-tour-popover.is-dragging {
+  transition: none !important;
+  user-select: none !important;
+  box-shadow: 8px 8px 0px var(--border-solid) !important;
+}
+
+[data-theme="dark"] .beam-tour-spotlight {
+  border-color: #FDE047;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.78), 0 0 25px rgba(253, 224, 71, 0.4);
+}
+
+[data-theme="dark"] .beam-tour-popover {
+  box-shadow: 6px 6px 0px #000000;
+}
+
+/* ==========================================================================
+   7. COMPREHENSIVE PHONE & MOBILE RESPONSIVE ENGINE (< 860px & < 640px)
+   Prioritizing Maximum Visibility of the Concurrency Transfer Stage
+   ========================================================================== */
+@media (max-width: 860px) {
+  /* Top Nav on Mobile */
+  .top-nav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 22px !important;
+  }
+  
+  .top-nav .nav-right {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  /* Cockpit Action Strip: Clean responsive wrap */
+  .cockpit-action-strip {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .cockpit-action-strip .url-input-container {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+    height: 42px !important;
+  }
+
+  .compact-stepper {
+    flex: 1 1 calc(33.33% - 6px) !important;
+    min-width: 85px !important;
+    height: 44px !important;
+  }
+
+  .hero-start-cta {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+    height: 46px !important;
+    font-size: 13px !important;
+  }
+
+  /* Benchmark Arena Grid on Mobile */
+  .benchmark-arena-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .bench-multiplier-column {
+    order: -1;
+  }
+}
+
+@media (max-width: 640px) {
+  /* App Shell margin on phones */
+  .app-shell {
+    padding: 16px 12px 48px !important;
+  }
+
+  .chassis-card {
+    padding: 18px 14px !important;
+    margin-bottom: 24px !important;
+  }
+
+  /* Concurrency Transfer Stage Hero optimization on Phones */
+  .stage-chassis .concurrency-arena {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    min-height: auto !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .destination-column {
+    width: 100% !important;
+    border-bottom: 1.5px dashed var(--border-solid);
+    padding-bottom: 14px;
+  }
+
+  .dest-folder-wrapper {
+    height: 140px !important;
+  }
+
+  .conduits-center {
+    display: none !important; /* Replaced by clean vertical flow on mobile */
+  }
+
+  .workers-column {
+    width: 100% !important;
+  }
+
+  .worker-entities-rack {
+    max-height: 260px !important;
+    overflow-y: auto !important;
+  }
+
+  /* Master Telemetry Bar on Phone */
+  .master-telemetry-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .master-stats-cluster {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .stat-cell {
+    padding: 4px 8px;
+  }
+
+  /* Compact Steppers on small screens */
+  .compact-stepper {
+    flex: 1 1 calc(50% - 6px) !important;
+  }
+
+  .compact-stepper.speed-stepper {
+    flex: 1 1 100% !important;
+  }
 }

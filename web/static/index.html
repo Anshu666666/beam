@@ -5,13 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Beam — Concurrent Byte-Range Streaming Engine</title>
   <meta name="description" content="Visual demonstrator for high-throughput concurrent RFC 7233 chunk downloader in Go with live worker byte streaming animation and 2D visual completion grid.">
+  <link rel="canonical" href="https://beam-stream.duckdns.org/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://beam-stream.duckdns.org/">
+  <meta property="og:title" content="Beam — Concurrent RFC 7233 Byte-Range Streaming Engine">
+  <meta property="og:description" content="High-throughput concurrent RFC 7233 byte-range streaming engine and visual retro dashboard in Go with live worker byte streaming animation and 2D visual completion grid.">
+  <meta property="og:image" content="https://beam-stream.duckdns.org/og-image.png">
+  <meta property="og:image:alt" content="Beam Stream Cockpit & Telemetry Dashboard">
+  <meta property="og:site_name" content="Beam Stream">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://beam-stream.duckdns.org/">
+  <meta name="twitter:title" content="Beam — Concurrent RFC 7233 Byte-Range Streaming Engine">
+  <meta name="twitter:description" content="High-throughput concurrent RFC 7233 byte-range streaming engine and visual retro dashboard in Go with live worker byte streaming animation and 2D visual completion grid.">
+  <meta name="twitter:image" content="https://beam-stream.duckdns.org/og-image.png">
   
   <!-- Fonts: Recursive (Variable mechanical font) & Space Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,CRSV,MONO@400..800,0..1,0..1,0..1&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="/style.css?v=4">
+  <link rel="stylesheet" href="/style.css?v=10">
 </head>
 <body class="beam-app">
 
@@ -31,28 +48,64 @@
         </div>
       </div>
 
-      <div class="nav-middle">
-        <button type="button" class="benchmark-nav-btn" id="benchmark-toggle-btn" title="Toggle Sequential vs Parallel Speedup Benchmark">
-          <span class="bench-btn-icon">⚔️</span>
-          <span>SPEEDUP BENCHMARK</span>
+      <div class="nav-right">
+        <!-- Interactive Walkthrough Guide Trigger (High-Visibility Magnet) -->
+        <button type="button" class="tour-nav-btn" id="tour-start-btn" title="Start Interactive Guided Walkthrough">
+          <span class="tour-pulse-radar" aria-hidden="true"></span>
+          <span class="tour-btn-icon">💡</span>
+          <span class="tour-btn-text">HOW IT WORKS</span>
+          <span class="tour-btn-arrow">▶</span>
         </button>
-        <span class="badge-pill pill-subtle">Lock-Free Atomics</span>
-        <span class="badge-pill pill-subtle">Bounded Pool</span>
-        <span class="badge-pill pill-subtle">Zero-RAM Stitch</span>
-      </div>
 
-      <!-- Light / Dark Mode Toggle Switch (Default: Light Mode) -->
-      <div class="theme-switcher">
-        <button type="button" class="theme-btn active" id="theme-light-btn" title="Switch to Light Mode">
-          <span class="theme-icon">☼</span>
-          <span class="theme-label">Light</span>
-        </button>
-        <button type="button" class="theme-btn" id="theme-dark-btn" title="Switch to Dark Mode">
-          <span class="theme-icon">☾</span>
-          <span class="theme-label">Dark</span>
-        </button>
+        <!-- Light / Dark Mode Toggle Switch (Default: Light Mode) -->
+        <div class="theme-switcher">
+          <button type="button" class="theme-btn active" id="theme-light-btn" title="Switch to Light Mode">
+            <span class="theme-icon">☼</span>
+            <span class="theme-label">Light</span>
+          </button>
+          <button type="button" class="theme-btn" id="theme-dark-btn" title="Switch to Dark Mode">
+            <span class="theme-icon">☾</span>
+            <span class="theme-label">Dark</span>
+          </button>
+        </div>
+
+        <!-- GitHub Repo Header Link -->
+        <a href="https://github.com/Anshu666666/beam" target="_blank" rel="noopener noreferrer" class="header-gh-btn" title="Beam repository on GitHub">
+          <svg class="gh-icon" viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span class="header-gh-label">GitHub</span>
+          <span class="header-gh-arrow">↗</span>
+        </a>
       </div>
     </header>
+
+    <!-- Hero Overview Strip (Instant Context for Visitors) -->
+    <section class="hero-overview-strip" aria-label="System Overview">
+      <div class="overview-left">
+        <div class="overview-badge">
+          <span class="overview-beacon" aria-hidden="true"></span>
+          <span class="overview-badge-text">HIGH-CONCURRENCY BYTE STREAMING ENGINE</span>
+        </div>
+        <p class="overview-description">
+          <strong>Beam</strong> is an open-source, production-grade <strong>RFC 7233 byte-range streaming engine</strong> built in Go. It accelerates large file transfers by partitioning downloads across parallel Goroutine workers with zero-RAM memory stitching, lock-free atomics, and real-time SSE telemetry.
+        </p>
+      </div>
+      <div class="overview-pills-row">
+        <div class="overview-pill">
+          <span class="pill-k">PROTOCOL</span>
+          <span class="pill-v">RFC 7233 Range</span>
+        </div>
+        <div class="overview-pill">
+          <span class="pill-k">ASSEMBLY</span>
+          <span class="pill-v">io.MultiReader</span>
+        </div>
+        <div class="overview-pill">
+          <span class="pill-k">CONCURRENCY</span>
+          <span class="pill-v">Bounded Goroutines</span>
+        </div>
+      </div>
+    </section>
 
     <!-- Main Content Area (Unified Cockpit Layout) -->
     <main class="main-content">
@@ -101,7 +154,7 @@
           </div>
 
           <!-- Row 2: Unified Action Strip (URL + Sliders + Start Button) -->
-          <div class="cockpit-action-strip">
+          <div class="cockpit-action-strip" id="cockpit-action-strip">
             <div class="url-input-container">
               <span class="input-method-badge">HTTP GET</span>
               <input type="url" id="url-input" class="solid-input" value="https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-sample-50mb.bin" placeholder="https://..." required spellcheck="false">
@@ -322,7 +375,6 @@
                 <span class="btn-icon">⚡</span>
                 <span>RUN SPEEDUP BENCHMARK</span>
               </button>
-              <button type="button" class="solid-pill-btn-small" id="benchmark-close-btn">CLOSE</button>
             </div>
           </div>
 
@@ -506,9 +558,45 @@
 
   </div>
 
+  <!-- Interactive Guided Tour / Walkthrough Modal & Spotlight Overlay -->
+  <div class="beam-tour-overlay" id="beam-tour-overlay" aria-hidden="true">
+    <div class="beam-tour-spotlight" id="beam-tour-spotlight"></div>
+  </div>
+
+  <div class="beam-tour-popover" id="beam-tour-popover" role="dialog" aria-modal="true" aria-labelledby="tour-step-title" style="display: none; z-index: 2147483647;">
+    <div class="tour-folder-tab">
+      <span id="tour-step-tab">STEP 1 OF 7</span>
+    </div>
+    <div class="tour-drag-handle" id="tour-drag-handle" title="Hold &amp; drag to move card anywhere">
+      <span class="drag-dots" aria-hidden="true">⠿</span>
+      <span class="drag-label">DRAG</span>
+    </div>
+    <button type="button" class="tour-close-btn" id="tour-close-btn" title="Exit Walkthrough (Esc)">&times;</button>
+    
+    <div class="tour-header-row">
+      <span class="tour-icon-badge" id="tour-step-icon">💡</span>
+      <h4 class="tour-title" id="tour-step-title">Welcome to Beam</h4>
+    </div>
+    
+    <p class="tour-description" id="tour-step-desc">
+      Beam is a concurrent byte-range streaming engine in Go. Let's walk through how to configure, stream, and benchmark downloads.
+    </p>
+    
+    <div class="tour-footer-row">
+      <div class="tour-dots-indicator" id="tour-dots-indicator">
+        <!-- Dots generated dynamically by app.js -->
+      </div>
+      <div class="tour-btn-group">
+        <button type="button" class="tour-btn tour-btn-ghost" id="tour-skip-btn">Skip</button>
+        <button type="button" class="tour-btn tour-btn-secondary" id="tour-prev-btn">◀ Back</button>
+        <button type="button" class="tour-btn tour-btn-primary" id="tour-next-btn">Next ▶</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Anime.js for High-Precision Physics-Based Motion Paths -->
   <script src="/anime.min.js"></script>
   <!-- Beam Frontend Controller Engine -->
-  <script src="/app.js"></script>
+  <script src="/app.js?v=10"></script>
 </body>
 </html>

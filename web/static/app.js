@@ -1,4 +1,4 @@
-﻿// ==========================================================================
+// ==========================================================================
 // Beam — High-Throughput Concurrent Byte-Range Streaming Engine (app.js)
 // Anime.js Motion Paths, Windows XP Byte Packet Streaming, 2D Completion Grid
 // ==========================================================================
@@ -880,5 +880,403 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // 13. INTERACTIVE PRODUCT TOUR / ONBOARDING WALKTHROUGH CONTROLLER
+  const tourOverlay = document.getElementById('beam-tour-overlay');
+  const tourSpotlight = document.getElementById('beam-tour-spotlight');
+  const tourPopover = document.getElementById('beam-tour-popover');
+  const tourDragHandle = document.getElementById('tour-drag-handle');
+  const tourStepTab = document.getElementById('tour-step-tab');
+  const tourStepIcon = document.getElementById('tour-step-icon');
+  const tourStepTitle = document.getElementById('tour-step-title');
+  const tourStepDesc = document.getElementById('tour-step-desc');
+  const tourDotsIndicator = document.getElementById('tour-dots-indicator');
+  const tourCloseBtn = document.getElementById('tour-close-btn');
+  const tourSkipBtn = document.getElementById('tour-skip-btn');
+  const tourPrevBtn = document.getElementById('tour-prev-btn');
+  const tourNextBtn = document.getElementById('tour-next-btn');
+  const tourStartBtn = document.getElementById('tour-start-btn');
+
+  const tourSteps = [
+    {
+      elementId: 'config-card',
+      icon: '🎯',
+      title: '1. Dispatch Cockpit & Presets',
+      desc: 'Pick any pre-configured payload (50 MB, 100 MB, Linux Kernel, Go 1.22) or enter any RFC 7233 byte-range capable file URL to begin.'
+    },
+    {
+      elementId: 'cockpit-action-strip',
+      icon: '⚙️',
+      title: '2. Concurrency & Chunk Slicing',
+      desc: 'Configure parallel Goroutine workers (1–16) and discrete byte chunks (1–64). You can also throttle network speed to visualize packet flow live!'
+    },
+    {
+      elementId: 'start-btn',
+      icon: '⚡',
+      title: '3. Start Concurrent Stream',
+      desc: 'Click START CONCURRENT STREAM to launch the Go engine! It fires parallel HTTP GET requests with Range: bytes=... headers and streams telemetry over Server-Sent Events (SSE).'
+    },
+    {
+      elementId: 'stage-card',
+      icon: '🏭',
+      title: '4. Visual Concurrency Arena',
+      desc: 'Watch Goroutine workers pull byte packets through dynamic conduits into the assembly destination folder with Zero-RAM Copy & SHA-256 seal verification.'
+    },
+    {
+      elementId: 'matrix-card',
+      icon: '▦',
+      title: '5. 2D Discrete Chunk Matrix',
+      desc: 'Real-time defrag-style memory grid tracking individual slice progress (Idle, Downloading, Completed).'
+    },
+    {
+      elementId: 'benchmark-card',
+      icon: '⚔️',
+      title: '6. Speedup Benchmark Arena',
+      desc: 'Pit standard single-stream sequential HTTP against 8-worker parallel Range streaming head-to-head to measure real-world throughput multiplier!'
+    },
+    {
+      elementId: 'trace-card',
+      icon: '🖥️',
+      title: '7. RFC 7233 Protocol Trace',
+      desc: 'Inspect low-level byte-range requests, socket timestamps, and Go engine telemetry in real time.'
+    }
+  ];
+
+  let currentTourStep = 0;
+  let isTourActive = false;
+  let isDragging = false;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let popoverInitialLeft = 0;
+  let popoverInitialTop = 0;
+
+  function initTourDots() {
+    if (!tourDotsIndicator) return;
+    tourDotsIndicator.innerHTML = '';
+    tourSteps.forEach((_, idx) => {
+      const dot = document.createElement('span');
+      dot.className = `tour-dot ${idx === currentTourStep ? 'active' : ''}`;
+      tourDotsIndicator.appendChild(dot);
+    });
+  }
+
+  function updateTourDots() {
+    if (!tourDotsIndicator) return;
+    const dots = tourDotsIndicator.querySelectorAll('.tour-dot');
+    dots.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === currentTourStep);
+    });
+  }
+
+  function positionTourPopover(targetRect, stepIdx) {
+    if (!tourPopover) return;
+    const popoverW = tourPopover.offsetWidth || 360;
+    const popoverH = tourPopover.offsetHeight || 220;
+    const margin = 24;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    let top = 0;
+    let left = 0;
+
+    // Smart, non-covering positioning per element type
+    if (stepIdx === 3) {
+      // Step 4: Visual Concurrency Arena -> Place inside upper-center of arena without obscuring folder or workers
+      left = targetRect.left + (targetRect.width / 2) - (popoverW / 2);
+      top = targetRect.top + 48;
+    } else if (stepIdx === 4) {
+      // Step 5: 2D Grid Tracker -> Place to the LEFT of the matrix card
+      left = targetRect.left - popoverW - margin;
+      top = targetRect.top + 20;
+
+      // On narrow screens where left does not fit, place below
+      if (left < 16) {
+        left = Math.max(16, (vw - popoverW) / 2);
+        top = targetRect.bottom + margin;
+      }
+    } else if (stepIdx === 6) {
+      // Step 7: Trace Window (at bottom of page) -> Place ABOVE trace card
+      top = targetRect.top - popoverH - margin;
+      left = Math.max(16, targetRect.left + 24);
+    } else if (stepIdx === 2) {
+      // Step 3: Start Button -> Place to the left if room, else below
+      if (targetRect.left - popoverW - margin > 16) {
+        left = targetRect.left - popoverW - margin;
+        top = targetRect.top - 10;
+      } else {
+        top = targetRect.bottom + margin;
+        left = Math.max(16, targetRect.right - popoverW);
+      }
+    } else {
+      // Default: Place BELOW the target with plenty of clearance so tabs don't overlap
+      top = targetRect.bottom + margin;
+      left = targetRect.left + (targetRect.width / 2) - (popoverW / 2);
+
+      // If bottom overflows viewport, place ABOVE the target
+      if (top + popoverH > vh - 20) {
+        top = targetRect.top - popoverH - margin;
+      }
+    }
+
+    // Viewport boundary clamping
+    if (left < 16) left = 16;
+    if (left + popoverW > vw - 16) left = vw - popoverW - 16;
+    if (top < 16) top = 16;
+    if (top + popoverH > vh - 16) top = vh - popoverH - 16;
+
+    tourPopover.style.top = `${Math.round(top)}px`;
+    tourPopover.style.left = `${Math.round(left)}px`;
+  }
+
+  function lockTourScroll() {
+    document.documentElement.classList.add('tour-scroll-locked');
+    document.body.classList.add('tour-scroll-locked');
+  }
+
+  function unlockTourScroll() {
+    document.documentElement.classList.remove('tour-scroll-locked');
+    document.body.classList.remove('tour-scroll-locked');
+  }
+
+  function getVisualTargetRect(targetEl) {
+    if (!targetEl) return null;
+    const rect = targetEl.getBoundingClientRect();
+    let top = rect.top;
+    let left = rect.left;
+    let right = rect.right;
+    let bottom = rect.bottom;
+
+    // Detect protruding folder tabs (e.g. .card-folder-tab) to ensure 100% equal enclosing bounds
+    const tabs = targetEl.querySelectorAll('.card-folder-tab, .brand-folder-tab, .stage-tab, .matrix-folder-tab, .bench-folder-tab');
+    tabs.forEach(tab => {
+      const tRect = tab.getBoundingClientRect();
+      if (tRect.width > 0 && tRect.height > 0) {
+        if (tRect.top < top) top = tRect.top;
+        if (tRect.left < left) left = tRect.left;
+        if (tRect.right > right) right = tRect.right;
+        if (tRect.bottom > bottom) bottom = tRect.bottom;
+      }
+    });
+
+    return {
+      top,
+      left,
+      right,
+      bottom,
+      width: right - left,
+      height: bottom - top
+    };
+  }
+
+  function updateSpotlightAndPopoverPositions() {
+    if (!isTourActive) return;
+    const step = tourSteps[currentTourStep];
+    if (!step) return;
+    const targetEl = document.getElementById(step.elementId) || document.querySelector(`.${step.elementId}`) || document.querySelector(step.elementId);
+    if (!targetEl) return;
+
+    const vRect = getVisualTargetRect(targetEl);
+    if (!vRect) return;
+
+    // Uniform padding across all 4 directions for polished symmetry
+    const isCard = targetEl.classList.contains('chassis-card') || targetEl.id === 'benchmark-card';
+    const padding = isCard ? 14 : 10;
+
+    if (tourSpotlight) {
+      tourSpotlight.style.top = `${Math.max(0, Math.round(vRect.top - padding))}px`;
+      tourSpotlight.style.left = `${Math.max(0, Math.round(vRect.left - padding))}px`;
+      tourSpotlight.style.width = `${Math.round(vRect.width + padding * 2)}px`;
+      tourSpotlight.style.height = `${Math.round(vRect.height + padding * 2)}px`;
+      tourSpotlight.style.borderRadius = isCard ? '14px' : '10px';
+    }
+    if (!isDragging) {
+      positionTourPopover(vRect, currentTourStep);
+    }
+  }
+
+  function renderCurrentTourStep() {
+    if (!isTourActive || !tourSteps[currentTourStep]) return;
+    const step = tourSteps[currentTourStep];
+    const targetEl = document.getElementById(step.elementId) || document.querySelector(`.${step.elementId}`) || document.querySelector(step.elementId);
+
+    // Remove active target elevation from previous elements
+    document.querySelectorAll('.beam-tour-active-target').forEach(el => {
+      el.classList.remove('beam-tour-active-target');
+    });
+
+    // Elevate current target so its buttons/sliders remain fully clickable!
+    if (targetEl) {
+      targetEl.classList.add('beam-tour-active-target');
+    }
+
+    if (step.elementId === 'benchmark-card' && benchmarkCard && benchmarkCard.style.display === 'none') {
+      benchmarkCard.style.display = 'block';
+    }
+
+    if (tourStepTab) tourStepTab.textContent = `STEP ${currentTourStep + 1} OF ${tourSteps.length}`;
+    if (tourStepIcon) tourStepIcon.textContent = step.icon;
+    if (tourStepTitle) tourStepTitle.textContent = step.title;
+    if (tourStepDesc) tourStepDesc.textContent = step.desc;
+
+    if (tourPrevBtn) {
+      tourPrevBtn.style.display = currentTourStep === 0 ? 'none' : 'inline-flex';
+    }
+    if (tourNextBtn) {
+      tourNextBtn.textContent = currentTourStep === tourSteps.length - 1 ? 'Finish ✓' : 'Next ▶';
+    }
+
+    updateTourDots();
+
+    if (targetEl) {
+      unlockTourScroll();
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      // Smooth magnetic tracking during scroll animation, then lock scroll
+      let framesCount = 0;
+      const maxFrames = 28; // ~450ms smooth transition
+      function trackScrollFrame() {
+        updateSpotlightAndPopoverPositions();
+        framesCount++;
+        if (framesCount < maxFrames && isTourActive) {
+          requestAnimationFrame(trackScrollFrame);
+        } else if (isTourActive) {
+          updateSpotlightAndPopoverPositions();
+          lockTourScroll(); // Lock scroll so limelight never drifts away!
+        }
+      }
+      requestAnimationFrame(trackScrollFrame);
+    }
+  }
+
+  function startTour() {
+    isTourActive = true;
+    currentTourStep = 0;
+    initTourDots();
+    if (tourOverlay) {
+      tourOverlay.classList.add('active');
+      tourOverlay.setAttribute('aria-hidden', 'false');
+    }
+    if (tourPopover) {
+      tourPopover.style.display = 'block';
+      tourPopover.style.zIndex = '2147483647';
+    }
+    renderCurrentTourStep();
+  }
+
+  function closeTour() {
+    isTourActive = false;
+    unlockTourScroll();
+    document.querySelectorAll('.beam-tour-active-target').forEach(el => {
+      el.classList.remove('beam-tour-active-target');
+    });
+    if (tourOverlay) {
+      tourOverlay.classList.remove('active');
+      tourOverlay.setAttribute('aria-hidden', 'true');
+    }
+    if (tourPopover) {
+      tourPopover.style.display = 'none';
+    }
+  }
+
+  function nextTourStep() {
+    if (currentTourStep < tourSteps.length - 1) {
+      currentTourStep++;
+      renderCurrentTourStep();
+    } else {
+      closeTour();
+      try { localStorage.setItem('beam_tour_seen', 'true'); } catch (e) {}
+    }
+  }
+
+  function prevTourStep() {
+    if (currentTourStep > 0) {
+      currentTourStep--;
+      renderCurrentTourStep();
+    }
+  }
+
+  // Drag functionality for the Tour Popover card
+  function onDragStart(e) {
+    if (!tourPopover) return;
+    isDragging = true;
+    const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+    const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
+    dragStartX = clientX;
+    dragStartY = clientY;
+
+    const rect = tourPopover.getBoundingClientRect();
+    popoverInitialLeft = rect.left;
+    popoverInitialTop = rect.top;
+
+    tourPopover.classList.add('is-dragging');
+    if (e.cancelable && e.type.startsWith('touch')) {
+      e.preventDefault();
+    }
+  }
+
+  function onDragMove(e) {
+    if (!isDragging || !tourPopover) return;
+    const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+    const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
+    const dx = clientX - dragStartX;
+    const dy = clientY - dragStartY;
+
+    const popoverW = tourPopover.offsetWidth;
+    const popoverH = tourPopover.offsetHeight;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    let newLeft = popoverInitialLeft + dx;
+    let newTop = popoverInitialTop + dy;
+
+    newLeft = Math.max(8, Math.min(vw - popoverW - 8, newLeft));
+    newTop = Math.max(8, Math.min(vh - popoverH - 8, newTop));
+
+    tourPopover.style.left = `${Math.round(newLeft)}px`;
+    tourPopover.style.top = `${Math.round(newTop)}px`;
+  }
+
+  function onDragEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    if (tourPopover) {
+      tourPopover.classList.remove('is-dragging');
+    }
+  }
+
+  if (tourDragHandle) {
+    tourDragHandle.addEventListener('mousedown', onDragStart);
+    tourDragHandle.addEventListener('touchstart', onDragStart, { passive: false });
+  }
+  window.addEventListener('mousemove', onDragMove);
+  window.addEventListener('touchmove', onDragMove, { passive: false });
+  window.addEventListener('mouseup', onDragEnd);
+  window.addEventListener('touchend', onDragEnd);
+
+  if (tourStartBtn) tourStartBtn.addEventListener('click', startTour);
+  if (tourCloseBtn) tourCloseBtn.addEventListener('click', closeTour);
+  if (tourSkipBtn) tourSkipBtn.addEventListener('click', () => {
+    closeTour();
+    try { localStorage.setItem('beam_tour_seen', 'true'); } catch (e) {}
+  });
+  if (tourPrevBtn) tourPrevBtn.addEventListener('click', prevTourStep);
+  if (tourNextBtn) tourNextBtn.addEventListener('click', nextTourStep);
+
+  window.addEventListener('keydown', (e) => {
+    if (!isTourActive) return;
+    if (e.key === 'Escape') closeTour();
+    else if (e.key === 'ArrowRight' || e.key === 'Enter') nextTourStep();
+    else if (e.key === 'ArrowLeft') prevTourStep();
+  });
+
+  window.addEventListener('resize', () => {
+    if (isTourActive) updateSpotlightAndPopoverPositions();
+  });
+
+  window.addEventListener('scroll', () => {
+    if (isTourActive) {
+      requestAnimationFrame(updateSpotlightAndPopoverPositions);
+    }
+  }, { passive: true });
 
 });
