@@ -327,15 +327,32 @@
     .code-snippet {
       background: var(--bg-card-secondary);
       border: 1px solid var(--border-solid);
-      padding: 8px 12px;
+      padding: 8px 10px;
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--ink-primary);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 10px;
       margin-top: auto;
+      max-width: 100%;
+      overflow: hidden;
+      border-radius: 3px;
+    }
+    .code-snippet code {
+      flex: 1;
+      min-width: 0;
+      white-space: nowrap;
+      overflow-x: auto;
+      text-overflow: ellipsis;
+      scrollbar-width: none;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--ink-primary);
+    }
+    .code-snippet code::-webkit-scrollbar {
+      display: none;
     }
     .copy-mini-btn {
       background: var(--bg-card);
@@ -582,7 +599,7 @@
 
     <!-- Simulated Live Terminal Mockup -->
     <section class="docs-section">
-      <h2 class="section-title"><span>💻</span> Interactive CLI Cockpit</h2>
+      <h2 class="section-title">Interactive CLI Cockpit</h2>
       <p class="section-desc">
         Watch how Beam splits payloads across concurrent worker Goroutines and renders live progress in your terminal:
       </p>
@@ -601,32 +618,34 @@
             <button type="button" class="term-tab" onclick="switchTermTab('bash')">macOS / Linux</button>
           </div>
         </div>
-        <div class="term-body" id="terminal-body-content"><span class="term-prompt">PS C:\Users\Dev\Downloads&gt;</span> <span class="term-cmd">.\beam.exe -demo</span>
+        <div class="term-body" id="terminal-body-content"><span class="term-prompt">PS C:\Users\anshu\OneDrive\Desktop\beam\dist&gt;</span> <span class="term-cmd">.\beam.exe -url "https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso" -w 8 -c 16</span>
 <span class="term-dim">┌────────────────────────────────────────────────────────────┐</span>
 <span class="term-cyan">│  ⚡ BEAM · Concurrent RFC 7233 Streaming Engine (Go CLI)   │</span>
 <span class="term-dim">└────────────────────────────────────────────────────────────┘</span>
-URL:        <span class="term-cyan">https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-sample-50mb.bin</span>
-Output:     <span class="term-yellow">beam-sample-50mb.bin</span> <span class="term-dim">(auto-derived)</span>
+URL:        <span class="term-cyan">https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso</span>
+Output:     <span class="term-dim">(auto-derived)</span>
 Workers:    <span class="term-white">8</span> concurrent streams
 Chunks:     <span class="term-white">16</span> byte partitions
 <span class="term-dim">────────────────────────────────────────────────────────────</span>
 <span class="term-yellow">[⚡] Probing target server &amp; byte-range capabilities...</span>
 [▶] Master Progress:
-  <span class="term-cyan">[█████████████████████████]</span> <span class="term-green">100.0%</span> │ 50.00 MB / 50.00 MB │ <span class="term-cyan">84.12 MB/s</span> │ ETA: 0s
+  <span class="term-cyan">[██████████████████       ]</span> <span class="term-white">73.2%</span> │ 4.26 GB / 5.82 GB │ <span class="term-yellow">81.44 MB/s</span> │ ETA: <span class="term-cyan">20s</span>
 
-[⚡] Worker Pool Status (8 workers):
-  W0: [<span class="term-dim">IDLE</span>]   W1: [<span class="term-dim">IDLE</span>]   W2: [<span class="term-dim">IDLE</span>]   W3: [<span class="term-dim">IDLE</span>]
-  W4: [<span class="term-dim">IDLE</span>]   W5: [<span class="term-dim">IDLE</span>]   W6: [<span class="term-dim">IDLE</span>]   W7: [<span class="term-dim">IDLE</span>]
-<span class="term-dim">────────────────────────────────────────────────────────────</span>
-<span class="term-green">✔ Download completed in 0.621s!</span>
-<span class="term-yellow">Saved to:   </span><span class="term-cyan">C:\Users\Dev\Downloads\beam-sample-50mb.bin</span>
-<span class="term-dim">============================================================</span></div>
+<span class="term-yellow">[⚡] Worker Pool Status (8 workers):</span>
+  W0 [#13] <span class="term-cyan">[████████████████████     ]</span> <span class="term-white">74.6%</span> (277.98 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>
+  W1 [#06] <span class="term-cyan">[█████                    ]</span> <span class="term-white">22.1%</span> (82.22 MB / 372.55 MB)  <span class="term-yellow">STREAMING</span>
+  W2 [#00] <span class="term-cyan">[██████                   ]</span> <span class="term-white">27.7%</span> (103.09 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>
+  W3 [#02] <span class="term-cyan">[████                     ]</span> <span class="term-white">16.8%</span> (62.45 MB / 372.55 MB)  <span class="term-yellow">STREAMING</span>
+  W4 [#12] <span class="term-cyan">[██████████████████████   ]</span> <span class="term-white">89.6%</span> (333.62 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>
+  W5 [#04] <span class="term-cyan">[████                     ]</span> <span class="term-white">19.5%</span> (72.48 MB / 372.55 MB)  <span class="term-yellow">STREAMING</span>
+  W6 [#14] <span class="term-cyan">[████████████████         ]</span> <span class="term-white">66.5%</span> (247.59 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>
+  W7 [#15] <span class="term-cyan">[█████████████            ]</span> <span class="term-white">55.2%</span> (205.51 MB / 372.55 MB) <span class="term-yellow">STREAMING</span></div>
       </div>
     </section>
 
     <!-- Step by Step Setup Guide -->
     <section class="docs-section">
-      <h2 class="section-title"><span>🚀</span> Quick Start Walkthrough</h2>
+      <h2 class="section-title">Quick Start Walkthrough</h2>
       <p class="section-desc">Get up and running in under 30 seconds.</p>
 
       <div class="steps-container">
@@ -637,7 +656,7 @@ Chunks:     <span class="term-white">16</span> byte partitions
           <h3>Download Binary</h3>
           <p>Download <code>beam.exe</code> to your folder (or use PowerShell 1-liner):</p>
           <div class="code-snippet">
-            <code>irm -Uri "https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam.exe" -OutFile "beam.exe"</code>
+            <code title="irm -Uri &quot;https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam.exe&quot; -OutFile &quot;beam.exe&quot;">irm .../beam.exe -OutFile "beam.exe"</code>
             <button class="copy-mini-btn" onclick="copySnippet(this, 'irm -Uri &quot;https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam.exe&quot; -OutFile &quot;beam.exe&quot;')">Copy</button>
           </div>
         </div>
@@ -691,7 +710,7 @@ Chunks:     <span class="term-white">16</span> byte partitions
 
     <!-- Verified Real-World Target Benchmark Presets -->
     <section class="docs-section">
-      <h2 class="section-title"><span>🎯</span> Verified Test Targets</h2>
+      <h2 class="section-title">Verified Test Targets</h2>
       <p class="section-desc">Try these high-speed CDN URLs to benchmark Beam's parallel engine against single-stream HTTP:</p>
 
       <div class="targets-grid">
@@ -740,7 +759,7 @@ Chunks:     <span class="term-white">16</span> byte partitions
 
     <!-- Command Flag Reference Table -->
     <section class="docs-section">
-      <h2 class="section-title"><span>📖</span> Command-Line Flag Reference</h2>
+      <h2 class="section-title">Command-Line Flag Reference</h2>
       <p class="section-desc">Comprehensive reference for all CLI arguments supported by Beam:</p>
 
       <div class="ref-table-wrap">
@@ -837,70 +856,76 @@ Chunks:     <span class="term-white">16</span> byte partitions
 
       if (os === 'ps') {
         title.innerText = 'Windows PowerShell — beam.exe';
-        body.innerHTML = `<span class="term-prompt">PS C:\\Users\\Dev\\Downloads&gt;</span> <span class="term-cmd">.\\beam.exe -demo</span>
-<span class="term-dim">┌────────────────────────────────────────────────────────────┐</span>
-<span class="term-cyan">│  ⚡ BEAM · Concurrent RFC 7233 Streaming Engine (Go CLI)   │</span>
-<span class="term-dim">└────────────────────────────────────────────────────────────┘</span>
-URL:        <span class="term-cyan">https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-sample-50mb.bin</span>
-Output:     <span class="term-yellow">beam-sample-50mb.bin</span> <span class="term-dim">(auto-derived)</span>
-Workers:    <span class="term-white">8</span> concurrent streams
-Chunks:     <span class="term-white">16</span> byte partitions
-<span class="term-dim">────────────────────────────────────────────────────────────</span>
-<span class="term-yellow">[⚡] Probing target server &amp; byte-range capabilities...</span>
-[▶] Master Progress:
-  <span class="term-cyan">[█████████████████████████]</span> <span class="term-green">100.0%</span> │ 50.00 MB / 50.00 MB │ <span class="term-cyan">84.12 MB/s</span> │ ETA: 0s
-
-[⚡] Worker Pool Status (8 workers):
-  W0: [<span class="term-dim">IDLE</span>]   W1: [<span class="term-dim">IDLE</span>]   W2: [<span class="term-dim">IDLE</span>]   W3: [<span class="term-dim">IDLE</span>]
-  W4: [<span class="term-dim">IDLE</span>]   W5: [<span class="term-dim">IDLE</span>]   W6: [<span class="term-dim">IDLE</span>]   W7: [<span class="term-dim">IDLE</span>]
-<span class="term-dim">────────────────────────────────────────────────────────────</span>
-<span class="term-green">✔ Download completed in 0.621s!</span>
-<span class="term-yellow">Saved to:   </span><span class="term-cyan">C:\\Users\\Dev\\Downloads\\beam-sample-50mb.bin</span>
-<span class="term-dim">============================================================</span>`;
-      } else if (os === 'cmd') {
-        title.innerText = 'Command Prompt (cmd.exe) — beam.exe';
-        body.innerHTML = `<span class="term-prompt">C:\\Users\\Dev\\Downloads&gt;</span> <span class="term-cmd">beam.exe -url "https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso" -w 8 -c 16</span>
+        body.innerHTML = `<span class="term-prompt">PS C:\\Users\\anshu\\OneDrive\\Desktop\\beam\\dist&gt;</span> <span class="term-cmd">.\\beam.exe -url "https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso" -w 8 -c 16</span>
 <span class="term-dim">┌────────────────────────────────────────────────────────────┐</span>
 <span class="term-cyan">│  ⚡ BEAM · Concurrent RFC 7233 Streaming Engine (Go CLI)   │</span>
 <span class="term-dim">└────────────────────────────────────────────────────────────┘</span>
 URL:        <span class="term-cyan">https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso</span>
-Output:     <span class="term-yellow">ubuntu-24.04.5.1-desktop-amd64.iso</span> <span class="term-dim">(auto-derived)</span>
+Output:     <span class="term-dim">(auto-derived)</span>
 Workers:    <span class="term-white">8</span> concurrent streams
 Chunks:     <span class="term-white">16</span> byte partitions
 <span class="term-dim">────────────────────────────────────────────────────────────</span>
 <span class="term-yellow">[⚡] Probing target server &amp; byte-range capabilities...</span>
 [▶] Master Progress:
-  <span class="term-cyan">[█████████████████████████]</span> <span class="term-green">100.0%</span> │ 5.82 GiB / 5.82 GiB │ <span class="term-cyan">92.40 MB/s</span> │ ETA: 0s
+  <span class="term-cyan">[██████████████████       ]</span> <span class="term-white">73.2%</span> │ 4.26 GB / 5.82 GB │ <span class="term-yellow">81.44 MB/s</span> │ ETA: <span class="term-cyan">20s</span>
 
-[⚡] Worker Pool Status (8 workers):
-  W0: [<span class="term-dim">IDLE</span>]   W1: [<span class="term-dim">IDLE</span>]   W2: [<span class="term-dim">IDLE</span>]   W3: [<span class="term-dim">IDLE</span>]
-  W4: [<span class="term-dim">IDLE</span>]   W5: [<span class="term-dim">IDLE</span>]   W6: [<span class="term-dim">IDLE</span>]   W7: [<span class="term-dim">IDLE</span>]
-<span class="term-dim">────────────────────────────────────────────────────────────</span>
-<span class="term-green">✔ Download completed in 64.38s!</span>
-<span class="term-yellow">Saved to:   </span><span class="term-cyan">C:\\Users\\Dev\\Downloads\\ubuntu-24.04.5.1-desktop-amd64.iso</span>
-<span class="term-dim">============================================================</span>`;
-      } else if (os === 'bash') {
-        title.innerText = 'Terminal (zsh / bash) — beam';
-        body.innerHTML = `<span class="term-prompt">user@host:~/Downloads$</span> <span class="term-cmd">chmod +x ./beam-darwin-arm64 &amp;&amp; ./beam-darwin-arm64 -demo</span>
+<span class="term-yellow">[⚡] Worker Pool Status (8 workers):</span>
+  W0 [#13] <span class="term-cyan">[████████████████████     ]</span> <span class="term-white">74.6%</span> (277.98 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>
+  W1 [#06] <span class="term-cyan">[█████                    ]</span> <span class="term-white">22.1%</span> (82.22 MB / 372.55 MB)  <span class="term-yellow">STREAMING</span>
+  W2 [#00] <span class="term-cyan">[██████                   ]</span> <span class="term-white">27.7%</span> (103.09 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>
+  W3 [#02] <span class="term-cyan">[████                     ]</span> <span class="term-white">16.8%</span> (62.45 MB / 372.55 MB)  <span class="term-yellow">STREAMING</span>
+  W4 [#12] <span class="term-cyan">[██████████████████████   ]</span> <span class="term-white">89.6%</span> (333.62 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>
+  W5 [#04] <span class="term-cyan">[████                     ]</span> <span class="term-white">19.5%</span> (72.48 MB / 372.55 MB)  <span class="term-yellow">STREAMING</span>
+  W6 [#14] <span class="term-cyan">[████████████████         ]</span> <span class="term-white">66.5%</span> (247.59 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>
+  W7 [#15] <span class="term-cyan">[█████████████            ]</span> <span class="term-white">55.2%</span> (205.51 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>`;
+      } else if (os === 'cmd') {
+        title.innerText = 'Command Prompt (cmd.exe) — beam.exe';
+        body.innerHTML = `<span class="term-prompt">C:\\Users\\anshu\\OneDrive\\Desktop\\beam\\dist&gt;</span> <span class="term-cmd">beam.exe -url "https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso" -w 8 -c 16</span>
 <span class="term-dim">┌────────────────────────────────────────────────────────────┐</span>
 <span class="term-cyan">│  ⚡ BEAM · Concurrent RFC 7233 Streaming Engine (Go CLI)   │</span>
 <span class="term-dim">└────────────────────────────────────────────────────────────┘</span>
-URL:        <span class="term-cyan">https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-sample-50mb.bin</span>
-Output:     <span class="term-yellow">beam-sample-50mb.bin</span> <span class="term-dim">(auto-derived)</span>
+URL:        <span class="term-cyan">https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso</span>
+Output:     <span class="term-dim">(auto-derived)</span>
 Workers:    <span class="term-white">8</span> concurrent streams
 Chunks:     <span class="term-white">16</span> byte partitions
 <span class="term-dim">────────────────────────────────────────────────────────────</span>
 <span class="term-yellow">[⚡] Probing target server &amp; byte-range capabilities...</span>
 [▶] Master Progress:
-  <span class="term-cyan">[█████████████████████████]</span> <span class="term-green">100.0%</span> │ 50.00 MB / 50.00 MB │ <span class="term-cyan">88.50 MB/s</span> │ ETA: 0s
+  <span class="term-cyan">[██████████████████       ]</span> <span class="term-white">73.2%</span> │ 4.26 GB / 5.82 GB │ <span class="term-yellow">81.44 MB/s</span> │ ETA: <span class="term-cyan">20s</span>
 
-[⚡] Worker Pool Status (8 workers):
-  W0: [<span class="term-dim">IDLE</span>]   W1: [<span class="term-dim">IDLE</span>]   W2: [<span class="term-dim">IDLE</span>]   W3: [<span class="term-dim">IDLE</span>]
-  W4: [<span class="term-dim">IDLE</span>]   W5: [<span class="term-dim">IDLE</span>]   W6: [<span class="term-dim">IDLE</span>]   W7: [<span class="term-dim">IDLE</span>]
+<span class="term-yellow">[⚡] Worker Pool Status (8 workers):</span>
+  W0 [#13] <span class="term-cyan">[████████████████████     ]</span> <span class="term-white">74.6%</span> (277.98 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>
+  W1 [#06] <span class="term-cyan">[█████                    ]</span> <span class="term-white">22.1%</span> (82.22 MB / 372.55 MB)  <span class="term-yellow">STREAMING</span>
+  W2 [#00] <span class="term-cyan">[██████                   ]</span> <span class="term-white">27.7%</span> (103.09 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>
+  W3 [#02] <span class="term-cyan">[████                     ]</span> <span class="term-white">16.8%</span> (62.45 MB / 372.55 MB)  <span class="term-yellow">STREAMING</span>
+  W4 [#12] <span class="term-cyan">[██████████████████████   ]</span> <span class="term-white">89.6%</span> (333.62 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>
+  W5 [#04] <span class="term-cyan">[████                     ]</span> <span class="term-white">19.5%</span> (72.48 MB / 372.55 MB)  <span class="term-yellow">STREAMING</span>
+  W6 [#14] <span class="term-cyan">[████████████████         ]</span> <span class="term-white">66.5%</span> (247.59 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>
+  W7 [#15] <span class="term-cyan">[█████████████            ]</span> <span class="term-white">55.2%</span> (205.51 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>`;
+      } else if (os === 'bash') {
+        title.innerText = 'Terminal (zsh / bash) — beam';
+        body.innerHTML = `<span class="term-prompt">user@host:~/beam$</span> <span class="term-cmd">chmod +x ./beam-linux-amd64 &amp;&amp; ./beam-linux-amd64 -url "https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso" -w 8 -c 16</span>
+<span class="term-dim">┌────────────────────────────────────────────────────────────┐</span>
+<span class="term-cyan">│  ⚡ BEAM · Concurrent RFC 7233 Streaming Engine (Go CLI)   │</span>
+<span class="term-dim">└────────────────────────────────────────────────────────────┘</span>
+URL:        <span class="term-cyan">https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso</span>
+Output:     <span class="term-dim">(auto-derived)</span>
+Workers:    <span class="term-white">8</span> concurrent streams
+Chunks:     <span class="term-white">16</span> byte partitions
 <span class="term-dim">────────────────────────────────────────────────────────────</span>
-<span class="term-green">✔ Download completed in 0.58s!</span>
-<span class="term-yellow">Saved to:   </span><span class="term-cyan">/Users/user/Downloads/beam-sample-50mb.bin</span>
-<span class="term-dim">============================================================</span>`;
+<span class="term-yellow">[⚡] Probing target server &amp; byte-range capabilities...</span>
+[▶] Master Progress:
+  <span class="term-cyan">[██████████████████       ]</span> <span class="term-white">73.2%</span> │ 4.26 GB / 5.82 GB │ <span class="term-yellow">81.44 MB/s</span> │ ETA: <span class="term-cyan">20s</span>
+
+<span class="term-yellow">[⚡] Worker Pool Status (8 workers):</span>
+  W0 [#13] <span class="term-cyan">[████████████████████     ]</span> <span class="term-white">74.6%</span> (277.98 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>
+  W1 [#06] <span class="term-cyan">[█████                    ]</span> <span class="term-white">22.1%</span> (82.22 MB / 372.55 MB)  <span class="term-yellow">STREAMING</span>
+  W2 [#00] <span class="term-cyan">[██████                   ]</span> <span class="term-white">27.7%</span> (103.09 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>
+  W3 [#02] <span class="term-cyan">[████                     ]</span> <span class="term-white">16.8%</span> (62.45 MB / 372.55 MB)  <span class="term-yellow">STREAMING</span>
+  W4 [#12] <span class="term-cyan">[██████████████████████   ]</span> <span class="term-white">89.6%</span> (333.62 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>
+  W5 [#04] <span class="term-cyan">[████                     ]</span> <span class="term-white">19.5%</span> (72.48 MB / 372.55 MB)  <span class="term-yellow">STREAMING</span>
+  W6 [#14] <span class="term-cyan">[████████████████         ]</span> <span class="term-white">66.5%</span> (247.59 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>
+  W7 [#15] <span class="term-cyan">[█████████████            ]</span> <span class="term-white">55.2%</span> (205.51 MB / 372.55 MB) <span class="term-yellow">STREAMING</span>`;
       }
     }
 
