@@ -97,15 +97,6 @@ Visual grid tracking each chunk's state (Idle, Downloading, Complete) with final
 
 ---
 
-### 5. High-Contrast Light Mode
-Tactile retro light theme for bright workspaces.
-
-<p align="center">
-  <img src="assets/cockpit_light_mode.png" alt="Light Mode Cockpit" width="100%" style="border-radius: 8px;">
-</p>
-
----
-
 ## 🔄 Architecture
 
 <p align="center">
