@@ -24,7 +24,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-explainer.mp4"><b>▶ Click to watch the full 1080p Explainer Video with Voiceover (27s MP4)</b></a>
+  <a href="https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-explainer.mp4"><b>▶ Click to watch the full 1080p Explainer Video with Voiceover (25.5s MP4)</b></a>
 </p>
 
 <p align="center">
@@ -222,7 +222,28 @@ beam/
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### 📦 Standalone Binaries (No Go or Docker Required)
+
+Grab the precompiled static binary for your OS directly from [Release v1.0.0](https://github.com/Anshu666666/beam/releases/tag/v1.0.0):
+
+| OS | Architecture | Binary |
+|---|---|---|
+| **Windows** | 64-bit (x86_64) | [**beam.exe** (direct download)](https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam.exe) |
+| **macOS** | Apple Silicon (arm64) | [**beam-darwin-arm64**](https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-darwin-arm64) |
+| **Linux** | 64-bit (x86_64) | [**beam-linux-amd64**](https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-linux-amd64) |
+
+```bash
+# Windows (PowerShell / CMD)
+.\beam.exe -url "https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso" -w 8 -c 16
+
+# Linux / macOS
+chmod +x ./beam-*
+./beam-* -url "https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso" -w 8 -c 16
+```
+
+---
+
+### Prerequisites (For Building from Source)
 - [Go 1.22+](https://golang.org/dl/) (or [Docker](https://www.docker.com/))
 - [Git](https://git-scm.com/)
 
