@@ -135,79 +135,57 @@ body {
 .brand-group {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
-.brand-logo-badge {
-  display: flex;
+.brand-logo-link {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  background-color: var(--bg-card);
-  border: var(--border-width) solid var(--border-solid);
-  border-radius: 8px;
-  box-shadow: var(--shadow-offset-sm);
   text-decoration: none;
-  flex-shrink: 0;
-  transition: transform 120ms ease, box-shadow 120ms ease;
+  transition: opacity 120ms ease, transform 120ms ease;
 }
 
-.brand-logo-badge:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: var(--shadow-offset);
+.brand-logo-link:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
 .brand-logo-img {
-  width: 32px;
-  height: 32px;
+  height: 38px;
+  width: auto;
+  max-width: 180px;
+  object-fit: contain;
   display: block;
 }
 
-.brand-folder-tab {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background-color: var(--color-butter);
-  color: #18181B;
-  border: var(--border-width) solid var(--border-solid);
-  box-shadow: var(--shadow-offset-sm);
-  padding: 6px 12px;
-  border-radius: 6px 14px 6px 6px;
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 13px;
+.brand-logo-light {
+  display: block;
 }
 
-.brand-title-box {
-  display: flex;
-  flex-direction: column;
+.brand-logo-dark {
+  display: none;
 }
 
-.brand-title {
-  font-family: var(--font-main);
-  font-variation-settings: 'MONO' 0, 'CASL' 1, 'wght' 850;
-  font-size: 26px;
-  letter-spacing: -0.5px;
-  line-height: 1.1;
-  color: var(--ink-primary);
+[data-theme="dark"] .brand-logo-light {
+  display: none !important;
 }
 
-.brand-accent {
-  background-color: var(--color-peach);
-  color: #18181B;
-  padding: 0px 6px;
-  margin-left: 2px;
-  border: var(--border-width) solid var(--border-solid);
-  border-radius: 4px;
+[data-theme="dark"] .brand-logo-dark {
+  display: block !important;
 }
 
-.brand-version {
+.brand-version-badge {
   font-family: var(--font-mono);
   font-size: 11px;
+  font-weight: 700;
   color: var(--ink-secondary);
-  font-weight: 600;
-  margin-top: 2px;
+  background-color: var(--bg-card-secondary);
+  border: 1.5px solid var(--border-solid);
+  border-radius: 4px;
+  padding: 3px 8px;
+  box-shadow: 1px 1px 0px var(--border-solid);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .nav-middle {
@@ -289,7 +267,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  flex: 1 1 650px;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .overview-badge {
@@ -368,12 +347,23 @@ body {
     flex-direction: column;
     align-items: stretch;
     padding: 14px 16px;
-    gap: 14px;
+    gap: 12px;
     margin-bottom: 24px;
   }
+  .overview-left {
+    flex: none !important;
+    width: 100% !important;
+  }
   .overview-pills-row {
+    display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    width: 100%;
+  }
+  .overview-pill {
+    flex: 1 1 calc(33.333% - 6px);
+    min-width: 90px;
+    box-sizing: border-box;
   }
 }
 
@@ -1912,6 +1902,16 @@ body {
     grid-template-columns: 1fr !important;
     gap: 28px !important;
   }
+  .compact-square-matrix {
+    width: 100% !important;
+    max-width: none !important;
+  }
+  .square-matrix-body {
+    flex-direction: row !important;
+    justify-content: space-around !important;
+    flex-wrap: wrap !important;
+    gap: 16px !important;
+  }
 }
 
 /* Expanded Hero Arena inside the wider Stage Card */
@@ -3197,12 +3197,36 @@ body.tour-scroll-locked {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
-    margin-bottom: 22px !important;
+    margin-bottom: 20px !important;
   }
   
-  .top-nav .nav-right {
+  .brand-group {
+    display: flex;
+    align-items: center;
     justify-content: space-between;
     width: 100%;
+  }
+
+  .top-nav .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .tour-nav-btn {
+    flex: 1 1 auto;
+    justify-content: center;
+    height: 38px;
+  }
+
+  .theme-switcher {
+    flex-shrink: 0;
+  }
+
+  .header-gh-btn {
+    flex-shrink: 0;
   }
 
   /* Cockpit Action Strip: Clean responsive wrap */
@@ -3252,6 +3276,124 @@ body.tour-scroll-locked {
     margin-bottom: 24px !important;
   }
 
+  .card-folder-tab {
+    top: -14px !important;
+    left: 14px !important;
+    padding: 2px 10px !important;
+  }
+
+  .card-folder-tab .tab-label {
+    font-size: 9.5px !important;
+  }
+
+  /* Brand Logo & Version on Phone */
+  .brand-logo-img {
+    height: 32px !important;
+    max-width: 145px !important;
+  }
+
+  .brand-version-badge {
+    font-size: 10px !important;
+    padding: 2px 7px !important;
+  }
+
+  .tour-nav-btn {
+    flex: 1 1 100% !important;
+    order: 1;
+    font-size: 11px !important;
+    height: 36px !important;
+  }
+
+  .theme-switcher {
+    order: 2;
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  .header-gh-btn {
+    order: 3;
+    flex-shrink: 0;
+  }
+
+  /* Hero Overview Strip on Phone */
+  .hero-overview-strip {
+    padding: 12px 14px !important;
+    gap: 10px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .overview-left {
+    flex: none !important;
+    width: 100% !important;
+    gap: 6px !important;
+  }
+
+  .overview-badge {
+    padding: 2px 8px !important;
+  }
+
+  .overview-badge-text {
+    font-size: 9px !important;
+  }
+
+  .overview-description {
+    font-size: 12.5px !important;
+    line-height: 1.5 !important;
+  }
+
+  .overview-pills-row {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+
+  .overview-pill {
+    padding: 5px 6px !important;
+    text-align: center;
+  }
+
+  .overview-pill .pill-k {
+    font-size: 8px !important;
+  }
+
+  .overview-pill .pill-v {
+    font-size: 9.5px !important;
+    word-break: break-word;
+  }
+
+  /* Presets Bar on Phone */
+  .presets-compact-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .presets-bar {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+
+  .preset-pill {
+    padding: 6px 10px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #quick-bench-trigger {
+    grid-column: 1 / -1 !important;
+  }
+
+  .preset-pill-tag {
+    font-size: 11px !important;
+  }
+
+  .preset-pill-desc {
+    font-size: 9px !important;
+  }
+
   /* Concurrency Transfer Stage Hero optimization on Phones */
   .stage-chassis .concurrency-arena {
     display: flex !important;
@@ -3286,6 +3428,21 @@ body.tour-scroll-locked {
     overflow-y: auto !important;
   }
 
+  /* Square Matrix Card on Phone */
+  .compact-square-matrix {
+    width: 100% !important;
+  }
+
+  .square-matrix-body {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  .matrix-terminal-square-frame {
+    width: 160px !important;
+    height: 160px !important;
+  }
+
   /* Master Telemetry Bar on Phone */
   .master-telemetry-bar {
     flex-direction: column;
@@ -3309,5 +3466,32 @@ body.tour-scroll-locked {
 
   .compact-stepper.speed-stepper {
     flex: 1 1 100% !important;
+  }
+
+  /* Footer on Phone */
+  .footer-main-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .footer-deploy-box {
+    align-items: flex-start;
+  }
+
+  .footer-bottom-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 400px) {
+  .overview-pills-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .presets-bar {
+    grid-template-columns: 1fr !important;
   }
 }
