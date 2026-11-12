@@ -37,11 +37,13 @@ func run(args []string) error {
 	var outputFile string
 	var workers int
 	var chunks int
+	var demo bool
+	var version bool
 
 	// fs.StringVar(p, name, value, usage):
 	// - What it does: Binds a string flag with specified name, default value, and usage description to target pointer.
 	// - Returns: None (modifies target pointer in-place).
-	fs.StringVar(&url, "url", "", "Target URL of the remote file to download (required)")
+	fs.StringVar(&url, "url", "", "Target URL of the remote file to download (required unless positional URL or -demo is used)")
 	fs.StringVar(&outputFile, "o", "", "Destination file path on disk (optional: auto-derived from URL if omitted)")
 
 	// fs.IntVar(p, name, value, usage):
@@ -50,15 +52,45 @@ func run(args []string) error {
 	fs.IntVar(&workers, "w", 4, "Number of concurrent worker goroutines in the pool")
 	fs.IntVar(&chunks, "c", 4, "Number of byte range chunks to divide the file into")
 
+	fs.BoolVar(&demo, "demo", false, "Run an instant demonstration download (50 MB sample file, 8 workers, 16 chunks)")
+	fs.BoolVar(&version, "version", false, "Print version information and exit")
+	fs.BoolVar(&version, "v", false, "Print version information and exit (shorthand)")
+
 	// Custom usage message when help is requested or arguments are malformed
 	fs.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage of beam:\n")
-		fmt.Fprintf(os.Stderr, "  beam -url <URL> [-o <destination>] [-w <workers>] [-c <chunks>]\n\n")
-		fmt.Fprintf(os.Stderr, "Flags:\n")
-		// fs.PrintDefaults():
-		// - What it does: Prints the default values and usage documentation for all defined flags to standard error.
-		// - Returns: None.
+		fmt.Fprintf(os.Stderr, "┌────────────────────────────────────────────────────────────┐\n")
+		fmt.Fprintf(os.Stderr, "│  ⚡ BEAM · Concurrent RFC 7233 Streaming Engine (Go CLI)   │\n")
+		fmt.Fprintf(os.Stderr, "└────────────────────────────────────────────────────────────┘\n\n")
+		fmt.Fprintf(os.Stderr, "High-throughput concurrent byte-range downloader with live visual cockpit.\n\n")
+		fmt.Fprintf(os.Stderr, "USAGE:\n")
+		fmt.Fprintf(os.Stderr, "  beam -url <URL> [flags]\n")
+		fmt.Fprintf(os.Stderr, "  beam <URL> [flags]\n")
+		fmt.Fprintf(os.Stderr, "  beam -demo\n\n")
+		fmt.Fprintf(os.Stderr, "FLAGS:\n")
 		fs.PrintDefaults()
+		fmt.Fprintf(os.Stderr, "\nEXAMPLES:\n")
+		fmt.Fprintf(os.Stderr, "  # Instant test download (50 MB sample asset):\n")
+		fmt.Fprintf(os.Stderr, "  beam -demo\n\n")
+		fmt.Fprintf(os.Stderr, "  # Download multi-GB file with 8 workers and 16 chunks:\n")
+		fmt.Fprintf(os.Stderr, "  beam -url \"https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso\" -w 8 -c 16\n\n")
+		fmt.Fprintf(os.Stderr, "  # Direct URL positional syntax:\n")
+		fmt.Fprintf(os.Stderr, "  beam https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso -w 8 -c 16\n\n")
+		fmt.Fprintf(os.Stderr, "  # Custom destination file:\n")
+		fmt.Fprintf(os.Stderr, "  beam -url \"https://example.com/data.tar.gz\" -o archive.tar.gz\n\n")
+	}
+
+	// Quick subcommand handling: beam demo / beam sample / beam help / beam version
+	if len(args) > 0 {
+		switch args[0] {
+		case "help", "-h", "--help":
+			fs.Usage()
+			return nil
+		case "demo", "sample":
+			args = []string{"-demo"}
+		case "version", "--version":
+			fmt.Println("Beam v1.0.0 (Go 1.22+ RFC 7233 engine)")
+			return nil
+		}
 	}
 
 	// fs.Parse(arguments):
@@ -71,10 +103,31 @@ func run(args []string) error {
 		return err
 	}
 
+	if version {
+		fmt.Println("Beam v1.0.0 (Go 1.22+ RFC 7233 engine)")
+		return nil
+	}
+
+	if demo {
+		url = "https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-sample-50mb.bin"
+		if outputFile == "" {
+			outputFile = "beam-sample-50mb.bin"
+		}
+		if workers == 4 {
+			workers = 8
+		}
+		if chunks == 4 {
+			chunks = 16
+		}
+	} else if url == "" && len(fs.Args()) > 0 {
+		// Positional URL support: beam https://...
+		url = fs.Args()[0]
+	}
+
 	// Validate required argument
 	if url == "" {
 		fs.Usage()
-		return fmt.Errorf("-url is required")
+		return fmt.Errorf("-url is required (or run 'beam -demo' for an instant test)")
 	}
 
 	// Print startup header banner
