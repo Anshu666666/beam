@@ -18,11 +18,13 @@
 </p>
 
 <p align="center">
-  <video src="https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-explainer.mp4" width="100%" controls autoplay loop muted playsinline style="border-radius: 8px;">
-    <a href="https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-explainer.mp4">
-      <img src="assets/hero_dashboard_dark.png" alt="Beam Cockpit & Stream Telemetry" width="100%" style="border-radius: 8px;">
-    </a>
-  </video>
+  <a href="https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-explainer.mp4">
+    <img src="assets/beam-demo.gif" alt="Beam — Concurrent RFC 7233 Byte-Range Streaming Engine" width="100%" style="border-radius: 8px;">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-explainer.mp4"><b>▶ Click to watch the full 1080p Explainer Video with Voiceover (27s MP4)</b></a>
 </p>
 
 <p align="center">
