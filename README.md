@@ -233,12 +233,21 @@ Grab the precompiled static binary for your OS directly from [Release v1.0.0](ht
 | **Linux** | 64-bit (x86_64) | [**beam-linux-amd64**](https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-linux-amd64) |
 
 ```bash
-# Windows (PowerShell / CMD)
+# Instant demo download test (50 MB sample file, 8 workers, 16 chunks):
+.\beam.exe -demo
+
+# Download a large file with 8 workers and 16 chunks:
 .\beam.exe -url "https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso" -w 8 -c 16
 
-# Linux / macOS
+# Direct positional URL syntax:
+.\beam.exe https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso -w 8 -c 16
+
+# Show help menu with visual banner and examples:
+.\beam.exe -help
+
+# Linux / macOS (make executable first):
 chmod +x ./beam-*
-./beam-* -url "https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso" -w 8 -c 16
+./beam-* -demo
 ```
 
 ---
@@ -277,10 +286,13 @@ go run ./main.go -url https://example.com/file.zip -o my_file.zip -w 4 -c 8
 #### CLI Flags
 | Flag | Default | Description |
 |---|---|---|
-| `-url` | *(Required)* | URL of the file to download |
-| `-o` | Auto-derived | Destination file path |
-| `-w` | `4` | Number of concurrent worker goroutines |
-| `-c` | `4` | Number of byte-range chunks |
+| `-url` | *(Required)* | URL of the file to download (or pass as positional argument) |
+| `-demo` | `false` | Run an instant demonstration download using the 50 MB sample asset |
+| `-o` | Auto-derived | Destination file path on disk |
+| `-w` | `4` | Number of concurrent worker goroutines in the pool |
+| `-c` | `4` | Number of byte-range chunks to partition the file into |
+| `-v` / `-version` | `false` | Print engine version and exit |
+| `-help` | `false` | Display full interactive help menu and copy-pasteable examples |
 
 ---
 
