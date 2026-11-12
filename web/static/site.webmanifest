@@ -1,5 +1,6 @@
 {
-  "name": "Beam Logo",
+  "name": "Beam — Concurrent Streaming Engine",
+  "short_name": "Beam",
   "icons": [
     {
       "src": "/icon-192.png",
