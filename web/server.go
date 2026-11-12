@@ -73,6 +73,9 @@ func (s *Server) Handler() http.Handler {
 func (s *Server) routes() {
 	// 1. Static asset server (HTML, CSS, JS)
 	fs := http.FileServer(http.Dir(s.staticDir))
+	s.mux.HandleFunc("/docs", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, s.staticDir+"/docs.html")
+	})
 	s.mux.Handle("/", fs)
 
 	// 2. Server-Sent Events (SSE) Download Endpoint (Streaming real remote targets)

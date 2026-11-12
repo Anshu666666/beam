@@ -4,7 +4,10 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	neturl "net/url"
 	"os"
+	"path"
+	"path/filepath"
 	"time"
 
 	"github.com/Anshu666666/beam/downloader"
@@ -138,11 +141,25 @@ func run(args []string) error {
 	fmt.Println("│  ⚡ BEAM · Concurrent RFC 7233 Streaming Engine (Go CLI)   │")
 	fmt.Println("└────────────────────────────────────────────────────────────┘")
 
+	resolvedOutput := outputFile
+	if resolvedOutput == "" {
+		if parsed, err := neturl.ParseRequestURI(url); err == nil {
+			cleanPath := path.Clean(parsed.Path)
+			base := path.Base(cleanPath)
+			if base != "" && base != "." && base != "/" {
+				resolvedOutput = base
+			}
+		}
+		if resolvedOutput == "" {
+			resolvedOutput = "downloaded_file"
+		}
+	}
+
 	fmt.Printf("URL:        \033[36m%s\033[0m\n", url)
 	if outputFile != "" {
 		fmt.Printf("Output:     \033[33m%s\033[0m\n", outputFile)
 	} else {
-		fmt.Printf("Output:     \033[90m(auto-derived)\033[0m\n")
+		fmt.Printf("Output:     \033[33m%s\033[0m \033[90m(auto-derived)\033[0m\n", resolvedOutput)
 	}
 	fmt.Printf("Workers:    \033[1m%d\033[0m concurrent streams\n", workers)
 	fmt.Printf("Chunks:     \033[1m%d\033[0m byte partitions\n", chunks)
@@ -187,8 +204,14 @@ func run(args []string) error {
 	// - Returns: time.Duration -> Elapsed time interval.
 	elapsed := time.Since(startTime)
 
+	absPath, err := filepath.Abs(resolvedOutput)
+	if err != nil {
+		absPath = resolvedOutput
+	}
+
 	fmt.Println("────────────────────────────────────────────────────────────")
 	fmt.Printf("\033[1;32m✔ Download completed in %s!\033[0m\n", elapsed.Round(time.Millisecond))
+	fmt.Printf("\033[1;33mSaved to:   \033[1;36m%s\033[0m\n", absPath)
 	fmt.Println("============================================================")
 
 	return nil
