@@ -1,0 +1,357 @@
+<template>
+  <style>
+    #scene3 {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      background: #F7F5EE;
+      color: #18181B;
+      font-family: 'Space Mono', monospace;
+      padding: 64px 96px 140px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 32px;
+      overflow: hidden;
+    }
+
+    /* Top Nav */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #18181B;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo-img {
+      height: 92px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .brand-version-badge {
+      font-size: 18px;
+      font-weight: 700;
+      color: #52525B;
+      background-color: #F3EFE3;
+      border: 1.5px solid #18181B;
+      border-radius: 6px;
+      padding: 6px 14px;
+      box-shadow: 2px 2px 0px #18181B;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-pill {
+      font-size: 18px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border: 2px solid #18181B;
+      border-radius: 999px;
+      box-shadow: 2px 2px 0px #18181B;
+      color: #18181B;
+      background-color: #95D5B2;
+    }
+
+    /* Main Chassis Card */
+    .chassis-card {
+      position: relative;
+      background-color: #FFFFFF;
+      border: 2px solid #18181B;
+      box-shadow: 6px 6px 0px #18181B;
+      border-radius: 12px;
+      padding: 36px 48px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-top: 16px;
+    }
+
+    .card-folder-tab {
+      position: absolute;
+      top: -22px;
+      left: 36px;
+      background-color: #FCD34D;
+      color: #18181B;
+      border: 2px solid #18181B;
+      border-bottom: none;
+      padding: 4px 20px 6px;
+      border-radius: 8px 8px 0 0;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .headline {
+      font-size: 64px;
+      line-height: 1.1;
+      font-weight: 800;
+      color: #18181B;
+      letter-spacing: -0.02em;
+    }
+
+    .sub-headline {
+      font-size: 28px;
+      color: #52525B;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-top: -8px;
+      margin-bottom: 2px;
+    }
+
+    /* Concurrency Arena */
+    .arena-grid {
+      display: grid;
+      grid-template-columns: 1040px 640px;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .lanes-container {
+      background: #F3EFE3;
+      border: 2px solid #18181B;
+      box-shadow: 4px 4px 0px #18181B;
+      border-radius: 8px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .lane-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      height: 38px;
+    }
+
+    .worker-badge {
+      width: 58px;
+      height: 34px;
+      background: #FFFFFF;
+      border: 1.5px solid #18181B;
+      box-shadow: 2px 2px 0px #18181B;
+      border-radius: 4px;
+      color: #18181B;
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .lane-track {
+      position: relative;
+      flex: 1;
+      height: 30px;
+      background: #FFFFFF;
+      border: 1.5px solid #18181B;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .lane-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0%;
+      background: #A2D2FF;
+      border-right: 2px solid #18181B;
+    }
+
+    .lane-status {
+      font-size: 14px;
+      font-weight: 800;
+      color: #18181B;
+      background: #95D5B2;
+      border: 1.5px solid #18181B;
+      box-shadow: 1.5px 1.5px 0px #18181B;
+      border-radius: 4px;
+      padding: 3px 10px;
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
+    }
+
+    /* Telemetry Card */
+    .telemetry-card {
+      background: #FFFFFF;
+      border: 2px solid #18181B;
+      box-shadow: 4px 4px 0px #18181B;
+      border-radius: 8px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #52525B;
+      letter-spacing: 0.05em;
+    }
+
+    .throughput-box {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .throughput-label {
+      font-size: 20px;
+      font-weight: 700;
+      color: #52525B;
+    }
+
+    .throughput-number {
+      font-size: 64px;
+      font-weight: 900;
+      color: #18181B;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .sparkline-box {
+      width: 100%;
+      height: 90px;
+      background: #F3EFE3;
+      border: 1.5px solid #18181B;
+      border-radius: 6px;
+      padding: 8px;
+      overflow: hidden;
+    }
+
+    .sparkline-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .telemetry-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 14px;
+      color: #52525B;
+      border-top: 1.5px solid #18181B;
+      padding-top: 10px;
+    }
+    .telemetry-meta b {
+      color: #18181B;
+    }
+  </style>
+
+  <div id="scene3" data-composition-id="scene3" data-width="1920" data-height="1080">
+    <header class="top-nav" data-layout-ignore="true">
+      <div class="brand-group">
+        <img src="assets/brand/beam-concept-c-horizontal.svg" alt="Beam" class="brand-logo-img" />
+        <span class="brand-version-badge">v1.0.0</span>
+      </div>
+
+      <div class="nav-pills">
+        <span class="badge-pill" data-layout-ignore="true">BOUNDED POOL: 8 WORKERS</span>
+      </div>
+    </header>
+
+    <main class="chassis-card" id="scene3-card" data-layout-allow-overflow>
+      <div class="card-folder-tab" data-layout-ignore="true">// 03 · CONCURRENCY</div>
+
+      <h1 class="headline" id="scene3-title">
+        BOUNDED CONCURRENCY ENGINE
+      </h1>
+      <p class="sub-headline" id="scene3-subtitle" data-layout-ignore="true">
+        8 Goroutines consuming from buffered channels to prevent memory saturation.
+      </p>
+
+      <div class="arena-grid" id="scene3-arena" data-layout-allow-overflow>
+        <div class="lanes-container">
+          <!-- 8 Worker Lanes -->
+          <div class="lane-row"><div class="worker-badge" data-layout-ignore="true">W0</div><div class="lane-track"><div class="lane-bar" id="wbar-0"></div></div><div class="lane-status" data-layout-ignore="true">STREAMING</div></div>
+          <div class="lane-row"><div class="worker-badge" data-layout-ignore="true">W1</div><div class="lane-track"><div class="lane-bar" id="wbar-1"></div></div><div class="lane-status" data-layout-ignore="true">STREAMING</div></div>
+          <div class="lane-row"><div class="worker-badge" data-layout-ignore="true">W2</div><div class="lane-track"><div class="lane-bar" id="wbar-2"></div></div><div class="lane-status" data-layout-ignore="true">STREAMING</div></div>
+          <div class="lane-row"><div class="worker-badge" data-layout-ignore="true">W3</div><div class="lane-track"><div class="lane-bar" id="wbar-3"></div></div><div class="lane-status" data-layout-ignore="true">STREAMING</div></div>
+          <div class="lane-row"><div class="worker-badge" data-layout-ignore="true">W4</div><div class="lane-track"><div class="lane-bar" id="wbar-4"></div></div><div class="lane-status" data-layout-ignore="true">STREAMING</div></div>
+          <div class="lane-row"><div class="worker-badge" data-layout-ignore="true">W5</div><div class="lane-track"><div class="lane-bar" id="wbar-5"></div></div><div class="lane-status" data-layout-ignore="true">STREAMING</div></div>
+          <div class="lane-row"><div class="worker-badge" data-layout-ignore="true">W6</div><div class="lane-track"><div class="lane-bar" id="wbar-6"></div></div><div class="lane-status" data-layout-ignore="true">STREAMING</div></div>
+          <div class="lane-row"><div class="worker-badge" data-layout-ignore="true">W7</div><div class="lane-track"><div class="lane-bar" id="wbar-7"></div></div><div class="lane-status" data-layout-ignore="true">STREAMING</div></div>
+        </div>
+
+        <div class="telemetry-card">
+          <div class="card-title" data-layout-ignore="true">// REAL-TIME AGGREGATE MONITOR</div>
+          <div class="throughput-box">
+            <div class="throughput-label" data-layout-ignore="true">AGGREGATE THROUGHPUT</div>
+            <div class="throughput-number" id="scene3-tp">12.4 MB/s</div>
+          </div>
+          <div class="sparkline-box" data-layout-ignore="true">
+            <svg class="sparkline-svg" viewBox="0 0 600 100" preserveAspectRatio="none">
+              <polyline fill="none" stroke="#18181B" stroke-width="4" points="0,90 80,75 160,50 240,40 320,30 400,25 480,22 560,20 600,18" />
+              <polygon fill="#95D5B2" points="0,90 80,75 160,50 240,40 320,30 400,25 480,22 560,20 600,18 600,100 0,100" />
+            </svg>
+          </div>
+          <div class="telemetry-meta" data-layout-ignore="true">
+            <span>LOCK-FREE COUNTERS: <b>sync/atomic.Int64</b></span>
+            <span>SSE BROADCAST INTERVAL: <b>50 ms</b></span>
+            <span>CHUNK BUFFER: <b>32 KB io.Copy</b></span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    tl.fromTo("#scene3-card",
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
+      0.05
+    );
+
+    tl.fromTo("#scene3-arena",
+      { opacity: 0, scale: 0.98 },
+      { opacity: 1, scale: 1, duration: 0.3, ease: "power3.out" },
+      0.15
+    );
+
+    tl.fromTo("#wbar-0", { width: "0%" }, { width: "88%", duration: 2.7, ease: "power1.inOut" }, 0.2);
+    tl.fromTo("#wbar-1", { width: "0%" }, { width: "95%", duration: 2.8, ease: "power1.inOut" }, 0.22);
+    tl.fromTo("#wbar-2", { width: "0%" }, { width: "82%", duration: 2.6, ease: "power1.inOut" }, 0.25);
+    tl.fromTo("#wbar-3", { width: "0%" }, { width: "90%", duration: 2.75, ease: "power1.inOut" }, 0.21);
+    tl.fromTo("#wbar-4", { width: "0%" }, { width: "85%", duration: 2.65, ease: "power1.inOut" }, 0.24);
+    tl.fromTo("#wbar-5", { width: "0%" }, { width: "92%", duration: 2.7, ease: "power1.inOut" }, 0.23);
+    tl.fromTo("#wbar-6", { width: "0%" }, { width: "80%", duration: 2.55, ease: "power1.inOut" }, 0.26);
+    tl.fromTo("#wbar-7", { width: "0%" }, { width: "87%", duration: 2.68, ease: "power1.inOut" }, 0.22);
+
+    const tpObj = { val: 12.4 };
+    const tpEl = document.getElementById("scene3-tp");
+    tl.to(tpObj, {
+      val: 94.8,
+      duration: 2.7,
+      ease: "power2.out",
+      onUpdate: () => {
+        if (tpEl) tpEl.textContent = tpObj.val.toFixed(1) + " MB/s";
+      }
+    }, 0.25);
+
+    tl.fromTo("#scene3",
+      { opacity: 1 },
+      { opacity: 0, duration: 0.2, ease: "power2.in" },
+      3.1
+    );
+
+    window.__timelines["scene3"] = tl;
+  </script>
+</template>

@@ -1,0 +1,1 @@
+One connection rarely saturates your bandwidth. Beam splits a file into byte ranges, fetches them in parallel with a bounded worker pool, then stitches and verifies with SHA-256. Written in Go, zero dependencies, about seven megabytes of RAM. Beam. Concurrent downloads, visualized.

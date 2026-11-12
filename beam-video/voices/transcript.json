@@ -1,0 +1,260 @@
+[
+  {
+    "id": "w0",
+    "text": "One",
+    "start": 0,
+    "end": 0.4
+  },
+  {
+    "id": "w1",
+    "text": "connection",
+    "start": 0.4,
+    "end": 0.96
+  },
+  {
+    "id": "w2",
+    "text": "rarely",
+    "start": 0.96,
+    "end": 1.44
+  },
+  {
+    "id": "w3",
+    "text": "saturates",
+    "start": 1.44,
+    "end": 2.08
+  },
+  {
+    "id": "w4",
+    "text": "your",
+    "start": 2.08,
+    "end": 2.24
+  },
+  {
+    "id": "w5",
+    "text": "bandwidth.",
+    "start": 2.24,
+    "end": 3.28
+  },
+  {
+    "id": "w6",
+    "text": "Beam",
+    "start": 3.28,
+    "end": 3.68
+  },
+  {
+    "id": "w7",
+    "text": "splits",
+    "start": 3.84,
+    "end": 4.24
+  },
+  {
+    "id": "w8",
+    "text": "a",
+    "start": 4.24,
+    "end": 4.32
+  },
+  {
+    "id": "w9",
+    "text": "file",
+    "start": 4.32,
+    "end": 4.56
+  },
+  {
+    "id": "w10",
+    "text": "into",
+    "start": 4.56,
+    "end": 4.8
+  },
+  {
+    "id": "w11",
+    "text": "byte",
+    "start": 4.8,
+    "end": 5.2
+  },
+  {
+    "id": "w12",
+    "text": "ranges,",
+    "start": 5.2,
+    "end": 6
+  },
+  {
+    "id": "w13",
+    "text": "fetches",
+    "start": 6,
+    "end": 6.56
+  },
+  {
+    "id": "w14",
+    "text": "them",
+    "start": 6.56,
+    "end": 6.72
+  },
+  {
+    "id": "w15",
+    "text": "in",
+    "start": 6.72,
+    "end": 6.88
+  },
+  {
+    "id": "w16",
+    "text": "parallel",
+    "start": 6.88,
+    "end": 7.36
+  },
+  {
+    "id": "w17",
+    "text": "with",
+    "start": 7.36,
+    "end": 7.52
+  },
+  {
+    "id": "w18",
+    "text": "a",
+    "start": 7.52,
+    "end": 7.6
+  },
+  {
+    "id": "w19",
+    "text": "bounded",
+    "start": 7.6,
+    "end": 8.16
+  },
+  {
+    "id": "w20",
+    "text": "worker",
+    "start": 8.16,
+    "end": 8.64
+  },
+  {
+    "id": "w21",
+    "text": "pool,",
+    "start": 8.64,
+    "end": 9.12
+  },
+  {
+    "id": "w22",
+    "text": "then",
+    "start": 9.12,
+    "end": 9.44
+  },
+  {
+    "id": "w23",
+    "text": "stitches",
+    "start": 9.44,
+    "end": 10.08
+  },
+  {
+    "id": "w24",
+    "text": "and",
+    "start": 10.08,
+    "end": 10.32
+  },
+  {
+    "id": "w25",
+    "text": "verifies",
+    "start": 10.32,
+    "end": 10.96
+  },
+  {
+    "id": "w26",
+    "text": "with",
+    "start": 10.96,
+    "end": 11.2
+  },
+  {
+    "id": "w27",
+    "text": "SHA",
+    "start": 11.2,
+    "end": 12.16
+  },
+  {
+    "id": "w28",
+    "text": "256.",
+    "start": 12.16,
+    "end": 13.76
+  },
+  {
+    "id": "w29",
+    "text": "Written",
+    "start": 13.76,
+    "end": 14.32
+  },
+  {
+    "id": "w30",
+    "text": "in",
+    "start": 14.32,
+    "end": 14.48
+  },
+  {
+    "id": "w31",
+    "text": "Go,",
+    "start": 14.48,
+    "end": 15.2
+  },
+  {
+    "id": "w32",
+    "text": "zero",
+    "start": 15.2,
+    "end": 15.52
+  },
+  {
+    "id": "w33",
+    "text": "dependencies,",
+    "start": 15.68,
+    "end": 16.8
+  },
+  {
+    "id": "w34",
+    "text": "about",
+    "start": 16.8,
+    "end": 17.04
+  },
+  {
+    "id": "w35",
+    "text": "7",
+    "start": 17.04,
+    "end": 17.36
+  },
+  {
+    "id": "w36",
+    "text": "megabytes",
+    "start": 17.36,
+    "end": 18.08
+  },
+  {
+    "id": "w37",
+    "text": "of",
+    "start": 18.08,
+    "end": 18.24
+  },
+  {
+    "id": "w38",
+    "text": "RAM.",
+    "start": 18.24,
+    "end": 19.68
+  },
+  {
+    "id": "w39",
+    "text": "Beam.",
+    "start": 19.68,
+    "end": 20.64
+  },
+  {
+    "id": "w40",
+    "text": "Concurrent",
+    "start": 20.64,
+    "end": 21.36
+  },
+  {
+    "id": "w41",
+    "text": "Downloads,",
+    "start": 21.36,
+    "end": 22.16
+  },
+  {
+    "id": "w42",
+    "text": "Visualized.",
+    "start": 22.16,
+    "end": 23.04
+  }
+]

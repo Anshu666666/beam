@@ -1,0 +1,322 @@
+<template>
+  <style>
+    #scene4 {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      background: #F7F5EE;
+      color: #18181B;
+      font-family: 'Space Mono', monospace;
+      padding: 64px 96px 140px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 32px;
+      overflow: hidden;
+    }
+
+    /* Top Nav */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #18181B;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo-img {
+      height: 92px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .brand-version-badge {
+      font-size: 18px;
+      font-weight: 700;
+      color: #52525B;
+      background-color: #F3EFE3;
+      border: 1.5px solid #18181B;
+      border-radius: 6px;
+      padding: 6px 14px;
+      box-shadow: 2px 2px 0px #18181B;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-pill {
+      font-size: 18px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border: 2px solid #18181B;
+      border-radius: 999px;
+      box-shadow: 2px 2px 0px #18181B;
+      color: #18181B;
+      background-color: #95D5B2;
+    }
+
+    /* Main Chassis Card */
+    .chassis-card {
+      position: relative;
+      background-color: #FFFFFF;
+      border: 2px solid #18181B;
+      box-shadow: 6px 6px 0px #18181B;
+      border-radius: 12px;
+      padding: 38px 48px 34px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-top: 16px;
+    }
+
+    .card-folder-tab {
+      position: absolute;
+      top: -22px;
+      left: 36px;
+      background-color: #FCD34D;
+      color: #18181B;
+      border: 2px solid #18181B;
+      border-bottom: none;
+      padding: 4px 20px 6px;
+      border-radius: 8px 8px 0 0;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .headline {
+      font-size: 64px;
+      line-height: 1.1;
+      font-weight: 800;
+      color: #18181B;
+      letter-spacing: -0.02em;
+    }
+
+    .sub-headline {
+      font-size: 28px;
+      color: #52525B;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-top: -8px;
+      margin-bottom: 2px;
+    }
+
+    /* Stitch Panel */
+    .stitch-panel {
+      position: relative;
+      background: #F3EFE3;
+      border: 2px solid #18181B;
+      box-shadow: 4px 4px 0px #18181B;
+      border-radius: 8px;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .stitch-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 20px;
+      color: #18181B;
+      font-weight: 700;
+    }
+
+    .status-tag {
+      background: #FCD34D;
+      border: 1.5px solid #18181B;
+      box-shadow: 2px 2px 0px #18181B;
+      border-radius: 4px;
+      padding: 3px 12px;
+      font-size: 16px;
+      font-weight: 800;
+      color: #18181B;
+    }
+
+    .blocks-track {
+      position: relative;
+      height: 52px;
+      width: 100%;
+      display: flex;
+      gap: 6px;
+      background: #FFFFFF;
+      border: 1.5px solid #18181B;
+      border-radius: 6px;
+      padding: 6px;
+    }
+
+    .stitch-block {
+      flex: 1;
+      background: #A2D2FF;
+      border: 1px solid #18181B;
+      border-radius: 2px;
+      transform-origin: center;
+    }
+
+    .hash-console {
+      background: #FFFFFF;
+      border: 2px solid #18181B;
+      box-shadow: 3px 3px 0px #18181B;
+      border-radius: 6px;
+      padding: 14px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-height: 80px;
+      justify-content: center;
+    }
+
+    .hash-title {
+      font-size: 16px;
+      color: #52525B;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    .hash-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: #18181B;
+      font-variant-numeric: tabular-nums;
+      word-break: break-all;
+      min-height: 32px;
+    }
+
+    /* Verified Stamp */
+    .stamp-container {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      height: 48px;
+    }
+
+    .verified-stamp {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #95D5B2;
+      border: 2px solid #18181B;
+      box-shadow: 4px 4px 0px #18181B;
+      border-radius: 6px;
+      padding: 8px 24px;
+      font-size: 22px;
+      font-weight: 800;
+      color: #18181B;
+      transform-origin: right center;
+      opacity: 0;
+    }
+  </style>
+
+  <div id="scene4" data-composition-id="scene4" data-width="1920" data-height="1080">
+    <header class="top-nav" data-layout-ignore="true">
+      <div class="brand-group">
+        <img src="assets/brand/beam-concept-c-horizontal.svg" alt="Beam" class="brand-logo-img" />
+        <span class="brand-version-badge">v1.0.0</span>
+      </div>
+
+      <div class="nav-pills">
+        <span class="badge-pill">io.MultiReader PIPELINE</span>
+      </div>
+    </header>
+
+    <main class="chassis-card" id="scene4-card" data-layout-allow-overflow>
+      <div class="card-folder-tab" data-layout-ignore="true">// 04 · INTEGRITY</div>
+
+      <h1 class="headline" id="scene4-title">
+        ZERO-ALLOCATION STREAM ASSEMBLY
+      </h1>
+      <p class="sub-headline" id="scene4-subtitle" data-layout-ignore="true">
+        Sequential io.MultiReader pipeline with cryptographic hash check.
+      </p>
+
+      <div class="stitch-panel" id="scene4-panel" data-layout-allow-overflow>
+        <div class="stitch-header" data-layout-ignore="true">
+          <span>STREAM CONCATENATION (32 CHUNKS)</span>
+          <span class="status-tag" id="scene4-status-tag">STITCHING DIRECT TO DISK</span>
+        </div>
+
+        <div class="blocks-track" id="scene4-blocks" data-layout-ignore="true">
+          <div class="stitch-block"></div><div class="stitch-block"></div><div class="stitch-block"></div><div class="stitch-block"></div>
+          <div class="stitch-block"></div><div class="stitch-block"></div><div class="stitch-block"></div><div class="stitch-block"></div>
+          <div class="stitch-block"></div><div class="stitch-block"></div><div class="stitch-block"></div><div class="stitch-block"></div>
+          <div class="stitch-block"></div><div class="stitch-block"></div><div class="stitch-block"></div><div class="stitch-block"></div>
+          <div class="stitch-block"></div><div class="stitch-block"></div><div class="stitch-block"></div><div class="stitch-block"></div>
+          <div class="stitch-block"></div><div class="stitch-block"></div><div class="stitch-block"></div><div class="stitch-block"></div>
+          <div class="stitch-block"></div><div class="stitch-block"></div><div class="stitch-block"></div><div class="stitch-block"></div>
+          <div class="stitch-block"></div><div class="stitch-block"></div><div class="stitch-block"></div><div class="stitch-block"></div>
+        </div>
+
+        <div class="hash-console">
+          <div class="hash-title" data-layout-ignore="true">// SHA-256 INTEGRITY DIGEST [crypto/sha256]</div>
+          <div class="hash-value" id="scene4-hash" data-layout-ignore="true"></div>
+        </div>
+
+        <div class="stamp-container">
+          <div class="verified-stamp" id="scene4-stamp" data-layout-ignore="true">
+            <span>✔</span>
+            <span>SHA-256 CHECKSUM VERIFIED MATCH</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    tl.fromTo("#scene4-card",
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
+      0.05
+    );
+
+    tl.fromTo("#scene4-panel",
+      { opacity: 0, scale: 0.98 },
+      { opacity: 1, scale: 1, duration: 0.3, ease: "power3.out" },
+      0.15
+    );
+
+    const blocks = document.querySelectorAll("#scene4-blocks .stitch-block");
+    blocks.forEach((b, i) => {
+      tl.to(b, {
+        backgroundColor: "#95D5B2",
+        borderColor: "#18181B",
+        duration: 0.05
+      }, 0.3 + (i * 0.035));
+    });
+
+    const fullHash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+    const hashEl = document.getElementById("scene4-hash");
+    const hashProgress = { len: 0 };
+    tl.to(hashProgress, {
+      len: fullHash.length,
+      duration: 1.1,
+      ease: "none",
+      onUpdate: () => {
+        if (hashEl) hashEl.textContent = fullHash.substring(0, Math.floor(hashProgress.len));
+      }
+    }, 1.4);
+
+    // Verified stamp slams in with tactile punch
+    tl.fromTo("#scene4-stamp",
+      { opacity: 0, scale: 1.7 },
+      { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.5)" },
+      2.6
+    );
+
+    tl.fromTo("#scene4",
+      { opacity: 1 },
+      { opacity: 0, duration: 0.2, ease: "power2.in" },
+      4.1
+    );
+
+    window.__timelines["scene4"] = tl;
+  </script>
+</template>

@@ -136,6 +136,16 @@ func (w *WorkerTracker) Write(b []byte) (int, error) {
 	return len(b), nil
 }
 
+const (
+	ansiReset  = "\033[0m"
+	ansiBold   = "\033[1m"
+	ansiCyan   = "\033[36m"
+	ansiGreen  = "\033[32m"
+	ansiYellow = "\033[33m"
+	ansiDim    = "\033[90m"
+	ansiWhite  = "\033[97m"
+)
+
 // RenderBar produces a formatted terminal progress bar string for this specific worker.
 func (w *WorkerTracker) RenderBar(barWidth int) string {
 	if w == nil {
@@ -154,21 +164,19 @@ func (w *WorkerTracker) RenderBar(barWidth int) string {
 			filled = 0
 		}
 		empty := barWidth - filled
-		// strings.Repeat(s, count):
-		// - What it does: Returns a new string consisting of 'count' copies of the string 's'.
-		// - Returns: string -> Repeated string.
-		bar := strings.Repeat("=", filled) + strings.Repeat(" ", empty)
-		// fmt.Sprintf(format, a...):
-		// - What it does: Formats values into a string.
-		// - Returns: string -> Formatted string.
-		return fmt.Sprintf("Worker %d [Chunk #%d]: [%s] %5.1f%% (%s / %s)",
-			w.id, w.CurrentChunk(), bar, pct, FormatBytes(w.ChunkDownloaded()), FormatBytes(w.ChunkTotal()))
+		bar := ansiCyan + strings.Repeat("█", filled) + ansiDim + strings.Repeat("░", empty) + ansiReset
+		return fmt.Sprintf("  %sW%d%s [#%02d] [%s] %5.1f%% (%s / %s) %s%s%s",
+			ansiCyan, w.id, ansiReset, w.CurrentChunk(), bar, pct,
+			FormatBytes(w.ChunkDownloaded()), FormatBytes(w.ChunkTotal()),
+			ansiYellow, "STREAMING", ansiReset)
 	case WorkerStatusDone:
-		bar := strings.Repeat("=", barWidth)
-		return fmt.Sprintf("Worker %d [Chunk #%d]: [%s] 100.0%% (%s / %s) [DONE]",
-			w.id, w.CurrentChunk(), bar, FormatBytes(w.ChunkTotal()), FormatBytes(w.ChunkTotal()))
+		bar := ansiGreen + strings.Repeat("█", barWidth) + ansiReset
+		return fmt.Sprintf("  %sW%d%s [#%02d] [%s] 100.0%% %s✔ DONE%s",
+			ansiGreen, w.id, ansiReset, w.CurrentChunk(), bar,
+			ansiGreen+ansiBold, ansiReset)
 	default:
-		return fmt.Sprintf("Worker %d: [Idle / Complete]", w.id)
+		return fmt.Sprintf("  %sW%d%s: %s[IDLE]%s",
+			ansiDim, w.id, ansiReset, ansiDim, ansiReset)
 	}
 }
 
@@ -337,7 +345,6 @@ func FormatSpeed(bytesPerSec float64) string {
 }
 
 // RenderBar produces a visual terminal progress bar string for the master tracker.
-// Example: "[=========>          ] 45.2% | 45.20 MB / 100.00 MB | 5.20 MB/s | ETA: 10s"
 func (p *ProgressTracker) RenderBar(barWidth int) string {
 	if p == nil {
 		return ""
@@ -352,19 +359,18 @@ func (p *ProgressTracker) RenderBar(barWidth int) string {
 	}
 
 	empty := barWidth - filled
-	bar := strings.Repeat("=", filled) + strings.Repeat(" ", empty)
+	bar := ansiCyan + strings.Repeat("█", filled) + ansiDim + strings.Repeat("░", empty) + ansiReset
 
 	downloadedStr := FormatBytes(p.Downloaded())
 	totalStr := FormatBytes(p.totalSize)
 	speedStr := FormatSpeed(p.Speed())
-
-	// Round(m):
-	// - What it does: Returns duration rounded to nearest multiple of m.
-	// - Returns: time.Duration.
 	etaDuration := p.ETA().Round(time.Second)
 
-	return fmt.Sprintf("[%s] %5.1f%% | %s / %s | %s | ETA: %v",
-		bar, pct, downloadedStr, totalStr, speedStr, etaDuration)
+	return fmt.Sprintf("[%s] %s%5.1f%%%s │ %s / %s │ %s%s%s │ ETA: %s%v%s",
+		bar, ansiBold+ansiWhite, pct, ansiReset,
+		downloadedStr, totalStr,
+		ansiYellow, speedStr, ansiReset,
+		ansiCyan, etaDuration, ansiReset)
 }
 
 // RenderDashboard produces a multi-line visual dashboard containing both the master
@@ -375,13 +381,14 @@ func (p *ProgressTracker) RenderDashboard(masterWidth int, workerWidth int) []st
 	}
 
 	var lines []string
-	lines = append(lines, "[+] Master Progress:")
+	lines = append(lines, ansiBold+"[▶] Master Progress:"+ansiReset)
 	lines = append(lines, "  "+p.RenderBar(masterWidth))
+	lines = append(lines, "")
 
 	if len(p.workers) > 0 {
-		lines = append(lines, fmt.Sprintf("[+] Worker Status (%d workers):", len(p.workers)))
+		lines = append(lines, fmt.Sprintf("%s[⚡] Worker Pool Status (%d workers):%s", ansiBold, len(p.workers), ansiReset))
 		for _, w := range p.workers {
-			lines = append(lines, "  "+w.RenderBar(workerWidth))
+			lines = append(lines, w.RenderBar(workerWidth))
 		}
 	}
 

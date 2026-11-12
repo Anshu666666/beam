@@ -1,0 +1,349 @@
+<template>
+  <style>
+    #scene1 {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      background: #F7F5EE;
+      color: #18181B;
+      font-family: 'Space Mono', monospace;
+      padding: 64px 96px 140px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 36px;
+      overflow: hidden;
+    }
+
+    /* 1. Top Navigation Bar (matching Beam web dashboard) */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #18181B;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo-img {
+      height: 92px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .brand-version-badge {
+      font-size: 18px;
+      font-weight: 700;
+      color: #52525B;
+      background-color: #F3EFE3;
+      border: 1.5px solid #18181B;
+      border-radius: 6px;
+      padding: 6px 14px;
+      box-shadow: 2px 2px 0px #18181B;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-pills {
+      display: flex;
+      gap: 12px;
+    }
+
+    .badge-pill {
+      font-size: 18px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border: 2px solid #18181B;
+      border-radius: 999px;
+      box-shadow: 2px 2px 0px #18181B;
+      color: #18181B;
+    }
+    .pill-yellow { background-color: #FCD34D; }
+    .pill-mint   { background-color: #95D5B2; }
+    .pill-blue   { background-color: #A2D2FF; }
+
+    /* 2. Main Chassis Card with Protruding Folder Tab */
+    .chassis-card {
+      position: relative;
+      background-color: #FFFFFF;
+      border: 2px solid #18181B;
+      box-shadow: 6px 6px 0px #18181B;
+      border-radius: 12px;
+      padding: 48px 48px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      margin-top: 24px;
+    }
+
+    .card-folder-tab {
+      position: absolute;
+      top: -22px;
+      left: 36px;
+      background-color: #FCD34D;
+      color: #18181B;
+      border: 2px solid #18181B;
+      border-bottom: none;
+      padding: 4px 20px 6px;
+      border-radius: 8px 8px 0 0;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .headline {
+      font-size: 68px;
+      line-height: 1.1;
+      font-weight: 800;
+      color: #18181B;
+      letter-spacing: -0.02em;
+      margin-top: 4px;
+    }
+
+    .sub-headline {
+      font-size: 28px;
+      color: #52525B;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-top: -12px;
+      margin-bottom: 8px;
+    }
+
+    /* 3. Bandwidth Conduit Track */
+    .pipe-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ceiling-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 22px;
+      font-weight: 700;
+      color: #52525B;
+      letter-spacing: 0.05em;
+    }
+
+    .ceiling-tag {
+      color: #B4781E;
+      background: #FEF3C7;
+      border: 1.5px solid #18181B;
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-weight: 800;
+    }
+
+    .conduit-track {
+      position: relative;
+      height: 110px;
+      width: 100%;
+      background: #F3EFE3;
+      border: 2px solid #18181B;
+      border-radius: 8px;
+      box-shadow: 3px 3px 0px #18181B;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    .idle-pattern {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        rgba(24, 24, 27, 0.04),
+        rgba(24, 24, 27, 0.04) 16px,
+        transparent 16px,
+        transparent 32px
+      );
+    }
+
+    .idle-label {
+      position: absolute;
+      right: 32px;
+      font-size: 26px;
+      color: #71717A;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .active-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0%;
+      background: #A2D2FF;
+      border-right: 3px solid #18181B;
+      display: flex;
+      align-items: center;
+    }
+
+    .packet-marker {
+      position: absolute;
+      right: 12px;
+      width: 28px;
+      height: 20px;
+      background: #18181B;
+      border-radius: 3px;
+    }
+
+    .stream-stat-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 800;
+      color: #18181B;
+    }
+
+    .stream-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: #3B82F6;
+      border: 2px solid #18181B;
+    }
+
+    .stat-sep {
+      color: #A1A1AA;
+    }
+
+    .stat-speed {
+      font-variant-numeric: tabular-nums;
+      color: #18181B;
+    }
+
+    /* 4. Bottom Overview Strip */
+    .hero-overview-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      background-color: #FFFFFF;
+      border: 2px solid #18181B;
+      border-radius: 10px;
+      box-shadow: 4px 4px 0px #18181B;
+      padding: 18px 28px;
+    }
+
+    .overview-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .overview-beacon {
+      width: 14px;
+      height: 14px;
+      background-color: #10B981;
+      border-radius: 50%;
+      border: 2px solid #18181B;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+      flex-shrink: 0;
+    }
+
+    .overview-text {
+      font-size: 22px;
+      font-weight: 700;
+      color: #18181B;
+    }
+
+    .overview-sub {
+      color: #52525B;
+      font-size: 20px;
+      font-weight: 600;
+    }
+  </style>
+
+  <div id="scene1" data-composition-id="scene1" data-width="1920" data-height="1080">
+    <!-- Top Nav -->
+    <header class="top-nav" data-layout-ignore="true">
+      <div class="brand-group">
+        <img src="assets/brand/beam-concept-c-horizontal.svg" alt="Beam" class="brand-logo-img" />
+        <span class="brand-version-badge">v1.0.0</span>
+      </div>
+
+      <div class="nav-pills">
+        <span class="badge-pill pill-yellow">RFC 7233</span>
+      </div>
+    </header>
+
+    <!-- Main Chassis Card -->
+    <main class="chassis-card" id="scene1-card" data-layout-allow-overflow>
+      <div class="card-folder-tab" data-layout-ignore="true">// 01 · SINGLE STREAM</div>
+
+      <h1 class="headline" id="scene1-title">
+        TCP THROUGHPUT BOTTLENECK
+      </h1>
+      <p class="sub-headline" id="scene1-subtitle" data-layout-ignore="true">
+        Latency & server caps throttle single streams.
+      </p>
+
+      <div class="pipe-section">
+        <div class="ceiling-header" data-layout-ignore="true">
+          <div class="stream-stat-badge">
+            <span class="stream-dot"></span>
+            <span>1 TCP STREAM</span>
+            <span class="stat-sep">/</span>
+            <span id="scene1-speed" class="stat-speed">0.0 MB/s</span>
+          </div>
+          <span class="ceiling-tag">88% BANDWIDTH UNUSED</span>
+        </div>
+
+        <div class="conduit-track">
+          <div class="idle-pattern"></div>
+          <div class="active-bar" id="scene1-bar">
+            <div class="packet-marker"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    // Chassis card enters with tactile snap
+    tl.fromTo("#scene1-card",
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+      0.1
+    );
+
+    // Slower, relaxed 0.8x progress crawl across the pipe
+    tl.fromTo("#scene1-bar",
+      { width: "0%" },
+      { width: "12%", duration: 3.2, ease: "power1.inOut" },
+      0.3
+    );
+
+    // Speed readout ticker
+    const speedObj = { val: 0.0 };
+    const speedEl = document.getElementById("scene1-speed");
+    tl.to(speedObj, {
+      val: 12.4,
+      duration: 3.2,
+      ease: "power2.out",
+      onUpdate: () => {
+        if (speedEl) speedEl.textContent = speedObj.val.toFixed(1) + " MB/s";
+      }
+    }, 0.3);
+
+    tl.fromTo("#scene1",
+      { opacity: 1 },
+      { opacity: 0, duration: 0.2, ease: "power2.in" },
+      3.3
+    );
+
+    window.__timelines["scene1"] = tl;
+  </script>
+</template>

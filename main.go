@@ -5,10 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"runtime"
-	"syscall"
 	"time"
-	"unsafe"
 
 	"github.com/Anshu666666/beam/downloader"
 )
@@ -84,23 +81,20 @@ func run(args []string) error {
 	// fmt.Println(a...):
 	// - What it does: Formats using default formats for its operands and writes to standard output with a trailing newline.
 	// - Returns: (int, error) -> Number of bytes written and any write error encountered.
-	fmt.Println("============================================================")
-	fmt.Println("    Beam — Concurrent Byte-Range Streaming Engine (Go CLI)  ")
-	fmt.Println("============================================================")
+	fmt.Println("┌────────────────────────────────────────────────────────────┐")
+	fmt.Println("│  ⚡ BEAM · Concurrent RFC 7233 Streaming Engine (Go CLI)   │")
+	fmt.Println("└────────────────────────────────────────────────────────────┘")
 
-	// fmt.Printf(format, a...):
-	// - What it does: Formats according to a format specifier and writes to standard output (os.Stdout).
-	// - Returns: (int, error) -> Number of bytes written and any write error encountered.
-	fmt.Printf("URL:        %s\n", url)
+	fmt.Printf("URL:        \033[36m%s\033[0m\n", url)
 	if outputFile != "" {
-		fmt.Printf("Output:     %s\n", outputFile)
+		fmt.Printf("Output:     \033[33m%s\033[0m\n", outputFile)
 	} else {
-		fmt.Printf("Output:     (auto-derived from URL)\n")
+		fmt.Printf("Output:     \033[90m(auto-derived)\033[0m\n")
 	}
-	fmt.Printf("Workers:    %d\n", workers)
-	fmt.Printf("Chunks:     %d\n", chunks)
-	fmt.Println("------------------------------------------------------------")
-	fmt.Println("[+] Probing target server...")
+	fmt.Printf("Workers:    \033[1m%d\033[0m concurrent streams\n", workers)
+	fmt.Printf("Chunks:     \033[1m%d\033[0m byte partitions\n", chunks)
+	fmt.Println("────────────────────────────────────────────────────────────")
+	fmt.Println("\033[33m[⚡] Probing target server & byte-range capabilities...\033[0m")
 
 	// time.Now():
 	// - What it does: Returns the current local time with monotonic clock reading.
@@ -140,42 +134,9 @@ func run(args []string) error {
 	// - Returns: time.Duration -> Elapsed time interval.
 	elapsed := time.Since(startTime)
 
-	fmt.Println("------------------------------------------------------------")
-	// Round(m):
-	// - What it does: Returns the result of rounding the duration to the nearest multiple of m.
-	// - Returns: time.Duration -> Rounded duration.
-	fmt.Printf("[SUCCESS] Download completed in %s!\n", elapsed.Round(time.Millisecond))
+	fmt.Println("────────────────────────────────────────────────────────────")
+	fmt.Printf("\033[1;32m✔ Download completed in %s!\033[0m\n", elapsed.Round(time.Millisecond))
 	fmt.Println("============================================================")
 
 	return nil
-}
-
-// initTerminal enables Virtual Terminal Processing on Windows consoles.
-// This enables native support for ANSI escape sequences (\033[...A, \033[2K).
-func initTerminal() {
-	if runtime.GOOS != "windows" {
-		return
-	}
-
-	// syscall.NewLazyDLL(dllName):
-	// - What it does: Loads a dynamic link library (DLL) into process memory when invoked.
-	// - Returns: *syscall.LazyDLL.
-	kernel32 := syscall.NewLazyDLL("kernel32.dll")
-
-	// procGetConsoleMode: queries current console mode flags
-	procGetConsoleMode := kernel32.NewProc("GetConsoleMode")
-	// procSetConsoleMode: sets new console mode flags
-	procSetConsoleMode := kernel32.NewProc("SetConsoleMode")
-
-	// os.Stdout.Fd():
-	// - What it does: Returns the operating system file descriptor for stdout.
-	// - Returns: uintptr.
-	stdout := syscall.Handle(os.Stdout.Fd())
-	var mode uint32
-
-	r1, _, _ := procGetConsoleMode.Call(uintptr(stdout), uintptr(unsafe.Pointer(&mode)))
-	if r1 != 0 {
-		const enableVTP = 0x0004
-		procSetConsoleMode.Call(uintptr(stdout), uintptr(mode|enableVTP))
-	}
 }

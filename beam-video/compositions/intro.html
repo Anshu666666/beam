@@ -1,0 +1,54 @@
+<template>
+  <style>
+    #intro {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      background: #F7F5EE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .brand-hero-logo {
+      width: 920px;
+      height: auto;
+      max-height: 920px;
+      object-fit: contain;
+      transform-origin: center;
+      filter: drop-shadow(6px 6px 0px rgba(24, 24, 27, 0.08));
+    }
+  </style>
+
+  <div id="intro" data-composition-id="intro" data-width="1920" data-height="1080">
+    <img
+      src="assets/brand/beam-concept-c-horizontal.svg"
+      alt="Beam"
+      class="brand-hero-logo"
+      id="intro-logo"
+      data-layout-ignore="true"
+    />
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    // 3.0s clean, punchy brand intro - visible from frame 0
+    tl.fromTo("#intro-logo",
+      { scale: 0.96 },
+      { scale: 1, duration: 0.5, ease: "power2.out" },
+      0
+    );
+
+    // Hold steady until 2.8s, then smooth transition out
+    tl.fromTo("#intro",
+      { opacity: 1 },
+      { opacity: 0, duration: 0.2, ease: "power2.in" },
+      2.8
+    );
+
+    window.__timelines["intro"] = tl;
+  </script>
+</template>

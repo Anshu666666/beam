@@ -1,0 +1,291 @@
+<template>
+  <style>
+    #scene5 {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      background: #F7F5EE;
+      color: #18181B;
+      font-family: 'Space Mono', monospace;
+      padding: 64px 96px 140px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 32px;
+      overflow: hidden;
+    }
+
+    /* Top Nav */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #18181B;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo-img {
+      height: 92px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .brand-version-badge {
+      font-size: 18px;
+      font-weight: 700;
+      color: #52525B;
+      background-color: #F3EFE3;
+      border: 1.5px solid #18181B;
+      border-radius: 6px;
+      padding: 6px 14px;
+      box-shadow: 2px 2px 0px #18181B;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-pill {
+      font-size: 18px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border: 2px solid #18181B;
+      border-radius: 999px;
+      box-shadow: 2px 2px 0px #18181B;
+      color: #18181B;
+      background-color: #FCD34D;
+    }
+
+    /* Main Chassis Card */
+    .chassis-card {
+      position: relative;
+      background-color: #FFFFFF;
+      border: 2px solid #18181B;
+      box-shadow: 6px 6px 0px #18181B;
+      border-radius: 12px;
+      padding: 38px 48px 34px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 16px;
+    }
+
+    .card-folder-tab {
+      position: absolute;
+      top: -22px;
+      left: 36px;
+      background-color: #FCD34D;
+      color: #18181B;
+      border: 2px solid #18181B;
+      border-bottom: none;
+      padding: 4px 20px 6px;
+      border-radius: 8px 8px 0 0;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .headline {
+      font-size: 64px;
+      line-height: 1.1;
+      font-weight: 800;
+      color: #18181B;
+      letter-spacing: -0.02em;
+    }
+
+    .sub-headline {
+      font-size: 28px;
+      color: #52525B;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-top: -8px;
+      margin-bottom: 2px;
+    }
+
+    /* Stat Tiles */
+    .tiles-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .stat-tile {
+      background: #F3EFE3;
+      border: 2px solid #18181B;
+      border-radius: 8px;
+      box-shadow: 5px 5px 0px #18181B;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 320px;
+      transform-origin: center;
+      position: relative;
+    }
+
+    .tile-tag {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1.5px solid #18181B;
+      box-shadow: 1.5px 1.5px 0px #18181B;
+      width: fit-content;
+      color: #18181B;
+    }
+    .tag-butter { background-color: #FCD34D; }
+    .tag-peach  { background-color: #F8B195; }
+    .tag-mint   { background-color: #95D5B2; }
+
+    .tile-value {
+      font-size: 78px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+      color: #18181B;
+    }
+
+    .tile-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 20px;
+      color: #52525B;
+      border-top: 1.5px solid #18181B;
+      padding-top: 10px;
+      font-weight: 700;
+    }
+
+    /* Secondary Specs Row */
+    .secondary-specs {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .sec-badge {
+      flex: 1;
+      background: #FFFFFF;
+      border: 1.5px solid #18181B;
+      box-shadow: 2px 2px 0px #18181B;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #52525B;
+      font-weight: 600;
+    }
+    .sec-badge b {
+      color: #18181B;
+    }
+  </style>
+
+  <div id="scene5" data-composition-id="scene5" data-width="1920" data-height="1080">
+    <header class="top-nav" data-layout-ignore="true">
+      <div class="brand-group">
+        <img src="assets/brand/beam-concept-c-horizontal.svg" alt="Beam" class="brand-logo-img" />
+        <span class="brand-version-badge">v1.0.0</span>
+      </div>
+
+      <div class="nav-pills">
+        <span class="badge-pill">SYSTEM BENCHMARKS</span>
+      </div>
+    </header>
+
+    <main class="chassis-card" id="scene5-card" data-layout-allow-overflow>
+      <div class="card-folder-tab" data-layout-ignore="true">// 05 · BENCHMARKS</div>
+
+      <h1 class="headline" id="scene5-title">
+        PRODUCTION BENCHMARKS & SPECS
+      </h1>
+      <p class="sub-headline" id="scene5-subtitle" data-layout-ignore="true">
+        Engineered for maximum concurrency with minimal resource consumption.
+      </p>
+
+      <div class="tiles-container" id="scene5-tiles" data-layout-allow-overflow>
+        <!-- Tile 1: Go -->
+        <div class="stat-tile" id="tile-go">
+          <div class="tile-tag tag-butter" data-layout-ignore="true">// RUNTIME ENVIRONMENT</div>
+          <div class="tile-value">GO 1.22+</div>
+          <div class="tile-meta" data-layout-ignore="true">
+            <span>Standard Library Goroutines</span>
+          </div>
+        </div>
+
+        <!-- Tile 2: Zero Dependencies -->
+        <div class="stat-tile" id="tile-deps">
+          <div class="tile-tag tag-peach" data-layout-ignore="true">// SUPPLY CHAIN AUDIT</div>
+          <div class="tile-value">0 DEPS</div>
+          <div class="tile-meta" data-layout-ignore="true">
+            <span>Zero External Packages</span>
+          </div>
+        </div>
+
+        <!-- Tile 3: RAM -->
+        <div class="stat-tile" id="tile-ram">
+          <div class="tile-tag tag-mint" data-layout-ignore="true">// RESOURCE FOOTPRINT</div>
+          <div class="tile-value">~7.2 MB</div>
+          <div class="tile-meta" data-layout-ignore="true">
+            <span>RSS Memory Under Full Load</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="secondary-specs" data-layout-ignore="true">
+        <div class="sec-badge">STARTUP: <b>&lt; 2 ms</b></div>
+        <div class="sec-badge">BUFFER CHUNK: <b>32 KB io.Copy</b></div>
+        <div class="sec-badge">MEMORY DUPLICATION: <b>ZERO</b></div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    tl.fromTo("#scene5-card",
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
+      0.05
+    );
+
+    // Stagger the three tiles slamming in to match voice:
+    // "Written in Go" (starts ~0.3s)
+    tl.fromTo("#tile-go",
+      { opacity: 0, scale: 0.85, y: 20 },
+      { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: "back.out(1.5)" },
+      0.2
+    );
+
+    // "zero dependencies" (starts ~1.4s)
+    tl.fromTo("#tile-deps",
+      { opacity: 0, scale: 0.85, y: 20 },
+      { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: "back.out(1.5)" },
+      1.4
+    );
+
+    // "about seven megabytes of RAM" (starts ~3.0s)
+    tl.fromTo("#tile-ram",
+      { opacity: 0, scale: 0.85, y: 20 },
+      { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: "back.out(1.5)" },
+      3.0
+    );
+
+    tl.fromTo("#scene5",
+      { opacity: 1 },
+      { opacity: 0, duration: 0.2, ease: "power2.in" },
+      5.8
+    );
+
+    window.__timelines["scene5"] = tl;
+  </script>
+</template>

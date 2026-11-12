@@ -18,7 +18,11 @@
 </p>
 
 <p align="center">
-  <img src="assets/hero_dashboard_dark.png" alt="Beam Cockpit & Stream Telemetry" width="100%" style="border-radius: 8px;">
+  <video src="https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-explainer.mp4" width="100%" controls autoplay loop muted playsinline style="border-radius: 8px;">
+    <a href="https://github.com/Anshu666666/beam/releases/download/v1.0.0/beam-explainer.mp4">
+      <img src="assets/hero_dashboard_dark.png" alt="Beam Cockpit & Stream Telemetry" width="100%" style="border-radius: 8px;">
+    </a>
+  </video>
 </p>
 
 <p align="center">

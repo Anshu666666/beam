@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Beam — Concurrent Downloads, Visualized</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg-page: #F7F5EE;
+        --ink: #18181B;
+        --font-mono: 'Space Mono', monospace;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--bg-page);
+        font-family: var(--font-mono);
+      }
+
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        background: var(--bg-page);
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="27.0"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- Slide 0: Brand Intro (0.0s - 3.0s) -->
+      <div
+        id="intro"
+        class="clip"
+        data-composition-id="intro"
+        data-composition-src="compositions/intro.html"
+        data-start="0"
+        data-duration="3.0"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 1: Bottleneck (3.0s - 6.5s) -->
+      <div
+        id="scene1"
+        class="clip"
+        data-composition-id="scene1"
+        data-composition-src="compositions/scene1.html"
+        data-start="3.0"
+        data-duration="3.5"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 2: RFC 7233 Slicing (6.5s - 9.2s) -->
+      <div
+        id="scene2"
+        class="clip"
+        data-composition-id="scene2"
+        data-composition-src="compositions/scene2.html"
+        data-start="6.5"
+        data-duration="2.7"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 3: Bounded Concurrency (9.2s - 12.5s) -->
+      <div
+        id="scene3"
+        class="clip"
+        data-composition-id="scene3"
+        data-composition-src="compositions/scene3.html"
+        data-start="9.2"
+        data-duration="3.3"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 4: Stream Assembly & SHA-256 (12.5s - 16.8s) -->
+      <div
+        id="scene4"
+        class="clip"
+        data-composition-id="scene4"
+        data-composition-src="compositions/scene4.html"
+        data-start="12.5"
+        data-duration="4.3"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 5: Benchmarks & Architecture (16.8s - 22.8s) -->
+      <div
+        id="scene5"
+        class="clip"
+        data-composition-id="scene5"
+        data-composition-src="compositions/scene5.html"
+        data-start="16.8"
+        data-duration="6.0"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 6: Outro (22.8s - 27.0s) -->
+      <div
+        id="scene6"
+        class="clip"
+        data-composition-id="scene6"
+        data-composition-src="compositions/scene6.html"
+        data-start="22.8"
+        data-duration="4.2"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Captions (0.0s - 27.0s) -->
+      <div
+        id="captions"
+        class="clip"
+        data-composition-id="captions"
+        data-composition-src="compositions/captions.html"
+        data-start="0"
+        data-duration="27.0"
+        data-track-index="2"
+        data-track-kind="captions"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Audio Narration Track (starts at 3.0s) -->
+      <audio
+        id="narration"
+        class="clip"
+        src="voices/voice_1_af_heart.wav"
+        data-start="3.0"
+        data-duration="23.13"
+        data-volume="1"
+        data-fade-out="0.4"
+        data-track-index="3"
+      ></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

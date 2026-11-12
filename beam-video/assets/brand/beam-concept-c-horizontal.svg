@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 256" width="700" height="256" role="img" aria-labelledby="title-beam-c-h">
+  <title id="title-beam-c-h">Beam Lockup C — The Concurrency Stream</title>
+  <g id="symbol">
+    <!-- Hard Drop Shadows for 4 Concurrent Worker Conduits (+5px offset) -->
+    <path fill="#18181B" d="M37 53 H173 L197 83 H37 Z"/>
+    <path fill="#18181B" d="M37 93 H193 L217 123 H37 Z"/>
+    <path fill="#18181B" d="M37 133 H201 L225 163 H37 Z"/>
+    <path fill="#18181B" d="M37 173 H181 L205 203 H37 Z"/>
+    <!-- Left Probe/Intake Spine in Charcoal #18181B with Hard Shadow -->
+    <rect x="32" y="48" width="28" height="150" rx="3" fill="#18181B"/>
+    <!-- Worker 0 Conduit (Butter Yellow #FBBF24 with 45-degree Forward Beam) -->
+    <path fill="#FBBF24" d="M32 48 H168 L192 78 H32 Z"/>
+    <!-- Worker 1 Conduit (Mint Green #52B788 with 45-degree Forward Beam) -->
+    <path fill="#52B788" d="M32 88 H188 L212 118 H32 Z"/>
+    <!-- Worker 2 Conduit (Sky Blue #A2D2FF with 45-degree Forward Beam) -->
+    <path fill="#A2D2FF" d="M32 128 H196 L220 158 H32 Z"/>
+    <!-- Worker 3 Conduit (Butter Yellow #FBBF24 with 45-degree Forward Beam) -->
+    <path fill="#FBBF24" d="M32 168 H176 L200 198 H32 Z"/>
+    <!-- Sliced Byte Packet Markers in Charcoal #18181B -->
+    <rect x="100" y="54" width="24" height="18" rx="2" fill="#18181B"/>
+    <rect x="136" y="94" width="24" height="18" rx="2" fill="#18181B"/>
+    <rect x="156" y="134" width="24" height="18" rx="2" fill="#18181B"/>
+    <rect x="124" y="174" width="24" height="18" rx="2" fill="#18181B"/>
+  </g>
+  <g id="wordmark" fill="#18181B" fill-rule="evenodd">
+    <!-- B -->
+    <path d="M 280 76 H 328 C 346 76 358 86 358 100 C 358 112 348 122 334 126 C 352 130 362 142 362 156 C 362 172 348 180 326 180 H 280 Z M 302 96 V 116 H 324 C 332 116 336 112 336 106 C 336 100 332 96 324 96 Z M 302 136 V 160 H 326 C 334 160 338 156 338 148 C 338 142 334 136 326 136 Z"/>
+    <!-- E -->
+    <path d="M 380 76 H 446 V 96 H 402 V 118 H 438 V 138 H 402 V 160 H 446 V 180 H 380 Z"/>
+    <!-- A (snapped to 75-degree clean angle) -->
+    <path d="M 502 76 L 530 180 H 510 L 504 156 H 482 L 476 180 H 456 Z M 493 116 L 487 140 H 499 Z"/>
+    <!-- M -->
+    <path d="M 550 76 H 572 L 598 142 L 624 76 H 646 V 180 H 626 V 112 L 604 168 H 592 L 570 112 V 180 H 550 Z"/>
+  </g>
+</svg>
+

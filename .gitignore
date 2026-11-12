@@ -11,3 +11,12 @@ go.work
 temp_*
 downloads/
 beam-web*
+dist/
+
+# HyperFrames temp & build cache
+beam-video/.hyperframes/
+beam-video/snaps-*/
+beam-video/voices/*.wav
+beam-video/capture/
+beam-video/*.bak
+beam-video/*.mp4

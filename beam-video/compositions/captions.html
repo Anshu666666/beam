@@ -1,0 +1,302 @@
+<template>
+  <style>
+    #captions {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      pointer-events: none;
+      font-family: 'Space Mono', monospace;
+      overflow: visible;
+      z-index: 80;
+    }
+
+    .caption-group {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 56px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      visibility: hidden;
+      opacity: 0;
+    }
+
+    .caption-pill {
+      background: #18181B;
+      border: 2px solid #18181B;
+      border-radius: 9999px;
+      padding: 14px 44px;
+      font-size: 38px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #E4E4E7;
+      display: inline-flex;
+      gap: 16px;
+      align-items: center;
+      box-shadow: 4px 4px 0px #FCD34D;
+    }
+
+    .cap-word {
+      color: #A1A1AA;
+      white-space: nowrap;
+    }
+
+    .cap-word.active {
+      color: #FCD34D;
+      font-weight: 800;
+    }
+  </style>
+
+  <div id="captions" data-composition-id="captions" data-width="1920" data-height="1080" data-layout-allow-caption-zone="true" data-layout-allow-overflow="true">
+    <!-- Group 1: One connection -->
+    <div class="caption-group" id="cg-1">
+      <div class="caption-pill">
+        <span class="cap-word" id="cw-0">One</span>
+        <span class="cap-word" id="cw-1">connection</span>
+      </div>
+    </div>
+
+    <!-- Group 2: rarely saturates your bandwidth. -->
+    <div class="caption-group" id="cg-2">
+      <div class="caption-pill">
+        <span class="cap-word" id="cw-2">rarely</span>
+        <span class="cap-word" id="cw-3">saturates</span>
+        <span class="cap-word" id="cw-4">your</span>
+        <span class="cap-word" id="cw-5">bandwidth.</span>
+      </div>
+    </div>
+
+    <!-- Group 3: Beam splits a file -->
+    <div class="caption-group" id="cg-3">
+      <div class="caption-pill">
+        <span class="cap-word" id="cw-6">Beam</span>
+        <span class="cap-word" id="cw-7">splits</span>
+        <span class="cap-word" id="cw-8">a</span>
+        <span class="cap-word" id="cw-9">file</span>
+      </div>
+    </div>
+
+    <!-- Group 4: into byte ranges, -->
+    <div class="caption-group" id="cg-4">
+      <div class="caption-pill">
+        <span class="cap-word" id="cw-10">into</span>
+        <span class="cap-word" id="cw-11">byte</span>
+        <span class="cap-word" id="cw-12">ranges,</span>
+      </div>
+    </div>
+
+    <!-- Group 5: fetches them in parallel -->
+    <div class="caption-group" id="cg-5">
+      <div class="caption-pill">
+        <span class="cap-word" id="cw-13">fetches</span>
+        <span class="cap-word" id="cw-14">them</span>
+        <span class="cap-word" id="cw-15">in</span>
+        <span class="cap-word" id="cw-16">parallel</span>
+      </div>
+    </div>
+
+    <!-- Group 6: with a bounded worker pool, -->
+    <div class="caption-group" id="cg-6">
+      <div class="caption-pill">
+        <span class="cap-word" id="cw-17">with</span>
+        <span class="cap-word" id="cw-18">a</span>
+        <span class="cap-word" id="cw-19">bounded</span>
+        <span class="cap-word" id="cw-20">worker</span>
+        <span class="cap-word" id="cw-21">pool,</span>
+      </div>
+    </div>
+
+    <!-- Group 7: then stitches and verifies -->
+    <div class="caption-group" id="cg-7">
+      <div class="caption-pill">
+        <span class="cap-word" id="cw-22">then</span>
+        <span class="cap-word" id="cw-23">stitches</span>
+        <span class="cap-word" id="cw-24">and</span>
+        <span class="cap-word" id="cw-25">verifies</span>
+      </div>
+    </div>
+
+    <!-- Group 8: with SHA-256. -->
+    <div class="caption-group" id="cg-8">
+      <div class="caption-pill">
+        <span class="cap-word" id="cw-26">with</span>
+        <span class="cap-word" id="cw-27">SHA-256.</span>
+      </div>
+    </div>
+
+    <!-- Group 9: Written in Go, -->
+    <div class="caption-group" id="cg-9">
+      <div class="caption-pill">
+        <span class="cap-word" id="cw-29">Written</span>
+        <span class="cap-word" id="cw-30">in</span>
+        <span class="cap-word" id="cw-31">Go,</span>
+      </div>
+    </div>
+
+    <!-- Group 10: zero dependencies, -->
+    <div class="caption-group" id="cg-10">
+      <div class="caption-pill">
+        <span class="cap-word" id="cw-32">zero</span>
+        <span class="cap-word" id="cw-33">dependencies,</span>
+      </div>
+    </div>
+
+    <!-- Group 11: about 7 megabytes of RAM. -->
+    <div class="caption-group" id="cg-11">
+      <div class="caption-pill">
+        <span class="cap-word" id="cw-34">about</span>
+        <span class="cap-word" id="cw-35">7</span>
+        <span class="cap-word" id="cw-36">megabytes</span>
+        <span class="cap-word" id="cw-37">of</span>
+        <span class="cap-word" id="cw-38">RAM.</span>
+      </div>
+    </div>
+
+    <!-- Group 12: Beam. -->
+    <div class="caption-group" id="cg-12">
+      <div class="caption-pill">
+        <span class="cap-word" id="cw-39">Beam.</span>
+      </div>
+    </div>
+
+    <!-- Group 13: Concurrent Downloads, Visualized. -->
+    <div class="caption-group" id="cg-13">
+      <div class="caption-pill">
+        <span class="cap-word" id="cw-40">Concurrent</span>
+        <span class="cap-word" id="cw-41">Downloads,</span>
+        <span class="cap-word" id="cw-42">Visualized.</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    // Group 1: One connection (3.0s - 4.15s)
+    tl.set("#cg-1", { autoAlpha: 1 }, 3.0);
+    tl.set("#cw-0", { className: "cap-word active" }, 3.0);
+    tl.set("#cw-0", { className: "cap-word" }, 3.4);
+    tl.set("#cw-1", { className: "cap-word active" }, 3.4);
+    tl.set("#cg-1", { autoAlpha: 0 }, 4.15);
+
+    // Group 2: rarely saturates your bandwidth. (4.15s - 6.4s)
+    tl.set("#cg-2", { autoAlpha: 1 }, 4.15);
+    tl.set("#cw-2", { className: "cap-word active" }, 4.15);
+    tl.set("#cw-2", { className: "cap-word" }, 4.44);
+    tl.set("#cw-3", { className: "cap-word active" }, 4.44);
+    tl.set("#cw-3", { className: "cap-word" }, 5.08);
+    tl.set("#cw-4", { className: "cap-word active" }, 5.08);
+    tl.set("#cw-4", { className: "cap-word" }, 5.24);
+    tl.set("#cw-5", { className: "cap-word active" }, 5.24);
+    tl.set("#cg-2", { autoAlpha: 0 }, 6.35);
+
+    // Group 3: Beam splits a file (6.35s - 7.65s)
+    tl.set("#cg-3", { autoAlpha: 1 }, 6.35);
+    tl.set("#cw-6", { className: "cap-word active" }, 6.35);
+    tl.set("#cw-6", { className: "cap-word" }, 6.84);
+    tl.set("#cw-7", { className: "cap-word active" }, 6.84);
+    tl.set("#cw-7", { className: "cap-word" }, 7.24);
+    tl.set("#cw-8", { className: "cap-word active" }, 7.24);
+    tl.set("#cw-8", { className: "cap-word" }, 7.32);
+    tl.set("#cw-9", { className: "cap-word active" }, 7.32);
+    tl.set("#cg-3", { autoAlpha: 0 }, 7.65);
+
+    // Group 4: into byte ranges, (7.65s - 9.1s)
+    tl.set("#cg-4", { autoAlpha: 1 }, 7.65);
+    tl.set("#cw-10", { className: "cap-word active" }, 7.65);
+    tl.set("#cw-10", { className: "cap-word" }, 7.80);
+    tl.set("#cw-11", { className: "cap-word active" }, 7.80);
+    tl.set("#cw-11", { className: "cap-word" }, 8.20);
+    tl.set("#cw-12", { className: "cap-word active" }, 8.20);
+    tl.set("#cg-4", { autoAlpha: 0 }, 9.05);
+
+    // Group 5: fetches them in parallel (9.05s - 10.45s)
+    tl.set("#cg-5", { autoAlpha: 1 }, 9.05);
+    tl.set("#cw-13", { className: "cap-word active" }, 9.05);
+    tl.set("#cw-13", { className: "cap-word" }, 9.56);
+    tl.set("#cw-14", { className: "cap-word active" }, 9.56);
+    tl.set("#cw-14", { className: "cap-word" }, 9.72);
+    tl.set("#cw-15", { className: "cap-word active" }, 9.72);
+    tl.set("#cw-15", { className: "cap-word" }, 9.88);
+    tl.set("#cw-16", { className: "cap-word active" }, 9.88);
+    tl.set("#cg-5", { autoAlpha: 0 }, 10.45);
+
+    // Group 6: with a bounded worker pool, (10.45s - 12.2s)
+    tl.set("#cg-6", { autoAlpha: 1 }, 10.45);
+    tl.set("#cw-17", { className: "cap-word active" }, 10.45);
+    tl.set("#cw-17", { className: "cap-word" }, 10.52);
+    tl.set("#cw-18", { className: "cap-word active" }, 10.52);
+    tl.set("#cw-18", { className: "cap-word" }, 10.60);
+    tl.set("#cw-19", { className: "cap-word active" }, 10.60);
+    tl.set("#cw-19", { className: "cap-word" }, 11.16);
+    tl.set("#cw-20", { className: "cap-word active" }, 11.16);
+    tl.set("#cw-20", { className: "cap-word" }, 11.64);
+    tl.set("#cw-21", { className: "cap-word active" }, 11.64);
+    tl.set("#cg-6", { autoAlpha: 0 }, 12.2);
+
+    // Group 7: then stitches and verifies (12.2s - 14.0s)
+    tl.set("#cg-7", { autoAlpha: 1 }, 12.2);
+    tl.set("#cw-22", { className: "cap-word active" }, 12.2);
+    tl.set("#cw-22", { className: "cap-word" }, 12.44);
+    tl.set("#cw-23", { className: "cap-word active" }, 12.44);
+    tl.set("#cw-23", { className: "cap-word" }, 13.08);
+    tl.set("#cw-24", { className: "cap-word active" }, 13.08);
+    tl.set("#cw-24", { className: "cap-word" }, 13.32);
+    tl.set("#cw-25", { className: "cap-word active" }, 13.32);
+    tl.set("#cg-7", { autoAlpha: 0 }, 14.0);
+
+    // Group 8: with SHA-256. (14.0s - 16.8s)
+    tl.set("#cg-8", { autoAlpha: 1 }, 14.0);
+    tl.set("#cw-26", { className: "cap-word active" }, 14.0);
+    tl.set("#cw-26", { className: "cap-word" }, 14.20);
+    tl.set("#cw-27", { className: "cap-word active" }, 14.20);
+    tl.set("#cg-8", { autoAlpha: 0 }, 16.8);
+
+    // Group 9: Written in Go, (16.8s - 18.25s)
+    tl.set("#cg-9", { autoAlpha: 1 }, 16.8);
+    tl.set("#cw-29", { className: "cap-word active" }, 16.8);
+    tl.set("#cw-29", { className: "cap-word" }, 17.32);
+    tl.set("#cw-30", { className: "cap-word active" }, 17.32);
+    tl.set("#cw-30", { className: "cap-word" }, 17.48);
+    tl.set("#cw-31", { className: "cap-word active" }, 17.48);
+    tl.set("#cg-9", { autoAlpha: 0 }, 18.25);
+
+    // Group 10: zero dependencies, (18.25s - 19.85s)
+    tl.set("#cg-10", { autoAlpha: 1 }, 18.25);
+    tl.set("#cw-32", { className: "cap-word active" }, 18.25);
+    tl.set("#cw-32", { className: "cap-word" }, 18.52);
+    tl.set("#cw-33", { className: "cap-word active" }, 18.52);
+    tl.set("#cg-10", { autoAlpha: 0 }, 19.85);
+
+    // Group 11: about 7 megabytes of RAM. (19.85s - 22.7s)
+    tl.set("#cg-11", { autoAlpha: 1 }, 19.85);
+    tl.set("#cw-34", { className: "cap-word active" }, 19.85);
+    tl.set("#cw-34", { className: "cap-word" }, 20.04);
+    tl.set("#cw-35", { className: "cap-word active" }, 20.04);
+    tl.set("#cw-35", { className: "cap-word" }, 20.36);
+    tl.set("#cw-36", { className: "cap-word active" }, 20.36);
+    tl.set("#cw-36", { className: "cap-word" }, 21.08);
+    tl.set("#cw-37", { className: "cap-word active" }, 21.08);
+    tl.set("#cw-37", { className: "cap-word" }, 21.24);
+    tl.set("#cw-38", { className: "cap-word active" }, 21.24);
+    tl.set("#cg-11", { autoAlpha: 0 }, 22.7);
+
+    // Group 12: Beam. (22.7s - 23.65s)
+    tl.set("#cg-12", { autoAlpha: 1 }, 22.7);
+    tl.set("#cw-39", { className: "cap-word active" }, 22.7);
+    tl.set("#cg-12", { autoAlpha: 0 }, 23.65);
+
+    // Group 13: Concurrent Downloads, Visualized. (23.65s - 26.5s)
+    tl.set("#cg-13", { autoAlpha: 1 }, 23.65);
+    tl.set("#cw-40", { className: "cap-word active" }, 23.65);
+    tl.set("#cw-40", { className: "cap-word" }, 24.36);
+    tl.set("#cw-41", { className: "cap-word active" }, 24.36);
+    tl.set("#cw-41", { className: "cap-word" }, 25.16);
+    tl.set("#cw-42", { className: "cap-word active" }, 25.16);
+    tl.set("#cg-13", { autoAlpha: 0 }, 26.5);
+
+    window.__timelines["captions"] = tl;
+  </script>
+</template>
