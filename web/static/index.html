@@ -13,8 +13,8 @@
   <meta property="og:title" content="Beam — Concurrent RFC 7233 Byte-Range Streaming Engine">
   <meta property="og:description" content="High-throughput concurrent RFC 7233 byte-range streaming engine and visual retro dashboard in Go with live worker byte streaming animation and 2D visual completion grid.">
   <meta property="og:image" content="https://beam-stream.duckdns.org/og-image.png">
-  <meta property="og:image:alt" content="Beam Stream Cockpit & Telemetry Dashboard">
-  <meta property="og:site_name" content="Beam Stream">
+  <meta property="og:image:alt" content="Beam Cockpit & Concurrency Telemetry">
+  <meta property="og:site_name" content="Beam">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
@@ -22,13 +22,20 @@
   <meta name="twitter:title" content="Beam — Concurrent RFC 7233 Byte-Range Streaming Engine">
   <meta name="twitter:description" content="High-throughput concurrent RFC 7233 byte-range streaming engine and visual retro dashboard in Go with live worker byte streaming animation and 2D visual completion grid.">
   <meta name="twitter:image" content="https://beam-stream.duckdns.org/og-image.png">
+
+  <!-- Favicons & App Icons -->
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#141416">
   
   <!-- Fonts: Recursive (Variable mechanical font) & Space Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,CRSV,MONO@400..800,0..1,0..1,0..1&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="/style.css?v=10">
+  <link rel="stylesheet" href="/style.css?v=11">
 </head>
 <body class="beam-app">
 
@@ -38,12 +45,14 @@
     <!-- Top Navigation Bar (Compact) -->
     <header class="top-nav">
       <div class="brand-group">
+        <a href="/" class="brand-logo-badge" title="Beam — High-Throughput Concurrent Range Downloader">
+          <img src="/beam-logo-square.svg" class="brand-logo-img" alt="Beam Concurrency Mark" width="36" height="36">
+        </a>
         <div class="brand-folder-tab">
-          <span class="folder-tab-icon">⚡</span>
           <span class="folder-tab-text">RFC 7233</span>
         </div>
         <div class="brand-title-box">
-          <h1 class="brand-title">BEAM<span class="brand-accent">STREAM</span></h1>
+          <h1 class="brand-title">BEAM</h1>
           <span class="brand-version">v1.0.0 — Go Engine</span>
         </div>
       </div>
@@ -504,8 +513,8 @@
         <!-- Left: Brand & Engine Specs -->
         <div class="footer-brand-meta">
           <div class="footer-logo-line">
-            <span class="footer-bolt">⚡</span>
-            <span class="footer-name">BEAM<span class="footer-sub">STREAM</span></span>
+            <img src="/beam-logo-square.svg" class="footer-logo-mark" alt="Beam Logo" width="22" height="22">
+            <span class="footer-name">BEAM</span>
             <span class="footer-pill-ver">v1.0.0</span>
           </div>
           <p class="footer-lead">High-Throughput Concurrent Byte-Range Streaming Engine built with standard Go primitives.</p>

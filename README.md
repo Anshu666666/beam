@@ -1,15 +1,24 @@
-# ⚡ Beam
-
 <p align="center">
-  <img src="assets/hero_dashboard_dark.png" alt="Beam Cockpit & Stream Telemetry" width="100%" style="border-radius: 8px;">
+  <a href="https://github.com/Anshu666666/beam">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="assets/brand/beam-logo-dark.png">
+      <source media="(prefers-color-scheme: light)" srcset="assets/brand/beam-logo-light.png">
+      <img src="assets/brand/beam-logo-dark.png" alt="Beam — Concurrent RFC 7233 Byte-Range Streaming Engine" width="420">
+    </picture>
+  </a>
 </p>
 
-<h3 align="center">Concurrent HTTP range downloader and live web dashboard in Go</h3>
+<h3 align="center">High-Throughput Concurrent RFC 7233 Byte-Range Streaming Engine &amp; Visual Cockpit in Pure Go</h3>
 
 <p align="center">
   <a href="https://golang.org"><img src="https://img.shields.io/badge/Go-1.22+-00ADD8?style=for-the-badge&logo=go&logoColor=white" alt="Go Version"></a>
   <a href="https://datatracker.ietf.org/doc/html/rfc7233"><img src="https://img.shields.io/badge/RFC_7233-Byte--Ranges-F59E0B?style=for-the-badge" alt="RFC 7233"></a>
   <a href="#-performance--memory"><img src="https://img.shields.io/badge/RAM_Footprint-7.2MB_RSS-00E5FF?style=for-the-badge&logo=speedtest&logoColor=black" alt="RAM Footprint"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-FBBF24?style=for-the-badge" alt="MIT License"></a>
+</p>
+
+<p align="center">
+  <img src="assets/hero_dashboard_dark.png" alt="Beam Cockpit & Stream Telemetry" width="100%" style="border-radius: 8px;">
 </p>
 
 <p align="center">

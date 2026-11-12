@@ -1,0 +1,23 @@
+<svg fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title-beam-c"><title>Beam Logo</title>
+  <title id="title-beam-c">Beam Concept C — The Concurrency Stream</title>
+  <!-- Hard Drop Shadows for 4 Concurrent Worker Conduits (+5px offset) -->
+  <path fill="#ffffff" d="M37 53 H173 L197 83 H37 Z"/>
+  <path fill="#ffffff" d="M37 93 H193 L217 123 H37 Z"/>
+  <path fill="#ffffff" d="M37 133 H201 L225 163 H37 Z"/>
+  <path fill="#ffffff" d="M37 173 H181 L205 203 H37 Z"/>
+  <!-- Left Probe/Intake Spine in Charcoal #18181B with Hard Shadow -->
+  <rect x="32" y="48" width="28" height="150" rx="3" fill="#ffffff"/>
+  <!-- Worker 0 Conduit (Butter Yellow #FBBF24 with 45-degree Forward Beam) -->
+  <path fill="#ffffff" d="M32 48 H168 L192 78 H32 Z"/>
+  <!-- Worker 1 Conduit (Mint Green #52B788 with 45-degree Forward Beam) -->
+  <path fill="#ffffff" d="M32 88 H188 L212 118 H32 Z"/>
+  <!-- Worker 2 Conduit (Sky Blue #A2D2FF with 45-degree Forward Beam) -->
+  <path fill="#ffffff" d="M32 128 H196 L220 158 H32 Z"/>
+  <!-- Worker 3 Conduit (Butter Yellow #FBBF24 with 45-degree Forward Beam) -->
+  <path fill="#ffffff" d="M32 168 H176 L200 198 H32 Z"/>
+  <!-- Sliced Byte Packet Markers in Charcoal #18181B -->
+  <rect x="100" y="54" width="24" height="18" rx="2" fill="#ffffff"/>
+  <rect x="136" y="94" width="24" height="18" rx="2" fill="#ffffff"/>
+  <rect x="156" y="134" width="24" height="18" rx="2" fill="#ffffff"/>
+  <rect x="124" y="174" width="24" height="18" rx="2" fill="#ffffff"/>
+</svg>

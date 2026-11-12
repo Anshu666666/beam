@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 256" width="700" height="256" role="img" aria-labelledby="title-beam-a-h">
+  <title id="title-beam-a-h">Beam Lockup A — The Byte-Range B</title>
+  <g id="symbol">
+    <!-- Tactile Hard Drop Shadow (+6px offset) -->
+    <path fill="#18181B" d="M50 42 H182 C200.78 42 216 57.22 216 76 C216 90.8 206.5 103.4 193.1 108 C208.5 112.9 220 127.1 220 144 C220 162.78 204.78 178 186 178 H164 L192 206 C196 210 192 218 184 218 H50 Z"/>
+    <!-- Stem Base / Outer Chassis -->
+    <path fill="#18181B" d="M44 36 H88 V212 H44 Z"/>
+    <!-- Stem Parallel Concurrency Slices (Sky Blue #A2D2FF) -->
+    <rect x="48" y="40" width="36" height="38" rx="2" fill="#A2D2FF"/>
+    <rect x="48" y="84" width="36" height="38" rx="2" fill="#A2D2FF"/>
+    <rect x="48" y="128" width="36" height="38" rx="2" fill="#A2D2FF"/>
+    <rect x="48" y="172" width="36" height="36" rx="2" fill="#A2D2FF"/>
+    <!-- Top Loop / Chunk Buffer 1: Butter Yellow #FBBF24 with real counter hole -->
+    <path fill="#FBBF24" fill-rule="evenodd" d="M88 36 H176 C194.78 36 210 51.22 210 70 C210 88.78 194.78 104 176 104 H88 Z M120 58 H166 C172.63 58 178 63.37 178 70 C178 76.63 172.63 82 166 82 H120 Z"/>
+    <!-- Bottom Loop / Chunk Buffer 2: Mint Green #52B788 with real counter hole -->
+    <path fill="#52B788" fill-rule="evenodd" d="M88 108 H182 C200.78 108 216 123.22 216 142 C216 160.78 200.78 176 182 176 H88 Z M120 130 H172 C178.63 130 184 135.37 184 142 C184 148.63 178.63 154 172 154 H120 Z"/>
+    <!-- Forward Velocity Ray at Base (Exact 45-degree angles) -->
+    <path fill="#52B788" d="M88 180 H176 L144 212 H88 Z"/>
+    <path fill="#18181B" fill-rule="evenodd" d="M88 176 H182 L142 216 H88 V210 H140 L172 178 H88 Z"/>
+  </g>
+  <g id="wordmark" fill="#18181B" fill-rule="evenodd">
+    <!-- B -->
+    <path d="M 280 76 H 328 C 346 76 358 86 358 100 C 358 112 348 122 334 126 C 352 130 362 142 362 156 C 362 172 348 180 326 180 H 280 Z M 302 96 V 116 H 324 C 332 116 336 112 336 106 C 336 100 332 96 324 96 Z M 302 136 V 160 H 326 C 334 160 338 156 338 148 C 338 142 334 136 326 136 Z"/>
+    <!-- E -->
+    <path d="M 380 76 H 446 V 96 H 402 V 118 H 438 V 138 H 402 V 160 H 446 V 180 H 380 Z"/>
+    <!-- A (snapped to 75-degree clean angle) -->
+    <path d="M 502 76 L 530 180 H 510 L 504 156 H 482 L 476 180 H 456 Z M 493 116 L 487 140 H 499 Z"/>
+    <!-- M -->
+    <path d="M 550 76 H 572 L 598 142 L 624 76 H 646 V 180 H 626 V 112 L 604 168 H 592 L 570 112 V 180 H 550 Z"/>
+  </g>
+</svg>
+

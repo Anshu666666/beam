@@ -138,6 +138,32 @@ body {
   gap: 14px;
 }
 
+.brand-logo-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background-color: var(--bg-card);
+  border: var(--border-width) solid var(--border-solid);
+  border-radius: 8px;
+  box-shadow: var(--shadow-offset-sm);
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.brand-logo-badge:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-offset);
+}
+
+.brand-logo-img {
+  width: 32px;
+  height: 32px;
+  display: block;
+}
+
 .brand-folder-tab {
   display: flex;
   align-items: center;
@@ -2691,8 +2717,15 @@ body {
 .footer-logo-line {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   margin-bottom: 6px;
+}
+
+.footer-logo-mark {
+  width: 20px;
+  height: 20px;
+  display: block;
+  border-radius: 4px;
 }
 
 .footer-bolt {
