@@ -310,10 +310,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (speedLimitSelect) {
+    const speedLimitIcons = { 1: 'turtle', 3: 'stopwatch', 5: 'clapperboard', 10: 'rocket', 0: 'lightning' };
     speedLimitSelect.addEventListener('change', (e) => {
       const val = parseInt(e.target.value, 10);
+      const icon = speedLimitIcons[val] || 'lightning';
       if (speedLimitBadge) {
-        speedLimitBadge.textContent = val === 0 ? 'MAX' : `${val} MB/s`;
+        speedLimitBadge.innerHTML = `<img src="/icons/kubai/${icon}.svg" alt="" class="ic speed-limit-ic">${val === 0 ? 'MAX' : `${val} MB/s`}`;
       }
       appendTrace(`[limiter] Bandwidth limit set: ${val === 0 ? 'Unlimited' : val + ' MB/s'}`, 'log-system');
     });
@@ -375,7 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // 9. Anime.js Byte Packet Flight Animation Engine
-  const packetIcons = ['01', '10', '📦', '📄', '00', '11'];
+  const packetSprites = ['01', '10', '<img src="/icons/kubai/package.svg" alt="" class="packet-sprite">', '<img src="/icons/kubai/file.svg" alt="" class="packet-sprite">', '00', '11'];
 
   function spawnBytePacket(workerId) {
     const pathSelector = `#conduit-path-${workerId}`;
@@ -387,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const packet = document.createElement('div');
       const isData = Math.random() > 0.4;
       packet.className = `byte-packet ${isData ? 'type-data' : 'type-chunk'}`;
-      packet.textContent = packetIcons[Math.floor(Math.random() * packetIcons.length)];
+      packet.innerHTML = packetSprites[Math.floor(Math.random() * packetSprites.length)];
       bytePacketsPlane.appendChild(packet);
 
       const flightDuration = 650 + Math.random() * 350;
@@ -900,43 +902,43 @@ document.addEventListener('DOMContentLoaded', () => {
   const tourSteps = [
     {
       elementId: 'config-card',
-      icon: '🎯',
+      icon: 'target',
       title: '1. Dispatch Cockpit & Presets',
       desc: 'Pick any pre-configured payload (50 MB, 100 MB, Linux Kernel, Go 1.22) or enter any RFC 7233 byte-range capable file URL to begin.'
     },
     {
       elementId: 'cockpit-action-strip',
-      icon: '⚙️',
+      icon: 'settings',
       title: '2. Concurrency & Chunk Slicing',
       desc: 'Configure parallel Goroutine workers (1–16) and discrete byte chunks (1–64). You can also throttle network speed to visualize packet flow live!'
     },
     {
       elementId: 'start-btn',
-      icon: '⚡',
+      icon: 'lightning',
       title: '3. Start Concurrent Stream',
       desc: 'Click START CONCURRENT STREAM to launch the Go engine! It fires parallel HTTP GET requests with Range: bytes=... headers and streams telemetry over Server-Sent Events (SSE).'
     },
     {
       elementId: 'stage-card',
-      icon: '🏭',
+      icon: 'factory',
       title: '4. Visual Concurrency Arena',
       desc: 'Watch Goroutine workers pull byte packets through dynamic conduits into the assembly destination folder with Zero-RAM Copy & SHA-256 seal verification.'
     },
     {
       elementId: 'matrix-card',
-      icon: '▦',
+      icon: 'grid',
       title: '5. 2D Discrete Chunk Matrix',
       desc: 'Real-time defrag-style memory grid tracking individual slice progress (Idle, Downloading, Completed).'
     },
     {
       elementId: 'benchmark-card',
-      icon: '⚔️',
+      icon: 'crossed-swords',
       title: '6. Speedup Benchmark Arena',
       desc: 'Pit standard single-stream sequential HTTP against 8-worker parallel Range streaming head-to-head to measure real-world throughput multiplier!'
     },
     {
       elementId: 'trace-card',
-      icon: '🖥️',
+      icon: 'monitor',
       title: '7. RFC 7233 Protocol Trace',
       desc: 'Inspect low-level byte-range requests, socket timestamps, and Go engine telemetry in real time.'
     }
@@ -1114,7 +1116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (tourStepTab) tourStepTab.textContent = `STEP ${currentTourStep + 1} OF ${tourSteps.length}`;
-    if (tourStepIcon) tourStepIcon.textContent = step.icon;
+    if (tourStepIcon) tourStepIcon.innerHTML = `<img src="/icons/kubai/${step.icon}.svg" alt="" class="ic">`;
     if (tourStepTitle) tourStepTitle.textContent = step.title;
     if (tourStepDesc) tourStepDesc.textContent = step.desc;
 
@@ -1122,7 +1124,9 @@ document.addEventListener('DOMContentLoaded', () => {
       tourPrevBtn.style.display = currentTourStep === 0 ? 'none' : 'inline-flex';
     }
     if (tourNextBtn) {
-      tourNextBtn.textContent = currentTourStep === tourSteps.length - 1 ? 'Finish ✓' : 'Next ▶';
+      tourNextBtn.innerHTML = currentTourStep === tourSteps.length - 1
+        ? 'Finish <img src="/icons/kubai/circle-check.svg" alt="" class="ic">'
+        : 'Next <img src="/icons/kubai/play.svg" alt="" class="ic">';
     }
 
     updateTourDots();

@@ -54,7 +54,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,CRSV,MONO@400..800,0..1,0..1,0..1&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="/style.css?v=12">
+  <link rel="stylesheet" href="/style.css?v=13">
 </head>
 <body class="beam-app">
 
@@ -74,27 +74,27 @@
       <div class="nav-right">
         <!-- Standalone CLI & Binary Docs Link -->
         <a href="/docs" class="header-cli-btn" title="Download CLI Executables & Documentation">
-          <span class="cli-btn-icon">⚡</span>
+          <span class="cli-btn-icon"><img src="/icons/kubai/lightning.svg" alt="" class="ic"></span>
           <span class="cli-btn-text">CLI / EXE DOCS</span>
-          <span class="cli-btn-arrow">↓</span>
+          <span class="cli-btn-arrow"><img src="/icons/kubai/download.svg" alt="" class="ic"></span>
         </a>
 
         <!-- Interactive Walkthrough Guide Trigger (High-Visibility Magnet) -->
         <button type="button" class="tour-nav-btn" id="tour-start-btn" title="Start Interactive Guided Walkthrough">
           <span class="tour-pulse-radar" aria-hidden="true"></span>
-          <span class="tour-btn-icon">💡</span>
+          <span class="tour-btn-icon"><img src="/icons/kubai/lightbulb.svg" alt="" class="ic"></span>
           <span class="tour-btn-text">HOW IT WORKS</span>
-          <span class="tour-btn-arrow">▶</span>
+          <span class="tour-btn-arrow"><img src="/icons/kubai/play.svg" alt="" class="ic"></span>
         </button>
 
         <!-- Light / Dark Mode Toggle Switch (Default: Light Mode) -->
         <div class="theme-switcher">
           <button type="button" class="theme-btn active" id="theme-light-btn" title="Switch to Light Mode">
-            <span class="theme-icon">☼</span>
+            <span class="theme-icon"><img src="/icons/kubai/sun.svg" alt="" class="ic"></span>
             <span class="theme-label">Light</span>
           </button>
           <button type="button" class="theme-btn" id="theme-dark-btn" title="Switch to Dark Mode">
-            <span class="theme-icon">☾</span>
+            <span class="theme-icon"><img src="/icons/kubai/moon.svg" alt="" class="ic"></span>
             <span class="theme-label">Dark</span>
           </button>
         </div>
@@ -105,7 +105,7 @@
             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
           </svg>
           <span class="header-gh-label">GitHub</span>
-          <span class="header-gh-arrow">↗</span>
+          <span class="header-gh-arrow"><img src="/icons/kubai/arrow-up-right.svg" alt="" class="ic"></span>
         </a>
       </div>
     </header>
@@ -177,7 +177,7 @@
               </button>
 
               <button type="button" class="preset-pill preset-benchmark-accent" id="quick-bench-trigger" title="Jump to Sequential vs Parallel Speedup Arena">
-                <span class="preset-pill-tag">⚔️ Speedup Arena</span>
+                <span class="preset-pill-tag"><img src="/icons/kubai/crossed-swords.svg" alt="" class="ic"> Speedup Arena</span>
                 <span class="preset-pill-desc">1 vs 8 Workers Head-to-Head</span>
               </button>
             </div>
@@ -211,23 +211,23 @@
             <div class="compact-stepper speed-stepper">
               <div class="stepper-meta">
                 <span class="stepper-title">THROTTLE</span>
-                <span class="stepper-val-badge" id="speed-limit-badge">5 MB/s</span>
+                <span class="stepper-val-badge" id="speed-limit-badge"><img src="/icons/kubai/clapperboard.svg" alt="" class="ic speed-limit-ic">5 MB/s</span>
               </div>
               <select id="speed-limit-select" class="solid-select-compact">
-                <option value="1">🐢 1 MB/s (Slow)</option>
-                <option value="3">⏱️ 3 MB/s (Demo)</option>
-                <option value="5" selected>🎬 5 MB/s (Smooth)</option>
-                <option value="10">🚀 10 MB/s (Fast)</option>
-                <option value="0">⚡ Max (Unlimited)</option>
+                <option value="1">1 MB/s (Slow)</option>
+                <option value="3">3 MB/s (Demo)</option>
+                <option value="5" selected>5 MB/s (Smooth)</option>
+                <option value="10">10 MB/s (Fast)</option>
+                <option value="0">Max (Unlimited)</option>
               </select>
             </div>
 
             <!-- Start Trigger Button -->
             <button type="button" id="start-btn" class="solid-action-btn-compact hero-start-cta" title="Click to launch high-throughput concurrent stream">
               <span class="cta-pulse-beacon" aria-hidden="true"></span>
-              <span class="btn-icon">⚡</span>
+              <span class="btn-icon"><img src="/icons/kubai/lightning.svg" alt="" class="ic"></span>
               <span class="btn-text">START CONCURRENT STREAM</span>
-              <span class="btn-arrow" aria-hidden="true">▶</span>
+              <span class="btn-arrow" aria-hidden="true"><img src="/icons/kubai/play.svg" alt="" class="ic"></span>
             </button>
           </div>
         </div>
@@ -308,7 +308,7 @@
                     </div>
                     <div class="folder-intake-target" id="dest-folder-target" aria-hidden="true"></div>
                     <div class="verification-seal" id="verification-seal">
-                      <span class="seal-icon">✓</span>
+                      <span class="seal-icon"><img src="/icons/kubai/circle-check.svg" alt="" class="ic"></span>
                       <span class="seal-text">VERIFIED</span>
                       <small class="seal-sub">SHA-256 OK</small>
                     </div>
@@ -391,7 +391,7 @@
         <span class="rivet rivet-br" aria-hidden="true"></span>
 
         <div class="card-folder-tab tab-butter">
-          <span class="tab-label">⚔️ SEQUENTIAL VS PARALLEL SPEEDUP ARENA</span>
+          <span class="tab-label"><img src="/icons/kubai/crossed-swords.svg" alt="" class="ic"> SEQUENTIAL VS PARALLEL SPEEDUP ARENA</span>
         </div>
 
         <div class="card-body benchmark-body">
@@ -402,7 +402,7 @@
             </div>
             <div class="benchmark-btn-cluster">
               <button type="button" class="solid-action-btn-compact hero-bench-cta" id="benchmark-run-btn">
-                <span class="btn-icon">⚡</span>
+                <span class="btn-icon"><img src="/icons/kubai/lightning.svg" alt="" class="ic"></span>
                 <span>RUN SPEEDUP BENCHMARK</span>
               </button>
             </div>
@@ -415,7 +415,7 @@
             <div class="bench-lane bench-lane-seq">
               <div class="bench-lane-header">
                 <div class="bench-lane-title-group">
-                  <span class="lane-badge-icon">🐢</span>
+                  <span class="lane-badge-icon"><img src="/icons/kubai/turtle.svg" alt="" class="ic"></span>
                   <div>
                     <h4 class="lane-title">Sequential Stream</h4>
                     <span class="lane-sub">1 Worker • Single HTTP Connection</span>
@@ -461,7 +461,7 @@
             <div class="bench-lane bench-lane-par">
               <div class="bench-lane-header">
                 <div class="bench-lane-title-group">
-                  <span class="lane-badge-icon">🚀</span>
+                  <span class="lane-badge-icon"><img src="/icons/kubai/rocket.svg" alt="" class="ic"></span>
                   <div>
                     <h4 class="lane-title">Beam Parallel Engine</h4>
                     <span class="lane-sub">8 Workers • RFC 7233 Multiplex</span>
@@ -555,8 +555,8 @@
               <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
             </svg>
             <div class="gh-btn-copy">
-              <span class="gh-btn-title">★ Star on GitHub</span>
-              <span class="gh-btn-sub">Anshu666666/beam ↗</span>
+              <span class="gh-btn-title"><img src="/icons/kubai/star.svg" alt="" class="ic"> Star on GitHub</span>
+              <span class="gh-btn-sub">Anshu666666/beam <img src="/icons/kubai/arrow-up-right.svg" alt="" class="ic"></span>
             </div>
           </a>
 
@@ -598,13 +598,13 @@
       <span id="tour-step-tab">STEP 1 OF 7</span>
     </div>
     <div class="tour-drag-handle" id="tour-drag-handle" title="Hold &amp; drag to move card anywhere">
-      <span class="drag-dots" aria-hidden="true">⠿</span>
+      <span class="drag-dots" aria-hidden="true"><img src="/icons/kubai/grip.svg" alt="" class="ic"></span>
       <span class="drag-label">DRAG</span>
     </div>
     <button type="button" class="tour-close-btn" id="tour-close-btn" title="Exit Walkthrough (Esc)">&times;</button>
     
     <div class="tour-header-row">
-      <span class="tour-icon-badge" id="tour-step-icon">💡</span>
+      <span class="tour-icon-badge" id="tour-step-icon"><img src="/icons/kubai/lightbulb.svg" alt="" class="ic"></span>
       <h4 class="tour-title" id="tour-step-title">Welcome to Beam</h4>
     </div>
     
@@ -618,8 +618,8 @@
       </div>
       <div class="tour-btn-group">
         <button type="button" class="tour-btn tour-btn-ghost" id="tour-skip-btn">Skip</button>
-        <button type="button" class="tour-btn tour-btn-secondary" id="tour-prev-btn">◀ Back</button>
-        <button type="button" class="tour-btn tour-btn-primary" id="tour-next-btn">Next ▶</button>
+        <button type="button" class="tour-btn tour-btn-secondary" id="tour-prev-btn"><img src="/icons/kubai/play.svg" alt="" class="ic ic-flip"> Back</button>
+        <button type="button" class="tour-btn tour-btn-primary" id="tour-next-btn">Next <img src="/icons/kubai/play.svg" alt="" class="ic"></button>
       </div>
     </div>
   </div>
@@ -627,6 +627,6 @@
   <!-- Anime.js for High-Precision Physics-Based Motion Paths -->
   <script src="/anime.min.js"></script>
   <!-- Beam Frontend Controller Engine -->
-  <script src="/app.js?v=10"></script>
+  <script src="/app.js?v=11"></script>
 </body>
 </html>

@@ -3542,3 +3542,84 @@ body.tour-scroll-locked {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* ==========================================================================
+   KUBAI ICONS — Inline SVG Glyph System (Kubai Icons)
+   Replaces all emoji with standalone Kubai SVG icons (folder-layered style,
+   outside outlines, one accent hue per icon). Sized via 1em where possible.
+   ========================================================================== */
+.ic {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.14em;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* Terminal / pre glyphs: exactly one character cell wide so box-drawing stays aligned */
+.ic-term {
+  display: inline-block;
+  width: 1ch;
+  height: 0.92em;
+  vertical-align: -0.12em;
+}
+
+/* Horizontally flipped glyph (play triangle used as "back") */
+.ic-flip {
+  transform: scaleX(-1);
+}
+
+/* Header */
+.cli-btn-icon .ic { width: 15px; height: 15px; }
+.cli-btn-arrow .ic { width: 12px; height: 12px; }
+.tour-btn-icon .ic { width: 16px; height: 16px; }
+.tour-btn-arrow .ic { width: 11px; height: 11px; vertical-align: -0.08em; }
+.theme-icon .ic { width: 15px; height: 15px; vertical-align: -0.2em; }
+.header-gh-arrow .ic { width: 12px; height: 12px; }
+
+/* CTA / action buttons */
+.btn-icon .ic { width: 16px; height: 16px; }
+.btn-arrow .ic { width: 12px; height: 12px; vertical-align: -0.08em; }
+
+/* Presets & section tabs */
+.preset-pill-tag .ic,
+.card-folder-tab .ic { width: 13px; height: 13px; }
+
+/* Throttle badge icon (updates live with the select) */
+.stepper-val-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.speed-limit-ic { width: 12px; height: 12px; }
+
+/* Benchmark lanes */
+.lane-badge-icon .ic { width: 26px; height: 26px; vertical-align: 0; }
+
+/* Verification seal */
+.seal-icon { display: inline-flex; }
+.seal-icon .ic { width: 19px; height: 19px; vertical-align: 0; }
+
+/* Footer GitHub CTA */
+.gh-btn-title { display: inline-flex; align-items: center; gap: 6px; }
+.gh-btn-title .ic { width: 15px; height: 15px; vertical-align: 0; }
+.gh-btn-sub .ic { width: 11px; height: 11px; }
+
+/* Tour drag handle & tour buttons */
+.tour-drag-handle .ic { width: 13px; height: 13px; vertical-align: 0; }
+.tour-btn .ic { width: 12px; height: 12px; vertical-align: -0.08em; }
+.tour-icon-badge { display: inline-flex; align-items: center; }
+.tour-icon-badge .ic { width: 21px; height: 21px; }
+
+/* Flying byte packets in the concurrency arena */
+.byte-packet .packet-sprite { width: 10px; height: 10px; display: block; }
+
+/* Docs page */
+.docs-nav-link .ic { width: 15px; height: 15px; vertical-align: -0.18em; }
+.docs-tag .ic { width: 13px; height: 13px; vertical-align: -0.15em; }
+.dl-os-icon { display: inline-flex; line-height: 1; }
+.dl-os-icon .ic { width: 34px; height: 34px; }
+.dl-button .ic { width: 16px; height: 16px; vertical-align: -0.18em; }
+.callout-icon { display: inline-flex; line-height: 1; }
+.callout-icon .ic { width: 27px; height: 27px; }
