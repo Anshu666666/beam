@@ -3571,20 +3571,20 @@ body.tour-scroll-locked {
 }
 
 /* Header */
-.cli-btn-icon .ic { width: 15px; height: 15px; }
-.cli-btn-arrow .ic { width: 12px; height: 12px; }
-.tour-btn-icon .ic { width: 16px; height: 16px; }
-.tour-btn-arrow .ic { width: 11px; height: 11px; vertical-align: -0.08em; }
-.theme-icon .ic { width: 15px; height: 15px; vertical-align: -0.2em; }
-.header-gh-arrow .ic { width: 12px; height: 12px; }
+.cli-btn-icon .ic { width: 21px; height: 21px; }
+.cli-btn-arrow .ic { width: 16px; height: 16px; }
+.tour-btn-icon .ic { width: 22px; height: 22px; }
+.tour-btn-arrow .ic { width: 15px; height: 15px; vertical-align: -0.08em; }
+.theme-icon .ic { width: 20px; height: 20px; vertical-align: -0.2em; }
+.header-gh-arrow .ic { width: 16px; height: 16px; }
 
 /* CTA / action buttons */
-.btn-icon .ic { width: 16px; height: 16px; }
-.btn-arrow .ic { width: 12px; height: 12px; vertical-align: -0.08em; }
+.btn-icon .ic { width: 22px; height: 22px; }
+.btn-arrow .ic { width: 16px; height: 16px; vertical-align: -0.08em; }
 
 /* Presets & section tabs */
 .preset-pill-tag .ic,
-.card-folder-tab .ic { width: 13px; height: 13px; }
+.card-folder-tab .ic { width: 18px; height: 18px; }
 
 /* Throttle badge icon (updates live with the select) */
 .stepper-val-badge {
@@ -3592,35 +3592,35 @@ body.tour-scroll-locked {
   align-items: center;
   gap: 4px;
 }
-.speed-limit-ic { width: 12px; height: 12px; }
+.speed-limit-ic { width: 16px; height: 16px; }
 
 /* Benchmark lanes */
-.lane-badge-icon .ic { width: 26px; height: 26px; vertical-align: 0; }
+.lane-badge-icon .ic { width: 34px; height: 34px; vertical-align: 0; }
 
 /* Verification seal */
 .seal-icon { display: inline-flex; }
-.seal-icon .ic { width: 19px; height: 19px; vertical-align: 0; }
+.seal-icon .ic { width: 25px; height: 25px; vertical-align: 0; }
 
 /* Footer GitHub CTA */
-.gh-btn-title { display: inline-flex; align-items: center; gap: 6px; }
-.gh-btn-title .ic { width: 15px; height: 15px; vertical-align: 0; }
-.gh-btn-sub .ic { width: 11px; height: 11px; }
+.gh-btn-title { display: inline-flex; align-items: center; gap: 7px; }
+.gh-btn-title .ic { width: 20px; height: 20px; vertical-align: 0; }
+.gh-btn-sub .ic { width: 14px; height: 14px; }
 
 /* Tour drag handle & tour buttons */
-.tour-drag-handle .ic { width: 13px; height: 13px; vertical-align: 0; }
-.tour-btn .ic { width: 12px; height: 12px; vertical-align: -0.08em; }
+.tour-drag-handle .ic { width: 17px; height: 17px; vertical-align: 0; }
+.tour-btn .ic { width: 15px; height: 15px; vertical-align: -0.08em; }
 .tour-icon-badge { display: inline-flex; align-items: center; }
-.tour-icon-badge .ic { width: 21px; height: 21px; }
+.tour-icon-badge .ic { width: 27px; height: 27px; }
 
 /* Flying byte packets in the concurrency arena */
-.byte-packet .packet-sprite { width: 10px; height: 10px; display: block; }
+.byte-packet .packet-sprite { width: 13px; height: 13px; display: block; }
 
 /* Docs page */
-.docs-nav-link .ic { width: 15px; height: 15px; vertical-align: -0.18em; }
-.docs-tag .ic { width: 13px; height: 13px; vertical-align: -0.15em; }
+.docs-nav-link .ic { width: 20px; height: 20px; vertical-align: -0.18em; }
+.docs-tag .ic { width: 17px; height: 17px; vertical-align: -0.15em; }
 .dl-os-icon { display: inline-flex; line-height: 1; }
-.dl-os-icon svg { display: block; }
+.dl-os-icon svg { display: block; width: 42px; height: 42px; }
 .dl-os-macos, .dl-os-linux { color: var(--ink-primary); }
-.dl-button .ic { width: 16px; height: 16px; vertical-align: -0.18em; }
+.dl-button .ic { width: 21px; height: 21px; vertical-align: -0.18em; }
 .callout-icon { display: inline-flex; line-height: 1; }
-.callout-icon .ic { width: 27px; height: 27px; }
+.callout-icon .ic { width: 34px; height: 34px; }
