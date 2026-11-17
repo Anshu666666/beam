@@ -3619,7 +3619,8 @@ body.tour-scroll-locked {
 .docs-nav-link .ic { width: 15px; height: 15px; vertical-align: -0.18em; }
 .docs-tag .ic { width: 13px; height: 13px; vertical-align: -0.15em; }
 .dl-os-icon { display: inline-flex; line-height: 1; }
-.dl-os-icon .ic { width: 34px; height: 34px; }
+.dl-os-icon svg { display: block; }
+.dl-os-macos, .dl-os-linux { color: var(--ink-primary); }
 .dl-button .ic { width: 16px; height: 16px; vertical-align: -0.18em; }
 .callout-icon { display: inline-flex; line-height: 1; }
 .callout-icon .ic { width: 27px; height: 27px; }
