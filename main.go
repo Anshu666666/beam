@@ -4,6 +4,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	neturl "net/url"
 	"os"
 	"path"
@@ -31,6 +32,9 @@ func main() {
 // Decoupling run() from main() enables isolated unit and integration testing
 // without calling os.Exit(1).
 func run(args []string) error {
+	// Enable ANSI escape processing on stdout/stderr as early as possible
+	initTerminal()
+
 	// flag.NewFlagSet(name, errorHandling):
 	// - What it does: Creates a new, isolated set of command-line flags with its own name and error policy.
 	// - Returns: *flag.FlagSet -> Configured flag set instance.
@@ -59,27 +63,38 @@ func run(args []string) error {
 	fs.BoolVar(&version, "version", false, "Print version information and exit")
 	fs.BoolVar(&version, "v", false, "Print version information and exit (shorthand)")
 
+	// printUsage renders the full help screen (art + spec sheet + flags) to w.
+	printUsage := func(w io.Writer) {
+		fs.SetOutput(w)
+		printBannerTo(w)
+		fmt.Fprintln(w)
+		fmt.Fprintln(w, "High-throughput concurrent byte-range downloader with live visual cockpit.")
+		fmt.Fprintln(w)
+		fmt.Fprintln(w, "USAGE:")
+		fmt.Fprintln(w, "  beam -url <URL> [flags]")
+		fmt.Fprintln(w, "  beam <URL> [flags]")
+		fmt.Fprintln(w, "  beam -demo")
+		fmt.Fprintln(w)
+		fmt.Fprintln(w, "FLAGS:")
+		fs.PrintDefaults()
+		fmt.Fprintln(w)
+		fmt.Fprintln(w, "EXAMPLES:")
+		fmt.Fprintln(w, "  # Instant test download (50 MB sample asset):")
+		fmt.Fprintln(w, "  beam -demo")
+		fmt.Fprintln(w)
+		fmt.Fprintln(w, "  # Download multi-GB file with 8 workers and 16 chunks:")
+		fmt.Fprintln(w, "  beam -url \"https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso\" -w 8 -c 16")
+		fmt.Fprintln(w)
+		fmt.Fprintln(w, "  # Direct URL positional syntax:")
+		fmt.Fprintln(w, "  beam https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso -w 8 -c 16")
+		fmt.Fprintln(w)
+		fmt.Fprintln(w, "  # Custom destination file:")
+		fmt.Fprintln(w, "  beam -url \"https://example.com/data.tar.gz\" -o archive.tar.gz")
+	}
+
 	// Custom usage message when help is requested or arguments are malformed
 	fs.Usage = func() {
-		fmt.Fprintf(os.Stderr, "┌────────────────────────────────────────────────────────────┐\n")
-		fmt.Fprintf(os.Stderr, "│  ⚡ BEAM · Concurrent RFC 7233 Streaming Engine (Go CLI)   │\n")
-		fmt.Fprintf(os.Stderr, "└────────────────────────────────────────────────────────────┘\n\n")
-		fmt.Fprintf(os.Stderr, "High-throughput concurrent byte-range downloader with live visual cockpit.\n\n")
-		fmt.Fprintf(os.Stderr, "USAGE:\n")
-		fmt.Fprintf(os.Stderr, "  beam -url <URL> [flags]\n")
-		fmt.Fprintf(os.Stderr, "  beam <URL> [flags]\n")
-		fmt.Fprintf(os.Stderr, "  beam -demo\n\n")
-		fmt.Fprintf(os.Stderr, "FLAGS:\n")
-		fs.PrintDefaults()
-		fmt.Fprintf(os.Stderr, "\nEXAMPLES:\n")
-		fmt.Fprintf(os.Stderr, "  # Instant test download (50 MB sample asset):\n")
-		fmt.Fprintf(os.Stderr, "  beam -demo\n\n")
-		fmt.Fprintf(os.Stderr, "  # Download multi-GB file with 8 workers and 16 chunks:\n")
-		fmt.Fprintf(os.Stderr, "  beam -url \"https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso\" -w 8 -c 16\n\n")
-		fmt.Fprintf(os.Stderr, "  # Direct URL positional syntax:\n")
-		fmt.Fprintf(os.Stderr, "  beam https://releases.ubuntu.com/24.04/ubuntu-24.04.5.1-desktop-amd64.iso -w 8 -c 16\n\n")
-		fmt.Fprintf(os.Stderr, "  # Custom destination file:\n")
-		fmt.Fprintf(os.Stderr, "  beam -url \"https://example.com/data.tar.gz\" -o archive.tar.gz\n\n")
+		printUsage(os.Stderr)
 	}
 
 	// Quick subcommand handling: beam demo / beam sample / beam help / beam version
@@ -127,19 +142,20 @@ func run(args []string) error {
 		url = fs.Args()[0]
 	}
 
-	// Validate required argument
+	// Validate required argument: a bare `beam` invocation prints the help
+	// screen to stdout and exits successfully, like `beam help`
 	if url == "" {
+		if len(args) == 0 {
+			printUsage(os.Stdout)
+			return nil
+		}
 		fs.Usage()
 		return fmt.Errorf("-url is required (or run 'beam -demo' for an instant test)")
 	}
 
-	// Print startup header banner
-	// fmt.Println(a...):
-	// - What it does: Formats using default formats for its operands and writes to standard output with a trailing newline.
-	// - Returns: (int, error) -> Number of bytes written and any write error encountered.
-	fmt.Println("┌────────────────────────────────────────────────────────────┐")
-	fmt.Println("│  ⚡ BEAM · Concurrent RFC 7233 Streaming Engine (Go CLI)   │")
-	fmt.Println("└────────────────────────────────────────────────────────────┘")
+	// Print startup banner: brand mark + spec sheet (neofetch-style),
+	// or a plain one-liner when piped / NO_COLOR is set
+	printBanner()
 
 	resolvedOutput := outputFile
 	if resolvedOutput == "" {
@@ -170,8 +186,6 @@ func run(args []string) error {
 	// - What it does: Returns the current local time with monotonic clock reading.
 	// - Returns: time.Time -> Current timestamp.
 	startTime := time.Now()
-
-	initTerminal()
 
 	var lastLines int
 	opts := downloader.Options{

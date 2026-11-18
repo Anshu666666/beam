@@ -12,9 +12,18 @@ import (
 	"testing"
 )
 
-// TestRun_MissingURL verifies that run returns an error when no -url is supplied.
+// TestRun_BareInvocation verifies that running `beam` with no arguments
+// prints the help screen and exits successfully (no error).
+func TestRun_BareInvocation(t *testing.T) {
+	if err := run([]string{}); err != nil {
+		t.Fatalf("expected nil error for bare invocation, got: %v", err)
+	}
+}
+
+// TestRun_MissingURL verifies that run returns an error when flags are
+// provided but no -url is given.
 func TestRun_MissingURL(t *testing.T) {
-	err := run([]string{})
+	err := run([]string{"-w", "2"})
 	if err == nil {
 		t.Fatal("expected error when -url is missing, got nil")
 	}
