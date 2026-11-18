@@ -7,22 +7,23 @@ import (
 	"strings"
 )
 
-// artLines is the wordmark "BEAM" rendered with the figlet "smshadow" font
+// artLines is the wordmark "BEAM" rendered with the figlet "eftitalic" font
 // (via github.com/common-nighthawk/go-figure, see the repo README for the
 // technique) in the butter yellow from the Beam frontend palette
-// (--color-butter #FCD34D). Each line is exactly 27 visible cells wide.
+// (--color-butter #FCD34D). Visible widths shrink 28 → 26 cells.
 var artLines = []string{
-	"\033[1;38;2;252;211;77m  _ )   __|     \\      \\  |\033[0m",
-	"\033[1;38;2;252;211;77m  _ \\   _|     _ \\    |\\/ |\033[0m",
-	"\033[1;38;2;252;211;77m ___/  ___|  _/  _\\  _|  _|\033[0m",
+	"\033[1;38;2;252;211;77m   ___    ___    _    _   __\033[0m",
+	"\033[1;38;2;252;211;77m  / o.)  / _/  .' \\  / \\,' /\033[0m",
+	"\033[1;38;2;252;211;77m / o \\  / _/  / o / / \\,' /\033[0m",
+	"\033[1;38;2;252;211;77m/___,' /___/ /_n_/ /_/ /_/\033[0m",
 }
 
 // artLineWidths[i] is the visible (cell) width of artLines[i], used to keep
 // the side info column aligned.
-var artLineWidths = []int{27, 27, 27}
+var artLineWidths = []int{28, 28, 27, 26}
 
-const artWidth = 27
-const artOffset = 3 // first info row where the art block begins (vertically centered)
+const artWidth = 28
+const artOffset = 2 // first info row where the art block begins (vertically centered)
 const bannerGap = 3 // spaces between the art and the info column
 
 // printBanner prints the neofetch-style Beam banner: neon wordmark on the
