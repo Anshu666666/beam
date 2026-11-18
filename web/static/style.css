@@ -2696,6 +2696,17 @@ body {
   color: #18181B;
 }
 
+/* Honest-loss state: shown when the parallel run actually underperforms the sequential baseline */
+.gauge-multiplier.slower {
+  color: var(--color-coral);
+  text-shadow: 0 0 12px rgba(224, 122, 95, 0.45);
+}
+
+.gauge-badge.active-slowdown {
+  background-color: var(--color-coral);
+  color: #18181B;
+}
+
 .gauge-time-saved {
   display: flex;
   flex-direction: column;

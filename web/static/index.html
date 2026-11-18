@@ -398,7 +398,7 @@
           <div class="benchmark-control-row">
             <div class="benchmark-meta-info">
               <h3 class="bench-heading">RFC 7233 Multi-Stream Concurrency Benchmark</h3>
-              <p class="bench-subtext">Direct side-by-side performance comparison: 1 TCP connection (Sequential) vs 8 Bounded Goroutines (Parallel Byte-Ranges).</p>
+              <p class="bench-subtext">Two-phase performance comparison, run one after the other so neither starves the other of bandwidth: first the 1 TCP connection (Sequential) baseline, then 8 Bounded Goroutines (Parallel Byte-Ranges).</p>
             </div>
             <div class="benchmark-btn-cluster">
               <button type="button" class="solid-action-btn-compact hero-bench-cta" id="benchmark-run-btn">
@@ -452,7 +452,7 @@
                 <span class="gauge-badge" id="speedup-verdict">Awaiting Test</span>
               </div>
               <div class="gauge-time-saved">
-                <span class="g-save-k">TIME REDUCTION</span>
+                <span class="g-save-k" id="time-reduction-label">TIME REDUCTION</span>
                 <span class="g-save-v" id="time-reduction-pct">--</span>
               </div>
             </div>

@@ -332,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (resolvedUrl && resolvedUrl.startsWith('/')) {
         resolvedUrl = window.location.origin + resolvedUrl;
       }
-      if (urlInput) urlInput.value = resolvedUrl;
+      if (resolvedUrl && urlInput) urlInput.value = resolvedUrl;
 
       if (btn.dataset.workers && workersSlider) {
         workersSlider.value = btn.dataset.workers;
@@ -347,12 +347,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const wCount = parseInt(workersSlider.value, 10);
       const cCount = parseInt(chunksSlider.value, 10);
       const label = btn.querySelector('.preset-pill-tag') ? btn.querySelector('.preset-pill-tag').textContent : 'Preset';
-      console.log('[beam] Preset button clicked:', label, '->', btn.dataset.url);
+      console.log('[beam] Preset button clicked:', label, '->', btn.dataset.url || '(action)');
 
       initWorkerRack(wCount);
       initChunkMatrix(cCount);
       setTimeout(() => renderConduits(wCount), 50);
-      appendTrace(`[preset] Selected ${label} -> ${btn.dataset.url} (Chunks: ${cCount})`, 'log-probe');
+      appendTrace(`[preset] Selected ${label}${btn.dataset.url ? ' -> ' + btn.dataset.url : ''} (Chunks: ${cCount})`, 'log-probe');
     });
   });
 
@@ -717,6 +717,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const speedupMultiplier = document.getElementById('speedup-multiplier');
   const speedupVerdict = document.getElementById('speedup-verdict');
   const timeReductionPct = document.getElementById('time-reduction-pct');
+  const timeReductionLabel = document.getElementById('time-reduction-label');
 
   let isBenchmarking = false;
 
@@ -772,15 +773,19 @@ document.addEventListener('DOMContentLoaded', () => {
       if (parPct) parPct.textContent = '0.0%';
       if (parSpeed) parSpeed.textContent = '0 B/s';
       if (parTime) parTime.textContent = '0.0s';
-      if (parStatus) { parStatus.textContent = 'RUNNING'; parStatus.className = 'bench-status-badge running'; }
+      if (parStatus) { parStatus.textContent = 'QUEUED'; parStatus.className = 'bench-status-badge'; }
 
-      if (speedupMultiplier) speedupMultiplier.textContent = '...';
+      if (speedupMultiplier) { speedupMultiplier.textContent = '...'; speedupMultiplier.classList.remove('slower'); }
       if (speedupVerdict) { speedupVerdict.textContent = 'Testing Saturation'; speedupVerdict.className = 'gauge-badge'; }
       if (timeReductionPct) timeReductionPct.textContent = 'Measuring';
+      if (timeReductionLabel) timeReductionLabel.textContent = 'TIME REDUCTION';
 
-      appendTrace('[benchmark] Initiating Side-by-Side Concurrency Run on: ' + benchmarkUrl, 'log-range');
+      appendTrace('[benchmark] Phase 1/2: Sequential baseline (1 worker, single connection) on: ' + benchmarkUrl, 'log-range');
+      appendTrace('[benchmark] Parallel lane queued — it will start only after the sequential run fully completes (no bandwidth contention).', 'log-info');
 
-      const startTime = performance.now();
+      const seqStartTime = performance.now();
+      let parStartTime = 0;
+      let parStarted = false;
       let seqDone = false;
       let parDone = false;
       let seqDuration = 0;
@@ -788,47 +793,14 @@ document.addEventListener('DOMContentLoaded', () => {
       let seqPeakSpeed = 0;
       let parPeakSpeed = 0;
 
-      // Timer tick
+      // Timer tick (each lane is timed from the moment its own phase actually starts)
       const timerInterval = setInterval(() => {
         const now = performance.now();
-        const elapsed = ((now - startTime) / 1000).toFixed(1) + 's';
-        if (!seqDone && seqTime) seqTime.textContent = elapsed;
-        if (!parDone && parTime) parTime.textContent = elapsed;
+        if (!seqDone && seqTime) seqTime.textContent = ((now - seqStartTime) / 1000).toFixed(1) + 's';
+        if (seqDone && !parDone && parTime) parTime.textContent = ((now - parStartTime) / 1000).toFixed(1) + 's';
       }, 100);
 
-      // 1. Dispatch Parallel Stream (8 Workers, 16 Chunks)
-      const parSource = new EventSource('/api/download/stream?url=' + encodeURIComponent(benchmarkUrl) + '&workers=8&chunks=16&rate=0');
-      parSource.onmessage = (e) => {
-        try {
-          const d = JSON.parse(e.data);
-          if (d.master) {
-            const pct = Math.min(d.master.percent, 100).toFixed(1);
-            if (parFill) parFill.style.width = pct + '%';
-            if (parPct) parPct.textContent = pct + '%';
-            if (parSpeed) parSpeed.textContent = d.master.speedFormatted || '0 B/s';
-            if (d.master.speed > parPeakSpeed) parPeakSpeed = d.master.speed;
-          }
-          if (d.type === 'complete') {
-            parDone = true;
-            parDuration = (performance.now() - startTime) / 1000;
-            if (parStatus) { parStatus.textContent = 'DONE (' + parDuration.toFixed(1) + 's)'; parStatus.className = 'bench-status-badge done'; }
-            if (parFill) parFill.style.width = '100%';
-            if (parPct) parPct.textContent = '100.0%';
-            if (parTime) parTime.textContent = parDuration.toFixed(1) + 's';
-            if (d.averageSpeed && parSpeed) parSpeed.textContent = d.averageSpeed;
-            parSource.close();
-            checkBenchmarkCompletion();
-          }
-        } catch (err) {}
-      };
-      parSource.onerror = () => {
-        parDone = true;
-        parDuration = (performance.now() - startTime) / 1000;
-        parSource.close();
-        checkBenchmarkCompletion();
-      };
-
-      // 2. Dispatch Sequential Stream (1 Worker, 1 Chunk)
+      // Phase 1: Sequential Stream FIRST (1 Worker, 1 Chunk) so it gets the full bandwidth to itself
       const seqSource = new EventSource('/api/download/stream?url=' + encodeURIComponent(benchmarkUrl) + '&workers=1&chunks=1&rate=0');
       seqSource.onmessage = (e) => {
         try {
@@ -842,23 +814,63 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           if (d.type === 'complete') {
             seqDone = true;
-            seqDuration = (performance.now() - startTime) / 1000;
+            seqDuration = (performance.now() - seqStartTime) / 1000;
             if (seqStatus) { seqStatus.textContent = 'DONE (' + seqDuration.toFixed(1) + 's)'; seqStatus.className = 'bench-status-badge done'; }
             if (seqFill) seqFill.style.width = '100%';
             if (seqPct) seqPct.textContent = '100.0%';
             if (seqTime) seqTime.textContent = seqDuration.toFixed(1) + 's';
             if (d.averageSpeed && seqSpeed) seqSpeed.textContent = d.averageSpeed;
             seqSource.close();
-            checkBenchmarkCompletion();
+            startParallelEngine();
           }
         } catch (err) {}
       };
       seqSource.onerror = () => {
         seqDone = true;
-        seqDuration = (performance.now() - startTime) / 1000;
+        seqDuration = (performance.now() - seqStartTime) / 1000;
         seqSource.close();
-        checkBenchmarkCompletion();
+        startParallelEngine();
       };
+
+      // Phase 2: Dispatch Parallel Stream ONLY AFTER the sequential run completes — avoids any clash for bandwidth
+      function startParallelEngine() {
+        if (parStarted) return;
+        parStarted = true;
+        parStartTime = performance.now();
+        if (parStatus) { parStatus.textContent = 'RUNNING'; parStatus.className = 'bench-status-badge running'; }
+        appendTrace('[benchmark] Phase 2/2: Beam Parallel Engine (8 workers, 16 RFC 7233 byte-range chunks)...', 'log-range');
+
+        const parSource = new EventSource('/api/download/stream?url=' + encodeURIComponent(benchmarkUrl) + '&workers=8&chunks=16&rate=0');
+        parSource.onmessage = (e) => {
+          try {
+            const d = JSON.parse(e.data);
+            if (d.master) {
+              const pct = Math.min(d.master.percent, 100).toFixed(1);
+              if (parFill) parFill.style.width = pct + '%';
+              if (parPct) parPct.textContent = pct + '%';
+              if (parSpeed) parSpeed.textContent = d.master.speedFormatted || '0 B/s';
+              if (d.master.speed > parPeakSpeed) parPeakSpeed = d.master.speed;
+            }
+            if (d.type === 'complete') {
+              parDone = true;
+              parDuration = (performance.now() - parStartTime) / 1000;
+              if (parStatus) { parStatus.textContent = 'DONE (' + parDuration.toFixed(1) + 's)'; parStatus.className = 'bench-status-badge done'; }
+              if (parFill) parFill.style.width = '100%';
+              if (parPct) parPct.textContent = '100.0%';
+              if (parTime) parTime.textContent = parDuration.toFixed(1) + 's';
+              if (d.averageSpeed && parSpeed) parSpeed.textContent = d.averageSpeed;
+              parSource.close();
+              checkBenchmarkCompletion();
+            }
+          } catch (err) {}
+        };
+        parSource.onerror = () => {
+          parDone = true;
+          parDuration = (performance.now() - parStartTime) / 1000;
+          parSource.close();
+          checkBenchmarkCompletion();
+        };
+      }
 
       function checkBenchmarkCompletion() {
         if (seqDone && parDone) {
@@ -866,18 +878,52 @@ document.addEventListener('DOMContentLoaded', () => {
           isBenchmarking = false;
           benchmarkRunBtn.disabled = false;
 
-          const ratio = (seqDuration > 0 && parDuration > 0) ? (seqDuration / parDuration) : (parPeakSpeed / Math.max(seqPeakSpeed, 1));
-          const speedupVal = Math.max(ratio, 1.2).toFixed(1);
-          const timeSaved = Math.max(0, Math.round(((seqDuration - parDuration) / Math.max(seqDuration, 0.1)) * 100));
+          // Honest verdict: both phases were timed individually (never running at the same time),
+          // so the measured ratio is reported as-is — even if Beam loses.
+          const hasDurations = seqDuration > 0 && parDuration > 0;
+          const hasPeaks = seqPeakSpeed > 0 && parPeakSpeed > 0;
+          const ratio = hasDurations
+            ? (seqDuration / parDuration)
+            : (hasPeaks ? (parPeakSpeed / seqPeakSpeed) : null); // fallback: peak-throughput ratio, only if both sides measured something
 
-          if (speedupMultiplier) speedupMultiplier.textContent = speedupVal + 'x';
-          if (speedupVerdict) {
-            speedupVerdict.textContent = speedupVal + 'x Faster Throughput';
-            speedupVerdict.className = 'gauge-badge active-boost';
+          const speedupVal = ratio === null ? null : ratio.toFixed(1);
+          const ratioState = ratio === null ? 'unknown' : (ratio > 1 ? 'won' : (ratio < 1 ? 'lost' : 'tie'));
+          const parallelWon = ratioState === 'won';
+          const timeSaved = hasDurations
+            ? Math.round(((seqDuration - parDuration) / Math.max(seqDuration, 0.1)) * 100) + 0 // +0 normalizes -0
+            : null; // no valid durations -> do not invent a latency figure
+
+          if (speedupMultiplier) {
+            speedupMultiplier.textContent = speedupVal === null ? '--' : speedupVal + 'x';
+            speedupMultiplier.classList.toggle('slower', ratioState === 'lost');
           }
-          if (timeReductionPct) timeReductionPct.textContent = '-' + (timeSaved > 0 ? timeSaved : '82') + '% Latency';
+          if (speedupVerdict) {
+            speedupVerdict.textContent =
+              ratioState === 'won' ? speedupVal + 'x Faster Throughput' :
+              ratioState === 'lost' ? speedupVal + 'x — Parallel Slower' :
+              ratioState === 'tie' ? '1.0x — Even Match' :
+              'Incomplete Data';
+            speedupVerdict.className =
+              ratioState === 'won' ? 'gauge-badge active-boost' :
+              ratioState === 'lost' ? 'gauge-badge active-slowdown' :
+              'gauge-badge';
+          }
+          if (timeReductionPct) {
+            timeReductionPct.textContent = timeSaved === null
+              ? '--'
+              : (timeSaved > 0 ? '-' + timeSaved + '% Latency'
+                 : (timeSaved < 0 ? '+' + Math.abs(timeSaved) + '% Latency' : '0% Latency'));
+          }
+          if (timeReductionLabel) {
+            timeReductionLabel.textContent = timeSaved === null
+              ? 'TIME DELTA'
+              : (timeSaved > 0 ? 'TIME REDUCTION' : (timeSaved < 0 ? 'TIME ADDED' : 'NO CHANGE'));
+          }
 
-          appendTrace('[benchmark] Completed! Beam 8-Worker speedup factor: ' + speedupVal + 'x (Time saved: ' + timeSaved + '%)', 'log-success');
+          appendTrace('[benchmark] Completed! Sequential: ' + seqDuration.toFixed(1) + 's | Parallel: ' + parDuration.toFixed(1) +
+            's | Speedup: ' + (speedupVal === null ? 'incomplete data' : speedupVal + 'x') +
+            (timeSaved === null ? '' : (timeSaved > 0 ? ' (' + timeSaved + '% faster)' : (timeSaved < 0 ? ' (' + Math.abs(timeSaved) + '% slower)' : ' (even)'))),
+            ratioState === 'won' || ratioState === 'lost' ? (parallelWon ? 'log-success' : 'log-error') : 'log-range');
         }
       }
     });
