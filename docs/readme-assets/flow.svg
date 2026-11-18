@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="350" viewBox="0 0 1280 350" role="img" aria-label="How Beam works: PROBE with a HEAD request, SLICE the file into RFC 7233 byte intervals, QUEUE the chunks in a buffered channel, STREAM them through a bounded pool of 8 workers, TRACK progress lock-free with atomics over 50 ms SSE, ASSEMBLE with io.MultiReader and a 32 KB buffer, and VERIFY the SHA-256 checksum">
+<title>Beam — How it works: Probe, Slice, Queue, Stream, Track, Assemble, Verify</title>
+<style>
+text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans","Noto Sans CJK SC","Microsoft YaHei",sans-serif}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,"Cascadia Mono",monospace}
+@keyframes packet{0%,8%{transform:translateX(0);opacity:0}14%{opacity:1}88%{opacity:1}96%,100%{transform:translateX(1150px);opacity:0}}
+@keyframes packet2{0%,54%{transform:translateX(0);opacity:0}60%{opacity:1}92%{opacity:1}99%,100%{transform:translateX(1150px);opacity:0}}
+.pkt{animation:packet 8.5s linear infinite}
+.pkt2{animation:packet2 8.5s linear infinite}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+.pulse{animation:pulse 2.4s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){.pkt,.pkt2,.pulse{animation:none;opacity:0}}
+</style>
+<defs>
+  <radialGradient id="glow" cx="78%" cy="18%" r="60%"><stop offset="0" stop-color="#f2a65a" stop-opacity=".12"/><stop offset="1" stop-color="#f2a65a" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1280" height="350" rx="18" fill="#15181d" stroke="#2f3640" stroke-width="2.5"/>
+<rect width="1280" height="350" rx="18" fill="url(#glow)"/>
+<g fill="#9aa4b1" opacity=".18">
+  <circle cx="60" cy="24" r="1.6"/><circle cx="220" cy="120" r="2.2"/><circle cx="380" cy="18" r="1"/><circle cx="520" cy="300" r="1.6"/><circle cx="660" cy="60" r="2.2"/><circle cx="800" cy="210" r="1"/><circle cx="940" cy="330" r="1.6"/><circle cx="1100" cy="40" r="2.2"/><circle cx="1230" cy="150" r="1"/><circle cx="140" cy="330" r="2.2"/><circle cx="330" cy="240" r="1"/><circle cx="760" cy="150" r="1.6"/>
+</g>
+<text x="52" y="52" font-size="17" font-weight="700" fill="#f2a65a" letter-spacing="4" class="mono">HOW IT WORKS · RFC 7233 BYTE-RANGES</text>
+<text x="1228" y="52" font-size="13" fill="#9aa4b1" text-anchor="end" class="mono">no ranges? single-stream fallback</text>
+<g stroke="#0a0a0c" stroke-width="2.5">
+  <rect x="58" y="126" width="156" height="150" rx="13" fill="#0a0a0c"/><rect x="222" y="126" width="156" height="150" rx="13" fill="#0a0a0c"/><rect x="386" y="126" width="156" height="150" rx="13" fill="#0a0a0c"/><rect x="550" y="126" width="156" height="150" rx="13" fill="#0a0a0c"/><rect x="714" y="126" width="156" height="150" rx="13" fill="#0a0a0c"/><rect x="878" y="126" width="156" height="150" rx="13" fill="#0a0a0c"/><rect x="1042" y="126" width="156" height="150" rx="13" fill="#0a0a0c"/>
+</g>
+<g stroke="#2f3640" stroke-width="2.5">
+  <rect x="52" y="120" width="156" height="150" rx="13" fill="#1f242b"/><rect x="216" y="120" width="156" height="150" rx="13" fill="#1f242b"/><rect x="380" y="120" width="156" height="150" rx="13" fill="#1f242b"/><rect x="544" y="120" width="156" height="150" rx="13" fill="#1f242b"/><rect x="708" y="120" width="156" height="150" rx="13" fill="#1f242b"/><rect x="872" y="120" width="156" height="150" rx="13" fill="#1f242b"/><rect x="1036" y="120" width="156" height="150" rx="13" fill="#1f242b"/>
+</g>
+<path d="M212 192 l6 8 -6 8 M376 192 l6 8 -6 8 M540 192 l6 8 -6 8 M704 192 l6 8 -6 8 M868 192 l6 8 -6 8 M1032 192 l6 8 -6 8" stroke="#9aa4b1" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(-4,0)" opacity=".8"/>
+<g fill="none" stroke="#eef1f4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="130" cy="162" r="13"/><path d="M140 172 l9 9"/>
+  <rect x="264" y="150" width="56" height="34" rx="4"/><path d="M283 150 v34 M301 150 v34" stroke-dasharray="3 4"/>
+  <rect x="429" y="152" width="50" height="36" rx="9"/><path d="M444 170 h16 M455 164 l7 6 -7 6"/>
+  <path d="M570 152 l14 11 -14 11 M590 152 l14 11 -14 11 M610 152 l14 11 -14 11 M630 152 l14 11 -14 11" stroke="#f2a65a"/>
+  <path d="M730 172 h10 l5 -12 5 18 5 -12 5 6 h14" stroke="#7cc4ae"/>
+  <rect x="892" y="152" width="44" height="34" rx="5" fill="#f2a65a" fill-opacity=".3" stroke="#eef1f4"/>
+  <rect x="908" y="146" width="44" height="34" rx="5" fill="#1f242b" stroke="#eef1f4"/><path d="M920 162 h24 M920 171 h24" stroke-width="3"/>
+  <path d="M1150 146 l18 10 v18 c0 12 -8 20 -18 24 -10 -4 -18 -12 -18 -24 v-18 Z" fill="#f2a65a" fill-opacity=".3"/><path d="M1141 174 l7 7 12 -13" stroke="#f2a65a" stroke-width="4"/>
+</g>
+<g class="mono" fill="#eef1f4">
+  <circle cx="78" cy="133" r="11" fill="#f2a65a" stroke="none"/><text x="78" y="138" font-size="14" font-weight="800" text-anchor="middle" fill="#15181d">1</text>
+  <circle cx="242" cy="133" r="11" fill="#7cc4ae" stroke="none"/><text x="242" y="138" font-size="14" font-weight="800" text-anchor="middle" fill="#15181d">2</text>
+  <circle cx="406" cy="133" r="11" fill="#a2d2ff" stroke="none"/><text x="406" y="138" font-size="14" font-weight="800" text-anchor="middle" fill="#15181d">3</text>
+  <circle cx="570" cy="133" r="11" fill="#f8b195" stroke="none"/><text x="570" y="138" font-size="14" font-weight="800" text-anchor="middle" fill="#15181d">4</text>
+  <circle cx="734" cy="133" r="11" fill="#c7ceea" stroke="none"/><text x="734" y="138" font-size="14" font-weight="800" text-anchor="middle" fill="#15181d">5</text>
+  <circle cx="898" cy="133" r="11" fill="#f2a65a" stroke="none"/><text x="898" y="138" font-size="14" font-weight="800" text-anchor="middle" fill="#15181d">6</text>
+  <circle cx="1062" cy="133" r="11" fill="#7cc4ae" stroke="none"/><text x="1062" y="138" font-size="14" font-weight="800" text-anchor="middle" fill="#15181d">7</text>
+  <text x="130" y="228" font-size="15" font-weight="800" letter-spacing="1" text-anchor="middle">PROBE</text>
+  <text x="294" y="228" font-size="15" font-weight="800" letter-spacing="1" text-anchor="middle">SLICE</text>
+  <text x="458" y="228" font-size="15" font-weight="800" letter-spacing="1" text-anchor="middle">QUEUE</text>
+  <text x="622" y="228" font-size="15" font-weight="800" letter-spacing="1" text-anchor="middle">STREAM</text>
+  <text x="786" y="228" font-size="15" font-weight="800" letter-spacing="1" text-anchor="middle">TRACK</text>
+  <text x="950" y="228" font-size="15" font-weight="800" letter-spacing=".5" text-anchor="middle">ASSEMBLE</text>
+  <text x="1114" y="228" font-size="15" font-weight="800" letter-spacing="1" text-anchor="middle">VERIFY</text>
+</g>
+<g fill="#9aa4b1" font-size="11.5" text-anchor="middle" class="mono">
+  <text x="130" y="248">HEAD · Accept-Ranges</text>
+  <text x="294" y="248">N byte intervals</text>
+  <text x="458" y="248">chan Chunk buffered</text>
+  <text x="622" y="248">8 workers · 206</text>
+  <text x="786" y="248">sync/atomic · 50 ms</text>
+  <text x="950" y="248">io.MultiReader 32 KB</text>
+  <text x="1114" y="248">crypto/sha256</text>
+</g>
+<line x1="52" y1="302" x2="1228" y2="302" stroke="#9aa4b1" stroke-width="2" stroke-dasharray="5 6" opacity=".7"/>
+<rect x="461" y="290" width="358" height="24" rx="12" fill="#1f242b" stroke="#2f3640" stroke-width="2"/>
+<text x="640" y="306.5" font-size="12" font-weight="700" fill="#eef1f4" text-anchor="middle" letter-spacing="2" class="mono">LOCK-FREE TELEMETRY · NO MUTEXES</text>
+<circle class="pkt" cx="40" cy="112" r="7" fill="#f2a65a" stroke="#15181d" stroke-width="2"/>
+<circle class="pkt2" cx="40" cy="112" r="7" fill="#f2a65a" stroke="#15181d" stroke-width="2"/>
+</svg>

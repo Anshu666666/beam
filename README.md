@@ -51,15 +51,7 @@ Single-stream HTTP downloads often fail to saturate available bandwidth because 
 
 `beam` accelerates downloads by splitting target files into chunks and fetching them in parallel using standard HTTP `Range` headers ([RFC 7233](https://datatracker.ietf.org/doc/html/rfc7233)). It is written in Go with **zero third-party dependencies**.
 
-```
-1. Probe        HEAD request checks for Accept-Ranges: bytes and Content-Length.
-2. Slice        Divides total byte length into N discrete intervals.
-3. Queue        Places chunk jobs into a buffered Go channel.
-4. Stream       A pool of worker goroutines fetches ranges concurrently to disk.
-5. Track        Atomic counters calculate real-time speeds with no lock contention.
-6. Assemble     Stitches chunks sequentially with io.MultiReader (32 KB buffer).
-7. Verify       Computes the SHA-256 checksum of the finished file.
-```
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme-assets/flow.svg"><source media="(prefers-color-scheme: light)" srcset="docs/readme-assets/flow-light.svg"><img src="docs/readme-assets/flow.svg" width="100%" alt="How Beam works: Probe with a HEAD request, slice into RFC 7233 byte intervals, queue chunks in a buffered channel, stream through 8 workers as 206 Partial Content, track lock-free with sync/atomic over 50 ms SSE, assemble with io.MultiReader (32 KB buffer), and verify the SHA-256 checksum"></picture></p>
 
 If a server does not support byte ranges, `beam` automatically falls back to a standard single download while still providing full live telemetry.
 
